@@ -15,33 +15,14 @@
         <activity
             android:name=".view.MainActivity"
             android:exported="true">
+            <nav-graph android:value="@navigation/navigation_graph"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.SettingListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.CommunityActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.PlanListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.RecipeListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.PlanActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.RecipeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.ProfileActivity"
-            android:exported="false" />
+
         <activity
             android:name=".view.LoginActivity"
             android:exported="true">

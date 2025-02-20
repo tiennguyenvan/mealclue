@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <style name="Theme.YourAppName" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Other theme properties -->
+        <item name="android:windowBackground">@color/colorBase</item> -->
+    </style>
+
+
     <!-- fonts -->
     <style name="HeadingThin">
         <item name="fontFamily">@font/lexend_thin</item>
