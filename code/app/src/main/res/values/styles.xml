@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- fonts -->
+    <style name="HeadingThin">
+        <item name="fontFamily">@font/lexend_thin</item>
+    </style>
+    <style name="HeadingExtraLight">
+        <item name="fontFamily">@font/lexend_extralight</item>
+    </style>
+    <style name="HeadingLight">
+        <item name="fontFamily">@font/lexend_light</item>
+    </style>
+    <style name="HeadingRegular">
+        <item name="fontFamily">@font/lexend_regular</item>
+    </style>
+    <style name="HeadingMedium">
+        <item name="fontFamily">@font/lexend_medium</item>
+    </style>
+    <style name="HeadingSemiBold">
+        <item name="fontFamily">@font/lexend_semibold</item>
+    </style>
+    <style name="HeadingBold">
+        <item name="fontFamily">@font/lexend_bold</item>
+    </style>
+    <style name="HeadingExtraBold">
+        <item name="fontFamily">@font/lexend_extrabold</item>
+    </style>
+    <style name="HeadingBlack">
+        <item name="fontFamily">@font/lexend_black</item>
+    </style>
+
+    <style name="TextThin">
+        <item name="fontFamily">@font/roboto_thin</item>
+    </style>
+    <style name="TextExtraLight">
+        <item name="fontFamily">@font/roboto_extralight</item>
+    </style>
+    <style name="TextLight">
+        <item name="fontFamily">@font/roboto_light</item>
+    </style>
+    <style name="TextRegular">
+        <item name="fontFamily">@font/roboto_regular</item>
+    </style>
+    <style name="TextMedium">
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+    <style name="TextSemiBold">
+        <item name="fontFamily">@font/roboto_semibold</item>
+    </style>
+    <style name="TextBold">
+        <item name="fontFamily">@font/roboto_bold</item>
+    </style>
+    <style name="TextExtraBold">
+        <item name="fontFamily">@font/roboto_extrabold</item>
+    </style>
+    <style name="TextBlack">
+        <item name="fontFamily">@font/roboto_black</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="Button">
+        <item name="android:background">@drawable/button_field</item>
+        <item name="android:textColor">@color/colorContrast</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingTop">@dimen/button_padding</item>
+        <item name="android:paddingBottom">@dimen/button_padding</item>
+    </style>
+    <style name="ButtonPrimary" parent="Button">
+        <item name="android:background">@drawable/button_primary</item>
+        <item name="android:textColor">@color/colorBase</item>
+    </style>
+    <style name="ButtonBase" parent="Button">
+        <item name="android:paddingTop">@dimen/button_padding_with_border</item>
+        <item name="android:paddingBottom">@dimen/button_padding_with_border</item>
+        <item name="android:background">@drawable/button_base</item>
+    </style>
+
+    <style name="ButtonSecondary" parent="Button">
+        <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:textColor">@color/colorBase</item>
+    </style>
+
+    <style name="ButtonContrast" parent="Button">
+        <item name="android:background">@drawable/button_contrast</item>
+        <item name="android:textColor">@color/colorBase</item>
+    </style>
+
+    <style name="ButtonTertiary" parent="Button">
+        <item name="android:background">@drawable/button_tertiary</item>
+        <item name="android:textColor">@color/colorBase</item>
+    </style>
+
+
+</resources>

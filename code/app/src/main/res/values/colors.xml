@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="colorPrimary">#D2E175</color>
+    <color name="colorSecondary">#EDD662</color>  <!-- Accent (Yellow) -->
+    <color name="colorTertiary">#E54C50</color>   <!-- Accent (Red) -->
+    <color name="colorContrast">#EEEEEE</color>   <!-- Light text/icons -->
+    <color name="colorBase">#111111</color>       <!-- Main background -->
+    <color name="colorBaseField">#2A2A2A</color>  <!-- Input field background -->
 </resources>

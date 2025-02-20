@@ -2,7 +2,16 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MealClue" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorBase</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorContrast</item>
+        <item name="android:background">@color/colorBase</item>
+        <item name="colorOnBackground">@color/colorContrast</item>
+        <item name="android:textColor">@color/colorContrast</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="materialButtonStyle">@style/Button</item>
     </style>
 
     <style name="Theme.MealClue" parent="Base.Theme.MealClue" />
