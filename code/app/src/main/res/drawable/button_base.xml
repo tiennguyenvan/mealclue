@@ -3,5 +3,5 @@
     <solid android:color="@color/colorBase"/>
     <corners android:radius="@dimen/button_radius"/>
     <stroke android:color="@color/colorBaseField"
-        android:width="@dimen/button_border_width" android:dashWidth="2dp" android:dashGap="2dp"/>
+        android:width="@dimen/button_border_width" android:dashWidth="4dp" android:dashGap="4dp"/>
 </shape>

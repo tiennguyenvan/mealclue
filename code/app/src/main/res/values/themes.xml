@@ -9,7 +9,7 @@
         <item name="android:background">@color/colorBase</item>
         <item name="colorOnBackground">@color/colorContrast</item>
         <item name="android:textColor">@color/colorContrast</item>
-        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/lexend_regular</item>
         <item name="android:textSize">@dimen/text_medium</item>
         <item name="materialButtonStyle">@style/Button</item>
     </style>
