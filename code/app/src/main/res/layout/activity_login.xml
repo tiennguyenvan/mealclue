@@ -59,8 +59,11 @@
             android:layout_height="@dimen/space_xxx_large"/>
         <Button
             style="@style/Button"
+            android:drawableEnd="@drawable/ic_caret_right"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="30dp"
+            android:paddingEnd="16dp"
             android:text="@string/email"
             />
         <Space
@@ -70,6 +73,9 @@
             style="@style/ButtonContrast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="38dp"
+            android:paddingEnd="14dp"
+            android:drawableEnd="@drawable/ic_google_logo"
             android:text="@string/google"
             />
 
