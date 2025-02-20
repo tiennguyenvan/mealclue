@@ -14,7 +14,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:alpha="0.7"
             android:contentDescription="@string/login_background"
             android:scaleType="centerCrop"
@@ -30,37 +30,47 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="@dimen/space_xx_large"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
-
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TextView
             style="@style/HeadingBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textSize="@dimen/text_xxx_large" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="@dimen/space_xxx_large"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="vertical">
         <TextView
             style="@style/HeadingLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:letterSpacing="0.3"
             android:text="@string/welcome" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_xxx_large"/>
         <Button
             style="@style/Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/email"
             />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_x_large"/>
         <Button
-            style="@style/ButtonPrimary"
+            style="@style/ButtonContrast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/email"
+            android:text="@string/google"
             />
 
     </LinearLayout>
