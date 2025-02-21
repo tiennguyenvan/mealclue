@@ -3,42 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/profileFragment"
+    app:startDestination="@id/frgProfile"
     >
     <fragment
-        android:id="@+id/profileFragment"
+        android:id="@+id/frgProfile"
         android:name="com.example.mealclue.view.fragments.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
-
-
     <fragment
-        android:id="@+id/planListFragment"
+        android:id="@+id/frgPlanList"
         android:name="com.example.mealclue.view.fragments.PlanListFragment"
         android:label="Plan List"
         tools:layout="@layout/fragment_plan_list" />
 
     <fragment
-        android:id="@+id/recipeDetailFragment"
+        android:id="@+id/frgRecipeDetail"
         android:name="com.example.mealclue.view.fragments.RecipeDetailFragment"
         android:label="Recipe Detail"
         tools:layout="@layout/fragment_recipe_detail" />
 
     <fragment
-        android:id="@+id/planDetailFragment"
+        android:id="@+id/frgPlanDetail"
         android:name="com.example.mealclue.view.fragments.PlanDetailFragment"
         android:label="Plan Detail"
         tools:layout="@layout/fragment_plan_detail" />
 
     <fragment
-        android:id="@+id/socialFragment"
+        android:id="@+id/frgSocial"
         android:name="com.example.mealclue.view.fragments.SocialFragment"
         android:label="Social"
         tools:layout="@layout/fragment_social" />
 
     <fragment
-        android:id="@+id/settingsFragment"
+        android:id="@+id/frgSettings"
         android:name="com.example.mealclue.view.fragments.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
