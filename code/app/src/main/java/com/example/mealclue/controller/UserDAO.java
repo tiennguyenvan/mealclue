@@ -58,7 +58,6 @@ public class UserDAO {
         return null;
     }
 
-    // Get All Users
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
@@ -80,7 +79,6 @@ public class UserDAO {
         return userList;
     }
 
-    // Update User
     public int updateUser(User user) {
         ContentValues values = new ContentValues();
         values.put("avatar", user.getAvatar());
@@ -92,8 +90,18 @@ public class UserDAO {
         return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(user.getId())});
     }
 
-    // Delete User
     public void deleteUser(int userId) {
         db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(userId)});
+    }
+
+    public void insertMockUser() {
+        User mockUser = new User(
+                "default_avatar.png", // Avatar
+                "Alice Johnson",       // Full Name
+                5,                     // Hearts count
+                "V6B 1A9",             // Postal Code
+                "alice.johnson@example.com" // Email
+        );
+        insertUser(mockUser);
     }
 }

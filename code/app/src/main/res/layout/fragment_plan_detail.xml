@@ -7,7 +7,7 @@
     android:padding="@dimen/wrapper_padding"
     tools:context=".view.fragments.PlanDetailFragment">
 
-    <!-- plan header -->
+    <!-- mealPlan header -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
 
     <Space style="@style/SpaceXLarge" />
 
-    <!-- plan content -->
+    <!-- mealPlan content -->
     <Button
         style="@style/ButtonBase"
         android:text="@string/add_to_top" />

@@ -25,5 +25,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+
     }
 }

@@ -8,10 +8,12 @@
     android:padding="@dimen/wrapper_padding"
     tools:context=".view.fragments.ProfileFragment">
 
-    <include layout="@layout/component_profile_header"/>
+    <include layout="@layout/component_profile_header"
+        android:id="@+id/incUser"
+        />
 
-    <Space style="@style/SpaceLarge" />
-    <!-- Meal Plan & Recipe Section -->
+    <Space style="@style/SpaceXXLarge" />
+    <!-- Meal MealPlan & Recipe Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +30,7 @@
             android:textAllCaps="true"
             android:textColor="@color/colorSecondary"
             android:textSize="@dimen/text_x_small" />
-
+        <Space style="@style/SpaceXSmall"/>
 
         <!-- Recipe Image & Name -->
         <FrameLayout
@@ -90,6 +92,7 @@
                 android:layout_marginStart="@dimen/text_xxx_small"
                 android:src="@drawable/ic_caret_left"
                 android:layout_gravity="center_vertical"
+                android:alpha="0.8"
                 />
             <ImageButton
                 android:contentDescription="@string/next_recipe"
@@ -100,6 +103,7 @@
                 android:layout_marginEnd="@dimen/text_xxx_small"
                 android:src="@drawable/ic_caret_right"
                 android:layout_gravity="center_vertical|end"
+                android:alpha="0.8"
                 />
         </FrameLayout>
     </LinearLayout>

@@ -6,8 +6,9 @@
     android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/imgAvatar"
         android:contentDescription="@string/avatar"
-        android:id="@+id/imgProfileAvatar"
+
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:scaleType="centerCrop"
@@ -22,7 +23,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/txtAppName"
             style="@style/TextLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:textSize="@dimen/text_small" />
 
         <TextView
-            android:id="@+id/txtUserName"
+            android:id="@+id/txtFullName"
             style="@style/TextBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -2,6 +2,8 @@ package com.example.mealclue.view.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,14 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mealclue.R;
+import com.example.mealclue.controller.UserDAO;
+import com.example.mealclue.databinding.ComponentProfileHeaderBinding;
+import com.example.mealclue.model.User;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+import com.example.mealclue.databinding.FragmentProfileBinding;
 public class ProfileFragment extends Fragment {
-
+    private FragmentProfileBinding $;
+    private ComponentProfileHeaderBinding incProfileHeader;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,12 +62,32 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        UserDAO userDAO = new UserDAO(requireContext());
+        if (userDAO.getAllUsers().isEmpty()) {
+            userDAO.insertMockUser();
+        }
+        // for demo, I use first user at this time
+        User user = userDAO.getAllUsers().get(0);
+
+        $.incUser.txtFullName.setText(user.getFullName());
+        $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        $ = FragmentProfileBinding.inflate(inflater, container, false);
+
+        return $.getRoot();
+//        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 }

@@ -5,14 +5,14 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Plan {
+public class MealPlan {
     private int id;
     private String name;
     private int userId; // FK to User
     private String recipes; // JSON array of Recipe IDs
     private boolean goal; // True if it's a goal plan
 
-    public Plan(String name, int userId, String recipes, boolean goal) {
+    public MealPlan(String name, int userId, String recipes, boolean goal) {
         this.name = name;
         this.userId = userId;
         this.recipes = recipes;
