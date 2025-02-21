@@ -1,4 +1,4 @@
-package com.example.mealclue.view;
+package com.example.mealclue.view.activities;
 
 import android.os.Bundle;
 

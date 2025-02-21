@@ -17,4 +17,31 @@
     <string name="plan_name">Plan Name</string>
     <string name="cook">Cook</string>
     <string name="delay">Delay</string>
+    <string name="recipe_image">Recipe Image</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="_6">6</string>
+    <string name="back">Back</string>
+    <string name="new_plan">New Plan</string>
+    <string name="avatar">Avatar</string>
+    <string name="user_full_name">User Full Name</string>
+    <string name="heart_count">Heart Count</string>
+    <string name="goal">Goal</string>
+    <string name="recipe_number">Recipe Number</string>
+    <string name="unset">Unset</string>
+    <string name="add_to_top">Add to Top</string>
+    <string name="add_top_bottom">Add top Bottom</string>
+    <string name="delete">Delete</string>
+    <string name="mirror">Mirror</string>
+    <string name="down">Down</string>
+    <string name="up">Up</string>
+    <string name="search">Search</string>
+    <string name="enter_keywords">Enter keywords</string>
+    <string name="enter_value">Enter value</string>
+    <string name="label">Label</string>
+
+
 </resources>

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.LoginActivity">
+    tools:context=".view.activities.LoginActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -37,8 +37,6 @@
 
         <TextView
             style="@style/TextBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textSize="@dimen/text_xxx_large" />
     </LinearLayout>
@@ -50,7 +48,7 @@
         android:layout_weight="1"
         android:gravity="bottom|center_horizontal"
         android:orientation="vertical"
-        android:padding="@dimen/space_xxx_large">
+        android:padding="@dimen/wrapper_padding">
 
         <TextView
             style="@style/TextLight"
@@ -59,30 +57,26 @@
             android:letterSpacing="0.3"
             android:text="@string/welcome" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_xxx_large" />
+        <Space style="@style/SpaceXXXLarge" />
 
         <Button
-            style="@style/Button"
+            style="@style/ButtonField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_caret_right"
-            android:paddingStart="30dp"
-            android:paddingEnd="16dp"
+            android:paddingStart="48dp"
+            android:paddingEnd="20dp"
             android:text="@string/email" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_x_large" />
+        <Space style="@style/SpaceXLarge" />
 
         <Button
             style="@style/ButtonContrast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_google_logo"
-            android:paddingStart="38dp"
-            android:paddingEnd="14dp"
+            android:paddingStart="48dp"
+            android:paddingEnd="20dp"
             android:text="@string/google" />
 
     </LinearLayout>

@@ -5,10 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".view.fragments.SocialFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+  <include layout="@layout/component_search_bar"/>
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        style="@style/ButtonField"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <Button
+        style="@style/ButtonField"
+        android:text="@string/back"/>
 
 </FrameLayout>

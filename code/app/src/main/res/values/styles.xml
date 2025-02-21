@@ -1,14 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+
     <style name="Theme.YourAppName" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Other theme properties -->
         <item name="android:windowBackground">@color/colorBase</item> -->
+    </style>
+    <!-- layout -->
+
+    <!-- spacer -->
+    <style name="SpaceExpand">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="SpaceXXXSmall">
+        <item name="android:layout_width">@dimen/space_xxx_small</item>
+        <item name="android:layout_height">@dimen/space_xxx_small</item>
+    </style>
+    <style name="SpaceXXSmall">
+        <item name="android:layout_width">@dimen/space_xx_small</item>
+        <item name="android:layout_height">@dimen/space_xx_small</item>
+    </style>
+    <style name="SpaceXSmall">
+        <item name="android:layout_width">@dimen/space_x_small</item>
+        <item name="android:layout_height">@dimen/space_x_small</item>
+    </style>
+    <style name="SpaceSmall">
+        <item name="android:layout_width">@dimen/space_small</item>
+        <item name="android:layout_height">@dimen/space_small</item>
+    </style>
+    <style name="SpaceMedium">
+        <item name="android:layout_width">@dimen/space_medium</item>
+        <item name="android:layout_height">@dimen/space_medium</item>
+    </style>
+    <style name="SpaceLarge">
+        <item name="android:layout_width">@dimen/space_large</item>
+        <item name="android:layout_height">@dimen/space_large</item>
+    </style>
+    <style name="SpaceXLarge">
+        <item name="android:layout_width">@dimen/space_x_large</item>
+        <item name="android:layout_height">@dimen/space_x_large</item>
+    </style>
+    <style name="SpaceXXLarge">
+        <item name="android:layout_width">@dimen/space_xx_large</item>
+        <item name="android:layout_height">@dimen/space_xx_large</item>
+    </style>
+    <style name="SpaceXXXLarge">
+        <item name="android:layout_width">@dimen/space_xxx_large</item>
+        <item name="android:layout_height">@dimen/space_xxx_large</item>
     </style>
 
 
     <!-- fonts -->
     <style name="Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="backgroundTint">@android:color/transparent</item>
     </style>
     <style name="TextThin" parent="Text">
@@ -41,6 +88,9 @@
 
     <!-- Buttons, default baseField -->
     <style name="Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
         <item name="android:textColor">@color/colorContrast</item>
         <item name="android:drawableTint">@color/colorContrast</item>
         <item name="android:textAllCaps">true</item>
@@ -79,8 +129,6 @@
 
     <style name="ButtonTertiary" parent="Button">
         <item name="android:background">@drawable/button_tertiary</item>
-        <item name="android:textColor">@color/colorBase</item>
-        <item name="android:drawableTint">@color/colorBase</item>
     </style>
 
 

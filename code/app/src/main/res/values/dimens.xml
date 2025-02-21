@@ -21,11 +21,12 @@
     <dimen name="space_x_large">24dp</dimen>
     <dimen name="space_xx_large">32dp</dimen>
     <dimen name="space_xxx_large">40dp</dimen>
+    <dimen name="wrapper_padding">@dimen/space_xx_large</dimen>
 
     <dimen name="button_text_size">16sp</dimen>
     <dimen name="button_radius">100dp</dimen>
-    <dimen name="button_padding">12dp</dimen>
+    <dimen name="button_padding">18dp</dimen>
 
-    <dimen name="button_border_width">2dp</dimen>
-    <dimen name="button_padding_with_border">10dp</dimen>
+    <dimen name="button_border_width">1dp</dimen>
+    <dimen name="button_padding_with_border">17dp</dimen>
 </resources>

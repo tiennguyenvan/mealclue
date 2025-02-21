@@ -4,66 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBase"
     android:orientation="vertical"
-    android:padding="@dimen/space_xxx_large"
+    android:padding="@dimen/wrapper_padding"
     tools:context=".view.fragments.ProfileFragment">
 
-    <!-- Top Profile Section -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+    <include layout="@layout/component_profile_header"/>
 
-        <ImageView
-            android:id="@+id/imgProfileAvatar"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_profile" />
-
-        <Space
-            android:layout_width="@dimen/space_medium"
-            android:layout_height="wrap_content" />
-
-        <!-- User Info Column -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtAppName"
-                style="@style/TextLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MealClue"
-                android:textSize="@dimen/text_small" />
-
-            <TextView
-                android:id="@+id/txtUserName"
-                style="@style/TextBold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tim Nguyen"
-                android:textColor="@color/colorContrast"
-                android:textSize="@dimen/text_large" />
-
-            <TextView
-                android:id="@+id/txtHeartCount"
-                style="@style/TextExtraLight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:text="7,537 hearts"
-                android:textSize="@dimen/text_small" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/space_x_large" />
+    <Space style="@style/SpaceLarge" />
     <!-- Meal Plan & Recipe Section -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -122,9 +69,7 @@
                     android:letterSpacing="0.4"
                     android:textSize="@dimen/text_medium" />
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/space_medium" />
+                <Space style="@style/SpaceMedium" />
 
                 <TextView
                     android:id="@+id/txtRecipeName"
@@ -140,8 +85,8 @@
                 android:contentDescription="@string/previous_recipe"
                 android:id="@+id/prevRecipeButton"
                 style="@style/ButtonField"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="wrap_content"
+                android:padding="@dimen/text_large"
                 android:layout_marginStart="@dimen/text_xxx_small"
                 android:src="@drawable/ic_caret_left"
                 android:layout_gravity="center_vertical"
@@ -150,8 +95,8 @@
                 android:contentDescription="@string/next_recipe"
                 android:id="@+id/nextRecipeButton"
                 style="@style/ButtonField"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:padding="@dimen/text_large"
+                android:layout_width="wrap_content"
                 android:layout_marginEnd="@dimen/text_xxx_small"
                 android:src="@drawable/ic_caret_right"
                 android:layout_gravity="center_vertical|end"
@@ -163,19 +108,14 @@
     <Button
         android:id="@+id/btnCook"
         style="@style/ButtonPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:drawableTop="@drawable/ic_pot"
         android:text="@string/cook"
         />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/space_medium"/>
+    <Space style="@style/SpaceMedium"/>
+
     <Button
         android:id="@+id/btnDelay"
         style="@style/ButtonBase"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="@string/delay" />
 </LinearLayout>

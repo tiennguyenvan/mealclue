@@ -1,14 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.fragments.RecipeDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="200dp"
+        android:contentDescription="@string/recipe_image"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_background" />
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/wrapper_padding">
+
+        <TextView
+            style="@style/TextBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recipe_name"
+            android:textSize="@dimen/text_xx_large" />
+
+        <Space
+            android:layout_width="@dimen/space_medium"
+            android:layout_height="@dimen/space_medium"/>
+
+        <!-- Step Buttons -->
+        <androidx.recyclerview.widget.RecyclerView
+            style="@style/ButtonField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <Space style="@style/SpaceMedium"/>
+        <!-- Ingredients RecyclerView (Visible Only on Step 1) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <!-- Cooking Instruction TextView (Visible on Steps 2+) -->
+        <TextView
+            android:id="@+id/txtInstruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/colorContrast"
+            android:visibility="gone"
+            android:paddingTop="16dp"/>
+
+        <Space style="@style/SpaceXLarge"/>
+        <Button
+            style="@style/ButtonField"
+            android:text="@string/back"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
