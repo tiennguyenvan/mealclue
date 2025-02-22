@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.fragments.SocialFragment">
 
-  <include layout="@layout/component_search_bar"/>
+  <include layout="@layout/component_search_bar" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/ButtonField"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-    <Button
-        style="@style/ButtonField"
-        android:text="@string/back"/>
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recyclerCategories"
+      style="@style/ButtonField"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+ s
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recyclerSubCategories"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
 
-</FrameLayout>
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recyclerPlanList"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+  <Button
+      style="@style/ButtonField"
+      android:id="@+id/btnBack"
+      android:text="@string/back" />
+
+</LinearLayout>

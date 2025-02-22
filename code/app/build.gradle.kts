@@ -10,6 +10,10 @@ android {
     viewBinding {
         enable = true;
     }
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.example.mealclue"
         minSdk = 26
@@ -18,6 +22,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "SPOONACULAR_API_KEY", "\"${project.findProperty("SPOONACULAR_API_KEY")}\"")
+
     }
 
     buildTypes {
@@ -36,6 +43,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.converter.gson)
     implementation(libs.androidx.navigation.ui)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.appcompat)

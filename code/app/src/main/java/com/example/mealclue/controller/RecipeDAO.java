@@ -38,6 +38,12 @@ public class RecipeDAO {
         return db.insert(TABLE_NAME, null, values);
     }
 
+    public void insertOrUpdateRecipe(Recipe recipe) {
+        if (getRecipeById(recipe.getId()) == null) {
+            insertRecipe(recipe);
+        }
+    }
+
     public Recipe getRecipeById(int id) {
         Cursor cursor = db.query(TABLE_NAME, null, "id = ?", new String[]{String.valueOf(id)},
                 null, null, null);
@@ -90,4 +96,25 @@ public class RecipeDAO {
     public void deleteRecipe(int id) {
         db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
     }
+
+    public List<Recipe> searchRecipes(String keyword) {
+        List<Recipe> recipeList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM Recipe WHERE name LIKE ?", new String[]{"%" + keyword + "%"});
+
+        if (cursor.moveToFirst()) {
+            do {
+                Recipe recipe = new Recipe(
+                        cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("image")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("ingredients")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("instructions"))
+                );
+                recipe.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                recipeList.add(recipe);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return recipeList;
+    }
+
 }

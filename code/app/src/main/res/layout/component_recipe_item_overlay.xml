@@ -4,13 +4,16 @@
     android:elevation="@dimen/space_x_large"
     app:cardCornerRadius="@dimen/space_x_large"
     android:id="@+id/item"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="350dp"
+    >
 
     <ImageView
-        android:id="@+id/itemImageView"
+        android:id="@+id/imgThumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:alpha="0.7"
         android:contentDescription="@string/login_background"
         android:scaleType="centerCrop"
@@ -32,7 +35,7 @@
         android:padding="@dimen/space_x_large">
 
         <TextView
-            android:id="@+id/itemRibbonTextView"
+            android:id="@+id/txtGoalRibbon"
             style="@style/ButtonTertiary"
             android:layout_width="wrap_content"
             android:paddingStart="@dimen/space_small"
@@ -45,7 +48,7 @@
         <Space style="@style/SpaceXXXSmall" />
 
         <TextView
-            android:id="@+id/itemNameTextView"
+            android:id="@+id/txtName"
             style="@style/TextBold"
             android:text="@string/recipe_name"
             android:textSize="@dimen/text_xx_large" />
@@ -53,7 +56,7 @@
         <Space style="@style/SpaceXXSmall" />
 
         <TextView
-            android:id="@+id/itemNumberTextView"
+            android:id="@+id/txtMeta"
             style="@style/TextLight"
             android:text="@string/recipe_number"
             android:textSize="@dimen/text_medium" />

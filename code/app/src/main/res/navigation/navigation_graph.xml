@@ -10,10 +10,9 @@
         android:name="com.example.mealclue.view.fragments.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" >
-
         <action
-            android:id="@+id/action_frgProfile_to_frgPlanList"
-            app:destination="@id/frgPlanList" />
+            android:id="@+id/action_frgProfile_to_frgPlanDetail"
+            app:destination="@id/frgPlanDetail" />
     </fragment>
 
     <fragment
@@ -21,9 +20,6 @@
         android:name="com.example.mealclue.view.fragments.PlanListFragment"
         android:label="Plan List"
         tools:layout="@layout/fragment_plan_list" >
-        <argument android:name="message"
-            android:defaultValue="F"
-            />
     </fragment>
 
     <fragment
@@ -38,7 +34,10 @@
         android:label="Plan Detail"
         tools:layout="@layout/fragment_plan_detail">
 
-
+        <argument
+            android:name="argMealPlanId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
 
     <fragment

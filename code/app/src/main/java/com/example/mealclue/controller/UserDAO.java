@@ -97,7 +97,7 @@ public class UserDAO {
     public void insertMockUser() {
         User mockUser = new User(
                 "default_avatar.png", // Avatar
-                "Alice Johnson",       // Full Name
+                "Tim Nguyen",       // Full Name
                 5,                     // Hearts count
                 "V6B 1A9",             // Postal Code
                 "alice.johnson@example.com" // Email

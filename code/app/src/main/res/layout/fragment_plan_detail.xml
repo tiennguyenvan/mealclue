@@ -67,24 +67,38 @@
 
     <!-- mealPlan content -->
     <Button
+        android:id="@+id/btnAddToTop"
         style="@style/ButtonBase"
         android:text="@string/add_to_top" />
 
-    <include layout="@layout/component_search_bar" />
-
-    <androidx.recyclerview.widget.RecyclerView
-
-        style="@style/ButtonField"
+    <LinearLayout
+        android:id="@+id/linearRecipeSearchFilters"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <include
+            layout="@layout/component_search_bar"
+            android:id="@+id/incSearchBar"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerRecipeCategories"
+            style="@style/ButtonField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerRecipeSubCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <Space style="@style/SpaceXLarge" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerRecipeList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
@@ -92,10 +106,11 @@
     <Space style="@style/SpaceXLarge" />
 
     <Button
+        android:id="@+id/btnAddToBottom"
         style="@style/ButtonBase"
         android:text="@string/add_top_bottom" />
-
+    <Space style="@style/SpaceMedium" />
     <Button
         style="@style/ButtonField"
-        android:text="@string/back"/>
+        android:text="@string/back" />
 </LinearLayout>

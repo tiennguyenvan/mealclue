@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
@@ -18,12 +18,14 @@
             android:backgroundTint="@color/colorBase">
 
             <ImageView
+                android:id="@+id/imgThumb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/login_background" />
 
             <ImageView
+                android:id="@+id/imgCheckedIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -34,6 +36,7 @@
         <Space style="@style/SpaceLarge" />
 
         <TextView
+            android:id="@+id/txtName"
             style="@style/TextSemiBold"
             android:text="@string/recipe_name"
             android:textSize="@dimen/text_large" />
@@ -41,6 +44,7 @@
         <Space style="@style/SpaceExpand"/>
 
         <ImageButton
+            android:id="@+id/btnEdit"
             android:layout_width="@dimen/text_large"
             android:layout_height="@dimen/text_large"
             android:backgroundTint="@android:color/transparent"
@@ -51,6 +55,7 @@
 
 
         <ImageButton
+            android:id="@+id/btnAdd"
             android:layout_width="@dimen/text_large"
             android:layout_height="@dimen/text_large"
             android:backgroundTint="@android:color/transparent"
@@ -63,11 +68,13 @@
 
     <!-- action butons -->
     <LinearLayout
+        android:id="@+id/linearEditingActions"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
+            android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete"
@@ -75,6 +82,7 @@
             />
         <Space style="@style/SpaceExpand"/>
         <Button
+            android:id="@+id/btnMirror"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mirror"
@@ -82,6 +90,7 @@
             />
         <Space style="@style/SpaceExpand"/>
         <Button
+            android:id="@+id/btnUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/up"
@@ -89,6 +98,7 @@
             />
         <Space style="@style/SpaceExpand"/>
         <Button
+            android:id="@+id/btnDown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/down"

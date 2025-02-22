@@ -44,6 +44,8 @@
     <string name="label">Label</string>
     <string name="profile_message">Profile message</string>
     <string name="no_plan_set_as_goal">No Plan set as Goal</string>
+    <string name="category_name">Category Name</string>
+    <string name="sub_category_name">Sub Category Name</string>
 
 
 </resources>

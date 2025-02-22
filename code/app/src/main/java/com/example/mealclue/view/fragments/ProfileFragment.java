@@ -34,6 +34,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
+
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding $;
     private ComponentProfileHeaderBinding incProfileHeader;
@@ -77,12 +78,23 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+    }
+
+    /**
+     * I place code here because on onCreate, the binding  for Header Include is not ready
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         UserDAO userDAO = new UserDAO(requireContext());
         if (userDAO.count() == 0) {
             userDAO.insertMockUser();
@@ -95,31 +107,23 @@ public class ProfileFragment extends Fragment {
 
         MealPlanDAO planDAO = new MealPlanDAO(requireContext());
         List<MealPlan> goalPlans = planDAO.getGoaledByUser(user.getId());
-        if (goalPlans.isEmpty()) {
-            $.linearPlanGoal.setVisibility(View.GONE);
-            $.linearNoGoal.setVisibility(View.VISIBLE);
-        } else {
-            $.linearPlanGoal.setVisibility(View.VISIBLE);
-            $.linearNoGoal.setVisibility(View.GONE);
-        }
+//        if (goalPlans.isEmpty()) {
+//            $.linearPlanGoal.setVisibility(View.GONE);
+//            $.linearNoGoal.setVisibility(View.VISIBLE);
+//        } else {
+//            $.linearPlanGoal.setVisibility(View.VISIBLE);
+//            $.linearNoGoal.setVisibility(View.GONE);
+//        }
 
         $.btnNewPlan.setOnClickListener(v -> {
 //            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.navMainMenu);
 //            bottomNav.setSelectedItemId(R.id.frgPlanList);
 
-            ProfileFragmentDirections.ActionFrgProfileToFrgPlanList action = ProfileFragmentDirections.actionFrgProfileToFrgPlanList();
-            action.setMessage("Hello");
+            ProfileFragmentDirections.ActionFrgProfileToFrgPlanDetail action = ProfileFragmentDirections.actionFrgProfileToFrgPlanDetail();
+//            action.setArgMealPlanId(-1)
             NavController navController = Navigation.findNavController(v);
             navController.navigate(action);
         });
-
-    }
-
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override

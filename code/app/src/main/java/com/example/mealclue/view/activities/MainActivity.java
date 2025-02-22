@@ -65,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
         syncWithNavigationActions();
     }
 
+    /**
+     * when navigate using actions from graph,
+     * this bottom nav does not update when click back
+     * on the previous jump, ex: from profile to plans manually by action
+     * then we cannot click back on profile
+     * so I use this to sync with the current real fragment
+     */
     private void syncWithNavigationActions() {
         $.navMainMenu.setOnItemSelectedListener(item -> {
             NavController nv = Navigation.findNavController(this, R.id.frgMain);

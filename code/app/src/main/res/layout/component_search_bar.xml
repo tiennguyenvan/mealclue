@@ -9,7 +9,7 @@
     >
     <!-- Search Input Field -->
     <EditText
-        android:id="@+id/searchEditText"
+        android:id="@+id/inpKeywords"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -27,7 +27,7 @@
         android:paddingBottom="@dimen/space_small"
         android:paddingStart="@dimen/button_padding"
         android:paddingEnd="@dimen/button_padding"
-        android:id="@+id/searchButton"
+        android:id="@+id/btnSearch"
         style="@style/ButtonPrimary"
         android:text="@string/search"
         />

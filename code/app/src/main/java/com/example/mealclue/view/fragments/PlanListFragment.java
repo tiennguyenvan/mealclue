@@ -2,7 +2,11 @@ package com.example.mealclue.view.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +19,15 @@ import com.example.mealclue.R;
  * Use the {@link PlanListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlanListFragment extends Fragment {
+import com.example.mealclue.databinding.FragmentPlanListBinding;
+import com.example.mealclue.model.MealPlan;
+import com.example.mealclue.view.adapters.PlanListAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+public class PlanListFragment extends Fragment {
+    private FragmentPlanListBinding $;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,9 +69,28 @@ public class PlanListFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        $.btnBack.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigateUp();
+        });
+        // mock plan data
+        List<MealPlan> plans = new ArrayList<>();
+        plans.add(new MealPlan("Plan Name", 0, "", true));
+        plans.add(new MealPlan("Plan Name", 0, "", true));
+        plans.add(new MealPlan("Plan Name", 0, "", true));
+        plans.add(new MealPlan("Plan Name", 0, "", true));
+        $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        PlanListAdapter planAdapter = new PlanListAdapter(plans);
+        $.recyclerPlanList.setAdapter(planAdapter);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_plan_list, container, false);
+        $ = FragmentPlanListBinding.inflate(inflater, container, false);
+//        return inflater.inflate(R.layout.fragment_plan_list, container, false);
+        return $.getRoot();
     }
 }

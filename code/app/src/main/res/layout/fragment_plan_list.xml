@@ -8,6 +8,7 @@
     tools:context=".view.fragments.PlanListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerPlanList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
@@ -16,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/btnBack"
             style="@style/ButtonField"
             android:text="@string/back"
             android:layout_width="0dp"
@@ -23,6 +25,7 @@
             />
         <Space style="@style/SpaceMedium"/>
         <Button
+            android:id="@+id/btnNewPlan"
             style="@style/ButtonBase"
             android:text="@string/new_plan"
             android:layout_width="0dp"

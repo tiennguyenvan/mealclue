@@ -2,7 +2,10 @@ package com.example.mealclue.view.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +18,18 @@ import com.example.mealclue.R;
  * Use the {@link SocialFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SocialFragment extends Fragment {
+import com.example.mealclue.databinding.FragmentSocialBinding;
+import com.example.mealclue.model.MealPlan;
+import com.example.mealclue.view.adapters.CategoryAdapter;
+import com.example.mealclue.view.adapters.PlanListAdapter;
+import com.example.mealclue.view.adapters.SubCategoryAdapter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class SocialFragment extends Fragment {
+    private FragmentSocialBinding $;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,9 +71,35 @@ public class SocialFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // mock plan data
+        List<MealPlan> plans = new ArrayList<>();
+        plans.add(new MealPlan("Plan Name", 0, "", true));
+        plans.add(new MealPlan("Plan Name", 0, "", true));
+        plans.add(new MealPlan("Plan Name", 0, "", true));
+        plans.add(new MealPlan("Plan Name", 0, "", true));
+        $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        PlanListAdapter planAdapter = new PlanListAdapter(plans);
+        $.recyclerPlanList.setAdapter(planAdapter);
+
+        List<String> categories = Arrays.asList("Distance", "Heart", "Saved", "Test");
+        $.recyclerCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        CategoryAdapter categoryAdapter = new CategoryAdapter(categories);
+        $.recyclerCategories.setAdapter(categoryAdapter);
+
+        List<String> subCategories = Arrays.asList("Clear", "1km", "5km", "10km");
+        $.recyclerSubCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        SubCategoryAdapter subCatAdapt = new SubCategoryAdapter(subCategories);
+        $.recyclerSubCategories.setAdapter(subCatAdapt);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_social, container, false);
+        $ = FragmentSocialBinding.inflate(inflater, container, false);
+        return $.getRoot();
+//        return inflater.inflate(R.layout.fragment_social, container, false);
     }
 }
