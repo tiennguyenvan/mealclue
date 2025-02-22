@@ -9,13 +9,22 @@
         android:id="@+id/frgProfile"
         android:name="com.example.mealclue.view.fragments.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+
+        <action
+            android:id="@+id/action_frgProfile_to_frgPlanList"
+            app:destination="@id/frgPlanList" />
+    </fragment>
 
     <fragment
         android:id="@+id/frgPlanList"
         android:name="com.example.mealclue.view.fragments.PlanListFragment"
         android:label="Plan List"
-        tools:layout="@layout/fragment_plan_list" />
+        tools:layout="@layout/fragment_plan_list" >
+        <argument android:name="message"
+            android:defaultValue="F"
+            />
+    </fragment>
 
     <fragment
         android:id="@+id/frgRecipeDetail"
@@ -27,7 +36,10 @@
         android:id="@+id/frgPlanDetail"
         android:name="com.example.mealclue.view.fragments.PlanDetailFragment"
         android:label="Plan Detail"
-        tools:layout="@layout/fragment_plan_detail" />
+        tools:layout="@layout/fragment_plan_detail">
+
+
+    </fragment>
 
     <fragment
         android:id="@+id/frgSocial"

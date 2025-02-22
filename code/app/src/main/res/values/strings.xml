@@ -42,6 +42,8 @@
     <string name="enter_keywords">Enter keywords</string>
     <string name="enter_value">Enter value</string>
     <string name="label">Label</string>
+    <string name="profile_message">Profile message</string>
+    <string name="no_plan_set_as_goal">No Plan set as Goal</string>
 
 
 </resources>

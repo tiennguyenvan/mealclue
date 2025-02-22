@@ -28,8 +28,7 @@ public class MealPlanDAO {
         db = dbHelper.getWritableDatabase();
     }
 
-    // Insert MealPlan
-    public long insertPlan(MealPlan mealPlan) {
+    public long insert(MealPlan mealPlan) {
         ContentValues values = new ContentValues();
         values.put("name", mealPlan.getName());
         values.put("user_id", mealPlan.getUserId());
@@ -40,7 +39,7 @@ public class MealPlanDAO {
     }
 
     // Get MealPlan by ID
-    public MealPlan getPlanById(int id) {
+    public MealPlan getById(int id) {
         Cursor cursor = db.query(TABLE_NAME, null, "id = ?", new String[]{String.valueOf(id)},
                 null, null, null);
 
@@ -59,7 +58,7 @@ public class MealPlanDAO {
     }
 
     // Get All Plans for a User
-    public List<MealPlan> getAllPlansByUser(int userId) {
+    public List<MealPlan> getByUser(int userId) {
         List<MealPlan> mealPlanList = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE user_id = ?", new String[]{String.valueOf(userId)});
 
@@ -80,7 +79,7 @@ public class MealPlanDAO {
     }
 
     // Get Only Goal Plans for a User
-    public List<MealPlan> getGoalPlansByUser(int userId) {
+    public List<MealPlan> getGoaledByUser(int userId) {
         List<MealPlan> mealPlanList = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE user_id = ? AND goal = 1", new String[]{String.valueOf(userId)});
 
@@ -100,8 +99,7 @@ public class MealPlanDAO {
         return mealPlanList;
     }
 
-    // Update MealPlan
-    public int updatePlan(MealPlan mealPlan) {
+    public int update(MealPlan mealPlan) {
         ContentValues values = new ContentValues();
         values.put("name", mealPlan.getName());
         values.put("user_id", mealPlan.getUserId());
@@ -111,8 +109,16 @@ public class MealPlanDAO {
         return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(mealPlan.getId())});
     }
 
-    // Delete MealPlan
-    public void deletePlan(int id) {
+    public void update(int id) {
         db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+    }
+    public int count() {
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME, null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
     }
 }

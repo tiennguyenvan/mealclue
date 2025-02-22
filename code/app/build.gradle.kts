@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
+//    id("androidx.navigation.safeargs")
 }
+apply(plugin = "androidx.navigation.safeargs")
 
 android {
     namespace = "com.example.mealclue"
@@ -34,8 +36,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.navigation.fragment.ktx)
-    implementation(libs.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.navigation.fragment)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

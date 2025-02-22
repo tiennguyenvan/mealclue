@@ -4,122 +4,155 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="@dimen/wrapper_padding"
     tools:context=".view.fragments.ProfileFragment">
 
-    <include layout="@layout/component_profile_header"
+    <include
         android:id="@+id/incUser"
-        />
+        layout="@layout/component_profile_header" />
+
 
     <Space style="@style/SpaceXXLarge" />
-    <!-- Meal MealPlan & Recipe Section -->
+
     <LinearLayout
+        android:id="@+id/linearPlanGoal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:visibility="gone"
         android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/txtPlanLabel"
-            style="@style/TextMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:letterSpacing="0.3"
-            android:text="@string/plan_name"
-            android:textAllCaps="true"
-            android:textColor="@color/colorSecondary"
-            android:textSize="@dimen/text_x_small" />
-        <Space style="@style/SpaceXSmall"/>
-
-        <!-- Recipe Image & Name -->
-        <FrameLayout
+        <!-- Meal MealPlan & Recipe Section -->
+        <LinearLayout
+            android:id="@+id/linearCurRecipe"
             android:layout_width="match_parent"
-            android:layout_height="250dp">
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/recipeImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0.7"
-                android:contentDescription="@string/login_background"
-                android:scaleType="centerCrop"
-                android:src="@drawable/login_background" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_gravity="bottom"
-                android:background="@drawable/gradient_bottom_overlay" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/txtPlanName"
+                style="@style/TextMedium"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:backgroundTint="@android:color/transparent"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="@dimen/space_large">
+                android:letterSpacing="0.3"
+                android:text="@string/plan_name"
+                android:textAllCaps="true"
+                android:textColor="@color/colorSecondary"
+                android:textSize="@dimen/text_x_small" />
 
-                <TextView
-                    android:id="@+id/txtMealType"
-                    style="@style/TextLight"
-                    android:layout_width="wrap_content"
+            <Space style="@style/SpaceXSmall" />
+
+            <!-- Recipe Image & Name -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp">
+
+                <ImageView
+                    android:id="@+id/imgRecipeThumb"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.7"
+                    android:contentDescription="@string/login_background"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/login_background" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/gradient_bottom_overlay" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/lunch"
-                    android:textAllCaps="true"
-                    android:letterSpacing="0.4"
-                    android:textSize="@dimen/text_medium" />
+                    android:layout_gravity="bottom"
+                    android:backgroundTint="@android:color/transparent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_large">
 
-                <Space style="@style/SpaceMedium" />
+                    <TextView
+                        android:id="@+id/txtMealType"
+                        style="@style/TextLight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.4"
+                        android:text="@string/lunch"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/text_medium" />
 
-                <TextView
-                    android:id="@+id/txtRecipeName"
-                    style="@style/TextMedium"
+                    <Space style="@style/SpaceMedium" />
+
+                    <TextView
+                        android:id="@+id/txtRecipeName"
+                        style="@style/TextMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/recipe_name"
+                        android:textSize="@dimen/text_x_large"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/btnPrevRecipe"
+                    style="@style/ButtonField"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/recipe_name"
-                    android:textSize="@dimen/text_x_large"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/text_xxx_small"
+                    android:alpha="0.8"
+                    android:contentDescription="@string/previous_recipe"
+                    android:padding="@dimen/text_large"
+                    android:src="@drawable/ic_caret_left" />
 
-            <ImageButton
-                android:contentDescription="@string/previous_recipe"
-                android:id="@+id/prevRecipeButton"
-                style="@style/ButtonField"
-                android:layout_width="wrap_content"
-                android:padding="@dimen/text_large"
-                android:layout_marginStart="@dimen/text_xxx_small"
-                android:src="@drawable/ic_caret_left"
-                android:layout_gravity="center_vertical"
-                android:alpha="0.8"
-                />
-            <ImageButton
-                android:contentDescription="@string/next_recipe"
-                android:id="@+id/nextRecipeButton"
-                style="@style/ButtonField"
-                android:padding="@dimen/text_large"
-                android:layout_width="wrap_content"
-                android:layout_marginEnd="@dimen/text_xxx_small"
-                android:src="@drawable/ic_caret_right"
-                android:layout_gravity="center_vertical|end"
-                android:alpha="0.8"
-                />
-        </FrameLayout>
+                <ImageButton
+                    android:id="@+id/btnNextRecipe"
+                    style="@style/ButtonField"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/text_xxx_small"
+                    android:alpha="0.8"
+                    android:contentDescription="@string/next_recipe"
+                    android:padding="@dimen/text_large"
+                    android:src="@drawable/ic_caret_right" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <Space style="@style/SpaceLarge" />
+
+        <!-- Cook & Delay Buttons -->
+        <Button
+            android:id="@+id/btnCook"
+            style="@style/ButtonPrimary"
+            android:drawableTop="@drawable/ic_pot"
+            android:text="@string/cook" />
+
+        <Space style="@style/SpaceMedium" />
+
+        <Button
+            android:id="@+id/btnDelay"
+            style="@style/ButtonBase"
+            android:text="@string/delay" />
     </LinearLayout>
 
-    <!-- Cook & Delay Buttons -->
-    <Button
-        android:id="@+id/btnCook"
-        style="@style/ButtonPrimary"
-        android:drawableTop="@drawable/ic_pot"
-        android:text="@string/cook"
-        />
+    <LinearLayout
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/linearNoGoal">
 
-    <Space style="@style/SpaceMedium"/>
+        <TextView
+            android:id="@+id/txtMessage"
+            style="@style/TextMedium"
+            android:text="@string/profile_message" />
+        <Space style="@style/SpaceLarge"/>
+        <Button
+            android:id="@+id/btnNewPlan"
+            style="@style/ButtonBase"
+            android:text="@string/new_plan" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btnDelay"
-        style="@style/ButtonBase"
-        android:text="@string/delay" />
 </LinearLayout>

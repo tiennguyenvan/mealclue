@@ -28,7 +28,7 @@ public class UserDAO {
         db = dbHelper.getWritableDatabase();
     }
 
-    public long insertUser(User user) {
+    public long insert(User user) {
         ContentValues values = new ContentValues();
         values.put("avatar", user.getAvatar());
         values.put("full_name", user.getFullName());
@@ -39,7 +39,7 @@ public class UserDAO {
         return db.insert(TABLE_NAME, null, values);
     }
 
-    public User getUserByEmail(String email) {
+    public User getByEmail(String email) {
         Cursor cursor = db.query(TABLE_NAME, null, "email = ?", new String[]{email},
                 null, null, null);
 
@@ -58,7 +58,7 @@ public class UserDAO {
         return null;
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         List<User> userList = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
 
@@ -79,7 +79,7 @@ public class UserDAO {
         return userList;
     }
 
-    public int updateUser(User user) {
+    public int update(User user) {
         ContentValues values = new ContentValues();
         values.put("avatar", user.getAvatar());
         values.put("full_name", user.getFullName());
@@ -102,6 +102,16 @@ public class UserDAO {
                 "V6B 1A9",             // Postal Code
                 "alice.johnson@example.com" // Email
         );
-        insertUser(mockUser);
+        insert(mockUser);
+    }
+
+    public int count() {
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME, null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
     }
 }

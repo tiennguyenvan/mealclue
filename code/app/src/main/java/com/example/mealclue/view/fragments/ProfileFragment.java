@@ -5,15 +5,24 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mealclue.R;
+import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.UserDAO;
 import com.example.mealclue.databinding.ComponentProfileHeaderBinding;
+import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.User;
+
+import com.example.mealclue.view.fragments.ProfileFragmentDirections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,9 +30,14 @@ import com.example.mealclue.model.User;
  * create an instance of this fragment.
  */
 import com.example.mealclue.databinding.FragmentProfileBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
+
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding $;
     private ComponentProfileHeaderBinding incProfileHeader;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -63,23 +77,50 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        UserDAO userDAO = new UserDAO(requireContext());
+        if (userDAO.count() == 0) {
+            userDAO.insertMockUser();
+        }
+        // for demo, I use first user at this time
+        User user = userDAO.getAll().get(0);
+
+        $.incUser.txtFullName.setText(user.getFullName());
+        $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));
+
+        MealPlanDAO planDAO = new MealPlanDAO(requireContext());
+        List<MealPlan> goalPlans = planDAO.getGoaledByUser(user.getId());
+        if (goalPlans.isEmpty()) {
+            $.linearPlanGoal.setVisibility(View.GONE);
+            $.linearNoGoal.setVisibility(View.VISIBLE);
+        } else {
+            $.linearPlanGoal.setVisibility(View.VISIBLE);
+            $.linearNoGoal.setVisibility(View.GONE);
+        }
+
+        $.btnNewPlan.setOnClickListener(v -> {
+//            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.navMainMenu);
+//            bottomNav.setSelectedItemId(R.id.frgPlanList);
+
+            ProfileFragmentDirections.ActionFrgProfileToFrgPlanList action = ProfileFragmentDirections.actionFrgProfileToFrgPlanList();
+            action.setMessage("Hello");
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(action);
+        });
+
+    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        UserDAO userDAO = new UserDAO(requireContext());
-        if (userDAO.getAllUsers().isEmpty()) {
-            userDAO.insertMockUser();
-        }
-        // for demo, I use first user at this time
-        User user = userDAO.getAllUsers().get(0);
-
-        $.incUser.txtFullName.setText(user.getFullName());
-        $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
