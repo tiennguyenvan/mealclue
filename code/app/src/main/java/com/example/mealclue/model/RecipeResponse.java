@@ -3,9 +3,9 @@ package com.example.mealclue.model;
 import java.util.List;
 
 public class RecipeResponse {
-    private List<Recipe> recipes;
+    private List<Recipe> results;
 
     public List<Recipe> getRecipes() {
-        return recipes;
+        return results;
     }
 }

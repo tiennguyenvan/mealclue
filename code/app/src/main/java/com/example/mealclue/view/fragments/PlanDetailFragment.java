@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.mealclue.R;
 import com.example.mealclue.controller.RecipeDAO;
@@ -37,6 +38,7 @@ import retrofit2.Response;
  */
 import com.example.mealclue.databinding.FragmentPlanDetailBinding;
 import com.example.mealclue.view.adapters.SubCategoryAdapter;
+import com.google.gson.Gson;
 
 public class PlanDetailFragment extends Fragment {
     private FragmentPlanDetailBinding $;
@@ -100,17 +102,24 @@ public class PlanDetailFragment extends Fragment {
         $.btnAddToBottom.setVisibility(View.GONE);
 
         $.linearRecipeSearchFilters.setVisibility(View.VISIBLE);
-        List<Recipe> mockRecipes = new ArrayList<>();
-        mockRecipes.add(new Recipe("Spaghetti Bolognese", String.valueOf(R.drawable.login_background), "", ""));
-        mockRecipes.add(new Recipe("Grilled Chicken Salad", String.valueOf(R.drawable.login_background), "", ""));
-        mockRecipes.add(new Recipe("Pancakes", String.valueOf(R.drawable.login_background), "", ""));
-        updateRecyclerView(mockRecipes);
-        $.incSearchBar.btnSearch.setOnClickListener(v -> {
-            String keyword = $.incSearchBar.inpKeywords.getText().toString().trim();
-            if (!keyword.isEmpty()) {
+
+//        List<Recipe> mockRecipes = new ArrayList<>();
+//        mockRecipes.add(new Recipe("Spaghetti Bolognese", String.valueOf(R.drawable.login_background), "", ""));
+//        mockRecipes.add(new Recipe("Grilled Chicken Salad", String.valueOf(R.drawable.login_background), "", ""));
+//        mockRecipes.add(new Recipe("Pancakes", String.valueOf(R.drawable.login_background), "", ""));
+//        updateRecyclerView(mockRecipes);
+        List<Recipe> recipes = new RecipeDAO(requireContext()).getAllRecipes();
+        updateRecyclerView(recipes);
+
+
+        searchRecipes("noodle");
+
+//        $.incSearchBar.btnSearch.setOnClickListener(v -> {
+//            String keyword = $.incSearchBar.inpKeywords.getText().toString().trim();
+//            if (!keyword.isEmpty()) {
 //                searchRecipes(keyword);
-            }
-        });
+//            }
+//        });
 
         List<String> categories = Arrays.asList("Cuisines", "Ingredients", "Calories", "Test");
         $.recyclerRecipeCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -138,6 +147,16 @@ public class PlanDetailFragment extends Fragment {
         }
     }
 
+
+    /**
+     * 2025-02-28 10:19:30.725  1309-1309  API_RESPONSE
+     * com.example.mealclue                 D
+     * Response body:
+     * {"results":[{"id":633858,"image":"https://img.spoonacular.com/recipes/633858-312x231.jpg"},{"id":632778,"image":"https://img.spoonacular.com/recipes/632778-312x231.jpg"},{"id":643642,"image":"https://img.spoonacular.com/recipes/643642-312x231.jpg"},{"id":642583,"image":"https://img.spoonacular.com/recipes/642583-312x231.jpg"},{"id":645354,"image":"https://img.spoonacular.com/recipes/645354-312x231.jpg"}]}
+     *
+     * {"results":[{"id":633858,"title":"Baked Tortellini In Red Sauce","image":"https://img.spoonacular.com/recipes/633858-312x231.jpg","imageType":"jpg"},{"id":632778,"title":"Artisan Farfalle Pasta With Smoked Salmon and Cream Sauce","image":"https://img.spoonacular.com/recipes/632778-312x231.jpg","imageType":"jpg"},{"id":643642,"title":"Macaroni Pasta with Fresh Tomatoes, Zucchini and Artichokes","image":"https://img.spoonacular.com/recipes/643642-312x231.jpg","imageType":"jpg"},{"id":642583,"title":"Farfalle with Peas, Ham and Cream","image":"https://img.spoonacular.com/recipes/642583-312x231.jpg","imageType":"jpg"},{"id":645354,"title":"Greek Shrimp Orzo","image":"https://img.spoonacular.com/recipes/645354-312x231.jpg","imageType":"jpg"}],"offset":0,"number":5,"totalResults":297}
+     * @param keyword
+     */
     private void fetchRecipesFromAPI(String keyword) {
         SpoonacularApiService apiService = RetrofitClient.getClient().create(SpoonacularApiService.class);
         String apiKey = RetrofitClient.getApiKey();
@@ -145,6 +164,9 @@ public class PlanDetailFragment extends Fragment {
         apiService.searchRecipes(apiKey, keyword, 5).enqueue(new Callback<RecipeResponse>() {
             @Override
             public void onResponse(Call<RecipeResponse> call, Response<RecipeResponse> response) {
+                Log.d("API_REQUEST", "Request URL: " + call.request().url());
+                Log.d("API_RESPONSE", "Response body: " + new Gson().toJson(response.body()));
+
                 if (response.isSuccessful() && response.body() != null) {
                     List<Recipe> recipes = response.body().getRecipes();
 
@@ -162,7 +184,11 @@ public class PlanDetailFragment extends Fragment {
 
             @Override
             public void onFailure(Call<RecipeResponse> call, Throwable t) {
+                Log.e("API_REQUEST", "Request URL: " + call.request().url());
                 Log.e("API_ERROR", "Failed to fetch recipes", t);
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(), "API Error: " + t.getMessage(), Toast.LENGTH_LONG).show()
+                );
             }
         });
     }

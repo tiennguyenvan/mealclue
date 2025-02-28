@@ -36,7 +36,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
-        holder.$.txtName.setText(recipe.getName());
+        holder.$.txtName.setText(recipe.getTitle());
 
         try {
             int imageResId = Integer.parseInt(recipe.getImage()); // Convert stored string back to int

@@ -10,17 +10,19 @@ import java.util.Map;
 
 public class Recipe {
     private int id;
-    private String name;
+    private String title;
     private String image; // URL or file path
     private String ingredients; // JSON map of <name of ingredient -> amount>
     private String instructions; // JSON array of steps [str,str]
 
-    public Recipe(String name, String image, String ingredients, String instructions) {
-        this.name = name;
+    public Recipe(int id, String title, String image) {
+        this.id = id;
+        this.title = title;
         this.image = image;
-        this.ingredients = ingredients;
-        this.instructions = instructions;
+        this.ingredients = null; // Placeholder for future data
+        this.instructions = null; // Placeholder for future data
     }
+
 
     public Map<String, String> getIngredientsMap() throws JSONException {
         Map<String, String> ingredientsMap = new HashMap<>();
@@ -52,12 +54,12 @@ public class Recipe {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getImage() {
@@ -82,5 +84,16 @@ public class Recipe {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", image='" + image + '\'' +
+                ", ingredients='" + ingredients + '\'' +
+                ", instructions='" + instructions + '\'' +
+                '}';
     }
 }

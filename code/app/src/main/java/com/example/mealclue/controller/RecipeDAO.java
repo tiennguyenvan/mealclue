@@ -14,12 +14,12 @@ public class RecipeDAO {
     public static final String TABLE_NAME = "Recipe";
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
-            + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + "name TEXT NOT NULL, "
+            + "id INTEGER PRIMARY KEY, "
+            + "title TEXT NOT NULL, "
             + "image TEXT, "
             + "youtube_url TEXT, "
-            + "ingredients TEXT NOT NULL, "
-            + "instructions TEXT NOT NULL);";
+            + "ingredients TEXT, "
+            + "instructions TEXT);";
 
     private SQLiteDatabase db;
 
@@ -29,8 +29,10 @@ public class RecipeDAO {
     }
 
     public long insertRecipe(Recipe recipe) {
+        System.out.println(recipe);
         ContentValues values = new ContentValues();
-        values.put("name", recipe.getName());
+        values.put("id", recipe.getId()); // Ensure ID is inserted
+        values.put("title", recipe.getTitle());
         values.put("image", recipe.getImage());
         values.put("ingredients", recipe.getIngredients());
         values.put("instructions", recipe.getInstructions());
@@ -39,6 +41,7 @@ public class RecipeDAO {
     }
 
     public void insertOrUpdateRecipe(Recipe recipe) {
+        // if this id is not in the the database yet
         if (getRecipeById(recipe.getId()) == null) {
             insertRecipe(recipe);
         }
@@ -50,12 +53,10 @@ public class RecipeDAO {
 
         if (cursor.moveToFirst()) {
             Recipe recipe = new Recipe(
-                    cursor.getString(cursor.getColumnIndexOrThrow("name")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("image")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("ingredients")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("instructions"))
+                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("image"))
             );
-            recipe.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             cursor.close();
             return recipe;
         }
@@ -69,12 +70,10 @@ public class RecipeDAO {
         if (cursor.moveToFirst()) {
             do {
                 Recipe recipe = new Recipe(
-                        cursor.getString(cursor.getColumnIndexOrThrow("name")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("image")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("ingredients")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("instructions"))
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("image"))
                 );
-                recipe.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 recipeList.add(recipe);
             } while (cursor.moveToNext());
         }
@@ -84,13 +83,14 @@ public class RecipeDAO {
 
     public int updateRecipe(Recipe recipe) {
         ContentValues values = new ContentValues();
-        values.put("name", recipe.getName());
+        values.put("title", recipe.getTitle());
         values.put("image", recipe.getImage());
         values.put("ingredients", recipe.getIngredients());
         values.put("instructions", recipe.getInstructions());
 
         return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(recipe.getId())});
     }
+
 
     // Delete Recipe
     public void deleteRecipe(int id) {
@@ -99,17 +99,15 @@ public class RecipeDAO {
 
     public List<Recipe> searchRecipes(String keyword) {
         List<Recipe> recipeList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM Recipe WHERE name LIKE ?", new String[]{"%" + keyword + "%"});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE title LIKE ?", new String[]{"%" + keyword + "%"});
 
         if (cursor.moveToFirst()) {
             do {
                 Recipe recipe = new Recipe(
-                        cursor.getString(cursor.getColumnIndexOrThrow("name")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("image")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("ingredients")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("instructions"))
+                        cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("image"))
                 );
-                recipe.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 recipeList.add(recipe);
             } while (cursor.moveToNext());
         }
