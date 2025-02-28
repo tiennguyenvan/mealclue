@@ -2,13 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
     <color name="colorPrimary">#4A6800</color>
     <color name="colorSecondary">#C9A000</color>
     <color name="colorTertiary">#D93A3E</color>
     <color name="colorContrast">#222222</color>
     <color name="colorBase">#F7F7F7</color>
     <color name="colorBaseField">#EDEDED</color>
-
-
 </resources>
