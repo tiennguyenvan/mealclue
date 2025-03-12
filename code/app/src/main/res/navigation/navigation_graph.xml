@@ -11,8 +11,17 @@
         android:label="Profile"
         tools:layout="@layout/fragment_profile" >
         <action
+            android:id="@+id/action_frgProfile_to_frgRecipeDetail"
+            app:destination="@id/frgRecipeDetail" />
+        <action
+            android:id="@+id/action_frgProfile_to_frgSettings"
+            app:destination="@id/frgSettings" />
+        <action
             android:id="@+id/action_frgProfile_to_frgPlanDetail"
             app:destination="@id/frgPlanDetail" />
+        <action
+            android:id="@+id/action_frgProfile_to_frgPlanList"
+            app:destination="@id/frgPlanList" />
     </fragment>
 
     <fragment
@@ -20,6 +29,9 @@
         android:name="com.example.mealclue.view.fragments.PlanListFragment"
         android:label="Plan List"
         tools:layout="@layout/fragment_plan_list" >
+        <action
+            android:id="@+id/action_frgPlanList_to_frgPlanDetail"
+            app:destination="@id/frgPlanDetail" />
     </fragment>
 
     <fragment
@@ -38,13 +50,36 @@
             android:name="argMealPlanId"
             app:argType="long"
             android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_frgPlanDetail_to_frgPlanDetailSearchRecipe"
+            app:destination="@id/frgPlanDetailSearchRecipe" />
+        <action
+            android:id="@+id/action_frgPlanDetail_to_frgRecipeDetail"
+            app:destination="@id/frgRecipeDetail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/frgPlanDetailSearchRecipe"
+        android:name="com.example.mealclue.view.fragments.PlanDetailSearchRecipeFragment"
+        android:label="Plan Detail Search Recipes"
+        tools:layout="@layout/fragment_plan_detail_search_recipe">
+        <action
+            android:id="@+id/action_frgPlanDetailSearchRecipe_to_frgPlanDetail"
+            app:destination="@id/frgPlanDetail" />
+        <action
+            android:id="@+id/action_frgPlanDetailSearchRecipe_to_frgRecipeDetail"
+            app:destination="@id/frgRecipeDetail" />
     </fragment>
 
     <fragment
         android:id="@+id/frgSocial"
         android:name="com.example.mealclue.view.fragments.SocialFragment"
         android:label="Social"
-        tools:layout="@layout/fragment_social" />
+        tools:layout="@layout/fragment_social" >
+        <action
+            android:id="@+id/action_frgSocial_to_frgPlanDetail"
+            app:destination="@id/frgPlanDetail" />
+    </fragment>
 
     <fragment
         android:id="@+id/frgSettings"

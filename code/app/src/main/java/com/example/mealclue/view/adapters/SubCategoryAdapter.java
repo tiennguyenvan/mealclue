@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mealclue.databinding.ComponentSubCategoryItemBinding;
+import com.example.mealclue.databinding.RecyclerItemSubCategoryBinding;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
     @NonNull
     @Override
     public SubCategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ComponentSubCategoryItemBinding binding = ComponentSubCategoryItemBinding.inflate(
+        RecyclerItemSubCategoryBinding binding = RecyclerItemSubCategoryBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false
         );
         return new SubCategoryAdapter.ViewHolder(binding);
@@ -53,9 +53,9 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ComponentSubCategoryItemBinding $;
+        RecyclerItemSubCategoryBinding $;
 
-        public ViewHolder(@NonNull ComponentSubCategoryItemBinding binding) {
+        public ViewHolder(@NonNull RecyclerItemSubCategoryBinding binding) {
             super(binding.getRoot());
             this.$ = binding;
         }

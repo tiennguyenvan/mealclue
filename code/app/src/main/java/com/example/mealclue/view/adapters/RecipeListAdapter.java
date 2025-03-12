@@ -10,10 +10,10 @@ import com.bumptech.glide.Glide;
 import com.example.mealclue.model.Recipe;
 import java.util.List;
 
-import com.example.mealclue.databinding.ComponentRecipeItemEditorBinding;
+import com.example.mealclue.databinding.RecyclerItemRecipeEditorBinding;
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.ViewHolder> {
     private List<Recipe> recipes;
-    private ComponentRecipeItemEditorBinding $;
+    private RecyclerItemRecipeEditorBinding $;
     Context context;
 
     public RecipeListAdapter(List<Recipe> recipes, Context context) {
@@ -27,7 +27,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 //        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.component_recipe_item_editor, parent, false);
 //        return new ViewHolder(view);
-        ComponentRecipeItemEditorBinding binding = ComponentRecipeItemEditorBinding.inflate(
+        RecyclerItemRecipeEditorBinding binding = RecyclerItemRecipeEditorBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false
         );
         return new ViewHolder(binding.getRoot(), binding);
@@ -53,9 +53,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ComponentRecipeItemEditorBinding $;
+        RecyclerItemRecipeEditorBinding $;
 
-        public ViewHolder(@NonNull View itemView, ComponentRecipeItemEditorBinding $) {
+        public ViewHolder(@NonNull View itemView, RecyclerItemRecipeEditorBinding $) {
             super(itemView);
             this.$ = $;
         }

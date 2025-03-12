@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.mealclue.databinding.ComponentRecipeItemOverlayBinding;
+import com.example.mealclue.databinding.RecyclerItemRecipeOverlayBinding;
 import com.example.mealclue.model.MealPlan;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ComponentRecipeItemOverlayBinding binding = ComponentRecipeItemOverlayBinding.inflate(
+        RecyclerItemRecipeOverlayBinding binding = RecyclerItemRecipeOverlayBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false
         );
         return new ViewHolder(binding);
@@ -46,9 +46,9 @@ public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.ViewHo
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ComponentRecipeItemOverlayBinding $;
+        RecyclerItemRecipeOverlayBinding $;
 
-        public ViewHolder(@NonNull ComponentRecipeItemOverlayBinding binding) {
+        public ViewHolder(@NonNull RecyclerItemRecipeOverlayBinding binding) {
             super(binding.getRoot());
             this.$ = binding;
         }

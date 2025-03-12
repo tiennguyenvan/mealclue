@@ -11,26 +11,13 @@
 
     <include
         android:id="@+id/incUser"
-        layout="@layout/component_profile_header" />
-
-
+        layout="@layout/inc_profile_header" />
     <Space style="@style/SpaceXXLarge" />
-    <TextView
-        android:id="@+id/txtMessage"
-        style="@style/TextMedium"
-        android:text="@string/profile_message" />
-    <Space style="@style/SpaceLarge"/>
-    <Button
-        android:id="@+id/btnNewPlan"
-        style="@style/ButtonBase"
-        android:text="@string/new_plan" />
-    <Space style="@style/SpaceLarge"/>
     <LinearLayout
         android:id="@+id/linearPlanGoal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-
         android:orientation="vertical">
         <!-- Meal MealPlan & Recipe Section -->
         <LinearLayout
@@ -137,12 +124,12 @@
             android:drawableTop="@drawable/ic_pot"
             android:text="@string/cook" />
 
-        <Space style="@style/SpaceMedium" />
+<!--        <Space style="@style/SpaceMedium" />-->
 
-        <Button
-            android:id="@+id/btnDelay"
-            style="@style/ButtonBase"
-            android:text="@string/delay" />
+<!--        <Button-->
+<!--            android:id="@+id/btnDelay"-->
+<!--            style="@style/ButtonBase"-->
+<!--            android:text="@string/delay" />-->
     </LinearLayout>
 
     <LinearLayout
@@ -151,7 +138,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/linearNoGoal">
-
+        <Button
+            android:id="@+id/btnSetGoalPlan"
+            style="@style/ButtonBase"
+            android:text="Set A Goal Plan" />
 
     </LinearLayout>
 

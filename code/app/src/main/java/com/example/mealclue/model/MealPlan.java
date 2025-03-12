@@ -20,12 +20,15 @@ public class MealPlan {
     }
 
     // Convert recipes JSON string to a List<Integer>
-    public List<Integer> getRecipeIdsList() throws JSONException {
+    public List<Integer> getRecipeIdsList() {
         List<Integer> recipeIds = new ArrayList<>();
-        JSONArray jsonArray = new JSONArray(recipes);
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            recipeIds.add(jsonArray.getInt(i));
+        try {
+            JSONArray jsonArray = new JSONArray(recipes);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                recipeIds.add(jsonArray.getInt(i));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return recipeIds;
     }
@@ -54,4 +57,5 @@ public class MealPlan {
 
     public boolean isGoal() { return goal; }
     public void setGoal(boolean goal) { this.goal = goal; }
+
 }

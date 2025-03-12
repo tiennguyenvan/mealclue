@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import com.example.mealclue.R;
 import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.UserDAO;
-import com.example.mealclue.databinding.ComponentProfileHeaderBinding;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.User;
 
@@ -37,7 +36,6 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding $;
-    private ComponentProfileHeaderBinding incProfileHeader;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -107,32 +105,31 @@ public class ProfileFragment extends Fragment {
 
         MealPlanDAO planDAO = new MealPlanDAO(requireContext());
         List<MealPlan> goalPlans = planDAO.getGoaledByUser(user.getId());
-//        if (goalPlans.isEmpty()) {
-//            $.linearPlanGoal.setVisibility(View.GONE);
-//            $.linearNoGoal.setVisibility(View.VISIBLE);
-//        } else {
-//            $.linearPlanGoal.setVisibility(View.VISIBLE);
-//            $.linearNoGoal.setVisibility(View.GONE);
-//        }
+        if (goalPlans.isEmpty()) {
+            $.linearPlanGoal.setVisibility(View.GONE);
+            $.linearNoGoal.setVisibility(View.VISIBLE);
+        } else {
+            $.linearPlanGoal.setVisibility(View.VISIBLE);
+            $.linearNoGoal.setVisibility(View.GONE);
+        }
 
-        $.btnNewPlan.setOnClickListener(v -> {
-//            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.navMainMenu);
-//            bottomNav.setSelectedItemId(R.id.frgPlanList);
+        $.btnSetGoalPlan.setOnClickListener(this::moveToPlanListToSetGoal);
+    }
 
-            ProfileFragmentDirections.ActionFrgProfileToFrgPlanDetail action = ProfileFragmentDirections.actionFrgProfileToFrgPlanDetail();
-//            action.setArgMealPlanId(-1)
-            NavController navController = Navigation.findNavController(v);
-            navController.navigate(action);
-        });
+    private void moveToPlanListToSetGoal(View view) {
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(R.id.action_frgProfile_to_frgPlanList);
+//
+//        ProfileFragmentDirections.ActionFrgProfileToFrgPlanDetail action = ProfileFragmentDirections.actionFrgProfileToFrgPlanDetail();
+//        action.setArgMealPlanId(-1);
+//        NavController navController = Navigation.findNavController(v);
+//        navController.navigate(action);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         $ = FragmentProfileBinding.inflate(inflater, container, false);
-
         return $.getRoot();
-//        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 }

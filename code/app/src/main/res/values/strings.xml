@@ -46,6 +46,10 @@
     <string name="no_plan_set_as_goal">No Plan set as Goal</string>
     <string name="category_name">Category Name</string>
     <string name="sub_category_name">Sub Category Name</string>
+    <string name="add_recipe">Add Recipe</string>
+    <string name="input_plan_name">Input Plan Name</string>
+    <string name="set_as_goal">Set as Goal</string>
+    <string name="edit_plan_name">Edit Plan Name</string>
 
 
 </resources>

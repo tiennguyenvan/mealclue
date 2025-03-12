@@ -15,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.mealclue.R;
+import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.RecipeDAO;
 import com.example.mealclue.controller.RetrofitClient;
 import com.example.mealclue.controller.SpoonacularApiService;
+import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.Recipe;
 import com.example.mealclue.model.RecipeResponse;
 import com.example.mealclue.view.adapters.CategoryAdapter;
@@ -38,10 +40,12 @@ import retrofit2.Response;
  */
 import com.example.mealclue.databinding.FragmentPlanDetailBinding;
 import com.example.mealclue.view.adapters.SubCategoryAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 public class PlanDetailFragment extends Fragment {
     private FragmentPlanDetailBinding $;
+    MealPlanDAO mealPlanDAO;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,126 +89,102 @@ public class PlanDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         $ = FragmentPlanDetailBinding.inflate(inflater, container, false);
         return $.getRoot();
+    }
 
-//        return inflater.inflate(R.layout.fragment_plan_detail, container, false);
+    public void clearBottomNavSelection() {
+        BottomNavigationView bottomNav = requireActivity().findViewById(R.id.navMainMenu);
+//            bottomNav.setSelectedItemId(R.id.frgPlanList);
+        bottomNav.getMenu().setGroupCheckable(0, true, false); // Disable selection behavior
+        for (int i = 0; i < bottomNav.getMenu().size(); i++) {
+            bottomNav.getMenu().getItem(i).setChecked(false); // Uncheck all items
+        }
+        bottomNav.getMenu().setGroupCheckable(0, true, true); // Re-enable selection behavior
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String apiKey = RetrofitClient.getApiKey();
-        Log.d("API_KEY_TEST", "Retrieved API Key: " + apiKey);
+        clearBottomNavSelection();
 
-        $.btnAddToTop.setVisibility(View.GONE);
-        $.btnAddToBottom.setVisibility(View.GONE);
-
-        $.linearRecipeSearchFilters.setVisibility(View.VISIBLE);
-
-//        List<Recipe> mockRecipes = new ArrayList<>();
-//        mockRecipes.add(new Recipe("Spaghetti Bolognese", String.valueOf(R.drawable.login_background), "", ""));
-//        mockRecipes.add(new Recipe("Grilled Chicken Salad", String.valueOf(R.drawable.login_background), "", ""));
-//        mockRecipes.add(new Recipe("Pancakes", String.valueOf(R.drawable.login_background), "", ""));
-//        updateRecyclerView(mockRecipes);
-        List<Recipe> recipes = new RecipeDAO(requireContext()).getAllRecipes();
-        updateRecyclerView(recipes);
-
-
-        searchRecipes("noodle");
-
-//        $.incSearchBar.btnSearch.setOnClickListener(v -> {
-//            String keyword = $.incSearchBar.inpKeywords.getText().toString().trim();
-//            if (!keyword.isEmpty()) {
-//                searchRecipes(keyword);
-//            }
-//        });
-
-        List<String> categories = Arrays.asList("Cuisines", "Ingredients", "Calories", "Test");
-        $.recyclerRecipeCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        CategoryAdapter categoryAdapter = new CategoryAdapter(categories);
-        $.recyclerRecipeCategories.setAdapter(categoryAdapter);
-
-        List<String> subCategories = Arrays.asList("Clear", "Italian", "Thai", "Mexican");
-        $.recyclerRecipeSubCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        SubCategoryAdapter subCatAdapt = new SubCategoryAdapter(subCategories);
-        $.recyclerRecipeSubCategories.setAdapter(subCatAdapt);
-
-
-
-
+        long mealPlanId = PlanDetailFragmentArgs.fromBundle(getArguments()).getArgMealPlanId();
+        Log.d("PlanDetailFragment", "Meal Plan ID: " + mealPlanId);
+        mealPlanDAO = new MealPlanDAO(requireContext());
+        if (mealPlanId != -1) {
+            populateMealPlan(mealPlanId);
+            return;
+        }
+        createNewPlan();
     }
 
-    private void searchRecipes(String keyword) {
-        RecipeDAO recipeDAO = new RecipeDAO(requireContext());
-        List<Recipe> recipes = recipeDAO.searchRecipes(keyword);
-
-        if (!recipes.isEmpty()) {
-            updateRecyclerView(recipes);
-        } else {
-            fetchRecipesFromAPI(keyword);
+    /**
+     *
+     * @param mealPlanId
+     */
+    public void populateMealPlan(long mealPlanId) {
+        MealPlan mealPlan = mealPlanDAO.getById((int) mealPlanId);
+        if (mealPlan == null) {
+            Toast.makeText(requireContext(), "Meal Plan not found", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        $.incPlanHeader.txtPlanName.setText(mealPlan.getName());
+        $.incPlanHeader.txtPlanName.setVisibility(View.VISIBLE);
+        $.incPlanHeader.btnEditPlanName.setVisibility(View.VISIBLE);
+        $.incPlanHeader.inpPlanName.setVisibility(View.GONE);
+        $.incPlanHeader.linearGoalSetter.setVisibility(View.VISIBLE);
+
+        List<Integer> recipeIds = mealPlan.getRecipeIdsList();
+        if (recipeIds.isEmpty()) {
+            Toast.makeText(requireContext(), "No Recipes Found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        RecipeDAO recipeDAO = new RecipeDAO(requireContext());
+        List<Recipe> recipes = new ArrayList<>();
+        for (int id : recipeIds) {
+            Recipe recipe = recipeDAO.getRecipeById(id);
+            if (recipe != null) recipes.add(recipe);
+        }
+
+        $.recyclerAddedRecipes.setLayoutManager(new LinearLayoutManager(requireContext()));
+        RecipeListAdapter adapter = new RecipeListAdapter(recipes, requireContext());
+        $.recyclerAddedRecipes.setAdapter(adapter);
     }
 
 
     /**
-     * 2025-02-28 10:19:30.725  1309-1309  API_RESPONSE
-     * com.example.mealclue                 D
-     * Response body:
-     * {"results":[{"id":633858,"image":"https://img.spoonacular.com/recipes/633858-312x231.jpg"},{"id":632778,"image":"https://img.spoonacular.com/recipes/632778-312x231.jpg"},{"id":643642,"image":"https://img.spoonacular.com/recipes/643642-312x231.jpg"},{"id":642583,"image":"https://img.spoonacular.com/recipes/642583-312x231.jpg"},{"id":645354,"image":"https://img.spoonacular.com/recipes/645354-312x231.jpg"}]}
      *
-     * {"results":[{"id":633858,"title":"Baked Tortellini In Red Sauce","image":"https://img.spoonacular.com/recipes/633858-312x231.jpg","imageType":"jpg"},{"id":632778,"title":"Artisan Farfalle Pasta With Smoked Salmon and Cream Sauce","image":"https://img.spoonacular.com/recipes/632778-312x231.jpg","imageType":"jpg"},{"id":643642,"title":"Macaroni Pasta with Fresh Tomatoes, Zucchini and Artichokes","image":"https://img.spoonacular.com/recipes/643642-312x231.jpg","imageType":"jpg"},{"id":642583,"title":"Farfalle with Peas, Ham and Cream","image":"https://img.spoonacular.com/recipes/642583-312x231.jpg","imageType":"jpg"},{"id":645354,"title":"Greek Shrimp Orzo","image":"https://img.spoonacular.com/recipes/645354-312x231.jpg","imageType":"jpg"}],"offset":0,"number":5,"totalResults":297}
-     * @param keyword
      */
-    private void fetchRecipesFromAPI(String keyword) {
-        SpoonacularApiService apiService = RetrofitClient.getClient().create(SpoonacularApiService.class);
-        String apiKey = RetrofitClient.getApiKey();
+    public void createNewPlan() {
+        $.incPlanHeader.btnEditPlanName.setVisibility(View.GONE);
+        $.incPlanHeader.txtPlanName.setVisibility(View.GONE);
+        $.incPlanHeader.inpPlanName.setVisibility(View.VISIBLE);
 
-        apiService.searchRecipes(apiKey, keyword, 5).enqueue(new Callback<RecipeResponse>() {
-            @Override
-            public void onResponse(Call<RecipeResponse> call, Response<RecipeResponse> response) {
-                Log.d("API_REQUEST", "Request URL: " + call.request().url());
-                Log.d("API_RESPONSE", "Response body: " + new Gson().toJson(response.body()));
-
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Recipe> recipes = response.body().getRecipes();
-
-                    if (recipes == null || recipes.isEmpty()) {
-                        Log.e("API_ERROR", "No recipes found from API");
-                        return;
-                    }
-
-                    saveRecipesToDatabase(recipes);
-                    updateRecyclerView(recipes);
-                } else {
-                    Log.e("API_ERROR", "API response unsuccessful");
-                }
+        $.incPlanHeader.inpPlanName.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                return;
             }
-
-            @Override
-            public void onFailure(Call<RecipeResponse> call, Throwable t) {
-                Log.e("API_REQUEST", "Request URL: " + call.request().url());
-                Log.e("API_ERROR", "Failed to fetch recipes", t);
-                requireActivity().runOnUiThread(() ->
-                        Toast.makeText(requireContext(), "API Error: " + t.getMessage(), Toast.LENGTH_LONG).show()
-                );
+            String planName = $.incPlanHeader.inpPlanName.getText().toString().trim();
+            if (planName.isEmpty()) {
+                return;
             }
+            // Save new plan
+            MealPlan newPlan = new MealPlan(planName, 1, "[]", false); // User ID 1 (replace as needed)
+            long newId = mealPlanDAO.insert(newPlan);
+
+            if (newId == -1) {
+                Toast.makeText(requireContext(), "Failed to create new plan", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Log.d("PlanDetailFragment", "New Plan Created with ID: " + newId);
+            $.incPlanHeader.txtPlanName.setText(planName);
+            $.incPlanHeader.txtPlanName.setVisibility(View.VISIBLE);
+            $.incPlanHeader.btnEditPlanName.setVisibility(View.VISIBLE);
+            $.incPlanHeader.inpPlanName.setVisibility(View.GONE);
+            $.incPlanHeader.linearGoalSetter.setVisibility(View.VISIBLE);
+            $.incBotButtons.btnAddNewRecipe.setVisibility(View.VISIBLE);
+            $.incBotButtons.spacer.setVisibility(View.VISIBLE);
         });
     }
-
-
-    private void saveRecipesToDatabase(List<Recipe> recipes) {
-        RecipeDAO recipeDAO = new RecipeDAO(requireContext());
-        for (Recipe recipe : recipes) {
-            recipeDAO.insertOrUpdateRecipe(recipe);
-        }
-    }
-
-    private void updateRecyclerView(List<Recipe> recipes) {
-        RecyclerView recyclerView = $.recyclerRecipeList;
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recyclerView.setAdapter(new RecipeListAdapter(recipes, requireContext()));
-    }
-
 }

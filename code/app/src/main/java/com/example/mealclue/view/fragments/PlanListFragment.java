@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -19,6 +20,7 @@ import com.example.mealclue.R;
  * Use the {@link PlanListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.databinding.FragmentPlanListBinding;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.view.adapters.PlanListAdapter;
@@ -28,6 +30,7 @@ import java.util.List;
 
 public class PlanListFragment extends Fragment {
     private FragmentPlanListBinding $;
+    private MealPlanDAO mealPlanDAO;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -61,6 +64,7 @@ public class PlanListFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -71,26 +75,31 @@ public class PlanListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        $.btnBack.setOnClickListener(v -> {
+        $.incBotButtons.btnBack.setOnClickListener(v -> {
             Navigation.findNavController(view).navigateUp();
         });
-        // mock plan data
-        List<MealPlan> plans = new ArrayList<>();
-        plans.add(new MealPlan("Plan Name", 0, "", true));
-        plans.add(new MealPlan("Plan Name", 0, "", true));
-        plans.add(new MealPlan("Plan Name", 0, "", true));
-        plans.add(new MealPlan("Plan Name", 0, "", true));
+        $.incBotButtons.spacer.setVisibility(View.VISIBLE);
+        $.incBotButtons.btnAddNewPlan.setVisibility(View.VISIBLE);
+
+        mealPlanDAO = new MealPlanDAO(requireContext());
+        List<MealPlan> mealPlanList = mealPlanDAO.getByUser(1);
+
         $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        PlanListAdapter planAdapter = new PlanListAdapter(plans);
+        PlanListAdapter planAdapter = new PlanListAdapter(mealPlanList);
         $.recyclerPlanList.setAdapter(planAdapter);
+
+        $.incBotButtons.btnAddNewPlan.setOnClickListener(v -> {
+            PlanListFragmentDirections.ActionFrgPlanListToFrgPlanDetail action = PlanListFragmentDirections.actionFrgPlanListToFrgPlanDetail();
+            action.setArgMealPlanId(-1);
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(action);
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         $ = FragmentPlanListBinding.inflate(inflater, container, false);
-//        return inflater.inflate(R.layout.fragment_plan_list, container, false);
         return $.getRoot();
     }
 }

@@ -8,14 +8,14 @@
     android:padding="@dimen/wrapper_padding"
     tools:context=".view.fragments.SettingsFragment">
 
-    <include layout="@layout/component_profile_header" />
+    <include layout="@layout/inc_profile_header" />
     <Space style="@style/SpaceXXLarge"/>
-    <include layout="@layout/component_labeled_input_text"  />
+    <include layout="@layout/inc_labeled_input_text"  />
     <Space style="@style/SpaceXLarge"/>
-    <include layout="@layout/component_labeled_input_text"  />
+    <include layout="@layout/inc_labeled_input_text"  />
     <Space style="@style/SpaceXLarge"/>
-    <include layout="@layout/component_labeled_input_text"  />
+    <include layout="@layout/inc_labeled_input_text"  />
     <Space style="@style/SpaceXLarge"/>
-    <include layout="@layout/component_labeled_input_text"  />
+    <include layout="@layout/inc_labeled_input_text"  />
 
 </LinearLayout>

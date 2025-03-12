@@ -31,4 +31,6 @@
         style="@style/ButtonPrimary"
         android:text="@string/search"
         />
+
+    <Space style="@style/SpaceXLarge" />
 </LinearLayout>

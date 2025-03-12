@@ -12,25 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-    <Space style="@style/SpaceMedium"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/btnBack"
-            style="@style/ButtonField"
-            android:text="@string/back"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            />
-        <Space style="@style/SpaceMedium"/>
-        <Button
-            android:id="@+id/btnNewPlan"
-            style="@style/ButtonBase"
-            android:text="@string/new_plan"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            />
-    </LinearLayout>
+
+    <include
+        android:id="@+id/incBotButtons"
+        layout="@layout/inc_bottom_buttons"/>
 
 </LinearLayout>

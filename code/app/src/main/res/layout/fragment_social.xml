@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".view.fragments.SocialFragment">
 
-    <include layout="@layout/component_search_bar" />
+    <include layout="@layout/inc_search_bar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCategories"

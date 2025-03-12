@@ -47,5 +47,4 @@
             android:text="@string/heart_count"
             android:textSize="@dimen/text_small" />
     </LinearLayout>
-
 </LinearLayout>
