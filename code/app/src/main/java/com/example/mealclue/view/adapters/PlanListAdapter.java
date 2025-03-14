@@ -4,9 +4,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mealclue.databinding.RecyclerItemRecipeOverlayBinding;
 import com.example.mealclue.model.MealPlan;
+import com.example.mealclue.view.fragments.PlanListFragmentDirections;
+
 import java.util.List;
 
 public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.ViewHolder> {
@@ -36,8 +40,14 @@ public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.ViewHo
             holder.$.txtMeta.setText("30 recipes - 3 left");
         } else {
             holder.$.txtGoalRibbon.setVisibility(View.GONE);
-            holder.$.txtMeta.setText("30 recipes");
+            holder.$.txtMeta.setText(String.format("%s recipes", plan.getRecipeIdsList().size()));
         }
+        holder.$.item.setOnClickListener(v -> {
+            PlanListFragmentDirections.ActionFrgPlanListToFrgPlanDetail action = PlanListFragmentDirections.actionFrgPlanListToFrgPlanDetail();
+            action.setArgMealPlanId(plan.getId());
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(action);
+        });
     }
 
     @Override

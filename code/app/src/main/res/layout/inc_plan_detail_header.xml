@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/linearGoalSetter"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/txtGoalRibbon"
             style="@style/TextLight"
-            android:text="@string/goal"
             android:layout_marginEnd="@dimen/space_medium"
+            android:text="@string/goal"
             android:textColor="@color/colorTertiary" />
 
         <Button
@@ -27,48 +27,66 @@
 
 
     <LinearLayout
-        android:id="@+id/linearGoalName"
+        android:id="@+id/linearPlanNameDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/txtPlanName"
             style="@style/TextBold"
             android:text="@string/plan_name"
-            android:visibility="gone"
-            android:textSize="@dimen/text_xx_large" />
-
-        <EditText
-            android:id="@+id/inpPlanName"
-            style="@style/TextBold"
-            android:inputType="text"
-            android:autofillHints="@string/input_plan_name"
-            android:hint="@string/input_plan_name"
-            android:textColorHint="#78909C"
             android:textSize="@dimen/text_xx_large" />
 
         <TextView
-            android:layout_marginStart="@dimen/space_medium"
             android:id="@+id/txtPlanPercent"
             style="@style/TextLight"
-            android:visibility="gone"
-            android:text="@string/_5"
+            android:layout_marginStart="@dimen/space_medium"
+            android:text=""
             android:textSize="@dimen/text_xx_large" />
 
         <ImageButton
-            android:contentDescription="@string/edit_plan_name"
             android:id="@+id/btnEditPlanName"
-            android:visibility="gone"
-            android:layout_marginStart="@dimen/space_medium"
             android:layout_width="@dimen/text_large"
             android:layout_height="@dimen/text_large"
+            android:layout_marginStart="@dimen/space_medium"
             android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/edit_plan_name"
             android:padding="0dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_pen" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearPlanNameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/inpPlanName"
+            style="@style/TextBold"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/input_plan_name"
+            android:hint="@string/input_plan_name"
+            android:inputType="text"
+            android:textColorHint="#78909C"
+            android:textSize="@dimen/text_xx_large"
+            />
+
+        <Button
+            android:padding="@dimen/space_medium"
+            android:id="@+id/btnUpdatePlanName"
+            style="@style/ButtonPrimary"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/space_medium"
+            android:text="@string/update" />
+
+    </LinearLayout>
+
 
     <Space style="@style/SpaceMedium" />
 

@@ -14,6 +14,7 @@ public class Recipe {
     private String image; // URL or file path
     private String ingredients; // JSON map of <name of ingredient -> amount>
     private String instructions; // JSON array of steps [str,str]
+    private String keywords;
 
     public Recipe(int id, String title, String image) {
         this.id = id;
@@ -23,6 +24,13 @@ public class Recipe {
         this.instructions = null; // Placeholder for future data
     }
 
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
 
     public Map<String, String> getIngredientsMap() throws JSONException {
         Map<String, String> ingredientsMap = new HashMap<>();
@@ -94,6 +102,7 @@ public class Recipe {
                 ", image='" + image + '\'' +
                 ", ingredients='" + ingredients + '\'' +
                 ", instructions='" + instructions + '\'' +
+                ", keywords='" + keywords + '\'' +
                 '}';
     }
 }

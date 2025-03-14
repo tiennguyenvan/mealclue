@@ -14,12 +14,14 @@ public class RecipeDAO {
     public static final String TABLE_NAME = "Recipe";
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
-            + "id INTEGER PRIMARY KEY, "
-            + "title TEXT NOT NULL, "
-            + "image TEXT, "
-            + "youtube_url TEXT, "
-            + "ingredients TEXT, "
-            + "instructions TEXT);";
+            + "id INTEGER PRIMARY KEY"
+            + ", title TEXT NOT NULL"
+            + ", image TEXT"
+            + ", youtube_url TEXT"
+            + ", ingredients TEXT"
+            + ", instructions TEXT"
+            + ", keywords TEXT"
+            + ");";
 
     private SQLiteDatabase db;
 
@@ -36,14 +38,24 @@ public class RecipeDAO {
         values.put("image", recipe.getImage());
         values.put("ingredients", recipe.getIngredients());
         values.put("instructions", recipe.getInstructions());
+        values.put("keywords", recipe.getKeywords());
 
         return db.insert(TABLE_NAME, null, values);
     }
 
-    public void insertOrUpdateRecipe(Recipe recipe) {
+    public void insertOrUpdateRecipe(Recipe recipe, String keyword) {
+        String recipeKeywords = recipe.getKeywords();
+        if (recipeKeywords == null) {
+            recipe.setKeywords(keyword);
+        } else if (!recipeKeywords.contains(keyword)) {
+            recipe.setKeywords(recipeKeywords + "," + keyword);
+        }
+
         // if this id is not in the the database yet
         if (getRecipeById(recipe.getId()) == null) {
             insertRecipe(recipe);
+        } else {
+            updateRecipe(recipe);
         }
     }
 
@@ -87,6 +99,7 @@ public class RecipeDAO {
         values.put("image", recipe.getImage());
         values.put("ingredients", recipe.getIngredients());
         values.put("instructions", recipe.getInstructions());
+        values.put("keywords", recipe.getKeywords());
 
         return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(recipe.getId())});
     }
@@ -99,8 +112,7 @@ public class RecipeDAO {
 
     public List<Recipe> searchRecipes(String keyword) {
         List<Recipe> recipeList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE title LIKE ?", new String[]{"%" + keyword + "%"});
-
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE title LIKE ? OR keywords LIKE ?", new String[]{"%" + keyword + "%", "%" + keyword + "%"});
         if (cursor.moveToFirst()) {
             do {
                 Recipe recipe = new Recipe(
@@ -108,11 +120,13 @@ public class RecipeDAO {
                         cursor.getString(cursor.getColumnIndexOrThrow("title")),
                         cursor.getString(cursor.getColumnIndexOrThrow("image"))
                 );
+                recipe.setKeywords(cursor.getString(cursor.getColumnIndexOrThrow("keywords")));
                 recipeList.add(recipe);
             } while (cursor.moveToNext());
         }
         cursor.close();
         return recipeList;
     }
+
 
 }

@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/space_medium"
     android:gravity="center_vertical"
+    android:layout_marginBottom="@dimen/space_x_large"
     >
     <!-- Search Input Field -->
     <EditText
@@ -32,5 +33,4 @@
         android:text="@string/search"
         />
 
-    <Space style="@style/SpaceXLarge" />
 </LinearLayout>

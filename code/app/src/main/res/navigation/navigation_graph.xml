@@ -69,6 +69,10 @@
         <action
             android:id="@+id/action_frgPlanDetailSearchRecipe_to_frgRecipeDetail"
             app:destination="@id/frgRecipeDetail" />
+        <argument
+            android:name="argMealPlanId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
 
     <fragment

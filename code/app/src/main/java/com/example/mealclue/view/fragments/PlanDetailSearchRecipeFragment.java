@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,16 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.mealclue.R;
+import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.RecipeDAO;
 import com.example.mealclue.controller.RetrofitClient;
 import com.example.mealclue.controller.SpoonacularApiService;
-import com.example.mealclue.databinding.FragmentPlanDetailBinding;
+import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.Recipe;
 import com.example.mealclue.model.RecipeResponse;
+import com.example.mealclue.view.adapters.RecipeListAdapter;
 import com.google.gson.Gson;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -36,8 +39,18 @@ import com.example.mealclue.databinding.FragmentPlanDetailSearchRecipeBinding;
  * Use the {@link PlanDetailSearchRecipeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlanDetailSearchRecipeFragment extends Fragment {
+public class PlanDetailSearchRecipeFragment extends Fragment
+    implements RecipeListAdapter.OnClickItemBtnAddListener
+{
     private FragmentPlanDetailSearchRecipeBinding $;
+    MealPlanDAO mealPlanDAO;
+    long mealPlanId = -1;
+    MealPlan mealPlan;
+    RecipeDAO recipeDAO;
+    List<Recipe> foundRecipes;
+    RecyclerView.Adapter recyclerSearchFoundRecipesAdapter;
+    String keyword = "";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -89,49 +102,86 @@ public class PlanDetailSearchRecipeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        String apiKey = RetrofitClient.getApiKey();
-        Log.d("API_KEY_TEST", "Retrieved API Key: " + apiKey);
+        initMealPlan();
+        recyclerSearchFoundRecipesAdapter = new RecipeListAdapter(foundRecipes, mealPlan, requireContext(), this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
+        $.recyclerSearchFoundRecipes.setAdapter(recyclerSearchFoundRecipesAdapter);
+        $.recyclerSearchFoundRecipes.setLayoutManager(layoutManager);
 
-
-//        List<Recipe> mockRecipes = new ArrayList<>();
-//        mockRecipes.add(new Recipe("Spaghetti Bolognese", String.valueOf(R.drawable.login_background), "", ""));
-//        mockRecipes.add(new Recipe("Grilled Chicken Salad", String.valueOf(R.drawable.login_background), "", ""));
-//        mockRecipes.add(new Recipe("Pancakes", String.valueOf(R.drawable.login_background), "", ""));
-//        updateRecyclerView(mockRecipes);
-        List<Recipe> recipes = new RecipeDAO(requireContext()).getAllRecipes();
-        updateRecyclerView(recipes);
-
-
-        searchRecipes("noodle");
-
-//        $.incSearchBar.btnSearch.setOnClickListener(v -> {
-//            String keyword = $.incSearchBar.inpKeywords.getText().toString().trim();
-//            if (!keyword.isEmpty()) {
-//                searchRecipes(keyword);
-//            }
-//        });
-
-        List<String> categories = Arrays.asList("Cuisines", "Ingredients", "Calories", "Test");
-//        $.recyclerRecipeCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-//        CategoryAdapter categoryAdapter = new CategoryAdapter(categories);
-//        $.recyclerRecipeCategories.setAdapter(categoryAdapter);
-
-//        List<String> subCategories = Arrays.asList("Clear", "Italian", "Thai", "Mexican");
-//        $.recyclerRecipeSubCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-//        SubCategoryAdapter subCatAdapt = new SubCategoryAdapter(subCategories);
-//        $.recyclerRecipeSubCategories.setAdapter(subCatAdapt);
-
+        $.incSearchBar.btnSearch.setOnClickListener(v -> {
+            keyword = $.incSearchBar.inpKeywords.getText().toString().trim();
+            System.out.println("Hit Search Button: " + keyword);
+            if (keyword.isEmpty()) {
+                System.out.println("Keyword empty: " + keyword);
+                return;
+            }
+            searchRecipes();
+        });
     }
 
+    @Override
+    public void onClickItemBtnAdd(int position) {
+        System.out.println("Add button clicked on position: " + position);
+        Recipe addedRecipe = foundRecipes.get(position);
+        if (addedRecipe == null || mealPlan == null) {
+            return;
+        }
+        List<Integer> recipeIds = mealPlan.getRecipeIdsList();
+        // check if id is already in the list or not
+        if (recipeIds.contains(addedRecipe.getId())) {
+            return;
+        }
+        recipeIds.add(addedRecipe.getId());
+        try {
+            mealPlan.setRecipeIdsList(recipeIds);
+            mealPlanDAO.update(mealPlan);
+            Toast.makeText(requireContext(), "Recipe added to plan", Toast.LENGTH_SHORT).show();
+            recyclerSearchFoundRecipesAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-    private void searchRecipes(String keyword) {
+    public void initMealPlan() {
+        mealPlanDAO = new MealPlanDAO(requireContext());
+        recipeDAO = new RecipeDAO(requireContext());
+        mealPlanId = PlanDetailFragmentArgs.fromBundle(getArguments()).getArgMealPlanId();
+        Log.d("PlanDetailFragment", "Meal Plan ID: " + mealPlanId);
+        if (mealPlanId == -1) {
+            Toast.makeText(requireContext(), "Meal Plan not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mealPlan = mealPlanDAO.getById((int) mealPlanId);
+        if (mealPlan == null) {
+            Toast.makeText(requireContext(), "Meal Plan not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        foundRecipes = new ArrayList<>();
+        showExistingPlanComponents(mealPlan.getName());
+    }
+
+    /**
+     *
+     * @param planName
+     */
+    public void showExistingPlanComponents(String planName) {
+        System.out.println("Plan Name: " + planName);
+
+        $.incPlanHeader.linearPlanNameDisplay.setVisibility(View.VISIBLE);
+        $.incPlanHeader.linearPlanNameInput.setVisibility(View.GONE);
+        $.incPlanHeader.txtPlanName.setText(planName);
+        $.incPlanHeader.btnEditPlanName.setVisibility(View.VISIBLE);
+    }
+
+    private void searchRecipes() {
         RecipeDAO recipeDAO = new RecipeDAO(requireContext());
         List<Recipe> recipes = recipeDAO.searchRecipes(keyword);
-
-        if (!recipes.isEmpty()) {
+        System.out.println("Searching for keywords: " + keyword);
+        if (!recipes.isEmpty() && recipes.size() >= 5) {
+            System.out.println("Recipes found: " + recipes.size());
             updateRecyclerView(recipes);
         } else {
-            fetchRecipesFromAPI(keyword);
+            fetchRecipesFromAPI();
         }
     }
 
@@ -144,11 +194,12 @@ public class PlanDetailSearchRecipeFragment extends Fragment {
      * <p>
      * {"results":[{"id":633858,"title":"Baked Tortellini In Red Sauce","image":"https://img.spoonacular.com/recipes/633858-312x231.jpg","imageType":"jpg"},{"id":632778,"title":"Artisan Farfalle Pasta With Smoked Salmon and Cream Sauce","image":"https://img.spoonacular.com/recipes/632778-312x231.jpg","imageType":"jpg"},{"id":643642,"title":"Macaroni Pasta with Fresh Tomatoes, Zucchini and Artichokes","image":"https://img.spoonacular.com/recipes/643642-312x231.jpg","imageType":"jpg"},{"id":642583,"title":"Farfalle with Peas, Ham and Cream","image":"https://img.spoonacular.com/recipes/642583-312x231.jpg","imageType":"jpg"},{"id":645354,"title":"Greek Shrimp Orzo","image":"https://img.spoonacular.com/recipes/645354-312x231.jpg","imageType":"jpg"}],"offset":0,"number":5,"totalResults":297}
      *
-     * @param keyword
      */
-    private void fetchRecipesFromAPI(String keyword) {
+    private void fetchRecipesFromAPI() {
         SpoonacularApiService apiService = RetrofitClient.getClient().create(SpoonacularApiService.class);
         String apiKey = RetrofitClient.getApiKey();
+        Log.d("API_KEY_TEST", "Retrieved API Key: " + apiKey);
+        Log.d("API_KEY_TEST", "Searching for keywords: " + keyword);
 
         apiService.searchRecipes(apiKey, keyword, 5).enqueue(new Callback<RecipeResponse>() {
             @Override
@@ -182,18 +233,17 @@ public class PlanDetailSearchRecipeFragment extends Fragment {
         });
     }
 
-
     private void saveRecipesToDatabase(List<Recipe> recipes) {
         RecipeDAO recipeDAO = new RecipeDAO(requireContext());
         for (Recipe recipe : recipes) {
-            recipeDAO.insertOrUpdateRecipe(recipe);
+            recipeDAO.insertOrUpdateRecipe(recipe, keyword);
         }
     }
 
     private void updateRecyclerView(List<Recipe> recipes) {
-//        RecyclerView recyclerView = $.recyclerRecipeList;
-//        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-//        recyclerView.setAdapter(new RecipeListAdapter(recipes, requireContext()));
+        foundRecipes.clear();
+        foundRecipes.addAll(recipes);
+        recyclerSearchFoundRecipesAdapter.notifyDataSetChanged();
     }
 
 }

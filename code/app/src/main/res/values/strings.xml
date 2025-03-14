@@ -50,6 +50,7 @@
     <string name="input_plan_name">Input Plan Name</string>
     <string name="set_as_goal">Set as Goal</string>
     <string name="edit_plan_name">Edit Plan Name</string>
+    <string name="update">Update</string>
 
 
 </resources>
