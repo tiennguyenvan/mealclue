@@ -47,13 +47,14 @@
             android:textSize="@dimen/text_x_small" />
 
        <ImageButton
-            android:id="@+id/btnAdd"
+            android:id="@+id/btnMainAction"
             android:layout_width="@dimen/text_large"
             android:layout_height="@dimen/text_large"
             android:backgroundTint="@android:color/transparent"
             android:padding="0dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_plus"
+
             app:tint="@color/colorPrimary" />
     </LinearLayout>
 
@@ -71,14 +72,16 @@
             android:layout_height="wrap_content"
             android:text="@string/delete"
             android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_small"
             />
         <Space style="@style/SpaceExpand"/>
         <Button
-            android:id="@+id/btnMirror"
+            android:id="@+id/btnDuplicate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/mirror"
+            android:text="@string/duplicate"
             android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_small"
             />
         <Space style="@style/SpaceExpand"/>
         <Button
@@ -87,6 +90,7 @@
             android:layout_height="wrap_content"
             android:text="@string/up"
             android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_small"
             />
         <Space style="@style/SpaceExpand"/>
         <Button
@@ -95,6 +99,7 @@
             android:layout_height="wrap_content"
             android:text="@string/down"
             android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_small"
             />
     </LinearLayout>
 </LinearLayout>

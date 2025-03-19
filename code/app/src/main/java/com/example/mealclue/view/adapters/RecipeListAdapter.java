@@ -4,26 +4,38 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.mealclue.R;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.Recipe;
+
+import java.util.Collections;
 import java.util.List;
 
 import com.example.mealclue.databinding.RecyclerItemRecipeEditorBinding;
+
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.ViewHolder> {
     private List<Recipe> recipes;
     private RecyclerItemRecipeEditorBinding $;
     Context context;
     MealPlan mealPlan;
+    int expandedPosition = -1;
 
-    public RecipeListAdapter(List<Recipe> recipes, MealPlan mealPlan, Context context, OnClickItemBtnAddListener listener) {
+    /**
+     * @param recipes
+     * @param mealPlan if mealPlan is null, means we are using this for the plan detail, not search
+     * @param context
+     * @param listener
+     */
+    public RecipeListAdapter(List<Recipe> recipes, MealPlan mealPlan, Context context, MainActionListener listener) {
         this.recipes = recipes;
         this.context = context;
         this.mealPlan = mealPlan;
-        this.onClickItemBtnAddListener = listener; // Assign listener here
+        this.mainActionListener = listener; // Assign listener here
     }
 
     @NonNull
@@ -37,11 +49,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         return new ViewHolder(binding.getRoot(), binding);
     }
 
-    public interface OnClickItemBtnAddListener {
-        void onClickItemBtnAdd(int position);
-    }
-    private OnClickItemBtnAddListener onClickItemBtnAddListener;
+    public interface MainActionListener {
+        void onRecyclerMainAction(int position);
 
+        void onRecyclerRecipeListChange();
+    }
+
+    private MainActionListener mainActionListener;
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -55,21 +69,84 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
             // Fallback for URL images
             Glide.with(holder.itemView.getContext()).load(recipe.getImage()).into(holder.$.imgThumb);
         }
-        if (mealPlan != null && mealPlan.getRecipeIdsList().contains(recipe.getId())) {
-            holder.$.btnAdd.setImageResource(R.drawable.ic_check);
+        if (mealPlan == null) {
+            holder.$.btnMainAction.setImageResource(R.drawable.ic_pen);
+            if (expandedPosition == position) {
+                holder.$.linearEditingActions.setVisibility(View.VISIBLE);
+                holder.$.btnMainAction.setAlpha(0.5f);
+            } else {
+                holder.$.linearEditingActions.setVisibility(View.GONE);
+                holder.$.btnMainAction.setAlpha(1f);
+            }
+            holder.$.btnMainAction.setOnClickListener(v -> {
+                int curPos = holder.getAdapterPosition();
+                if (expandedPosition == curPos) {
+                    expandedPosition = -1;
+                } else {
+                    expandedPosition = curPos;
+                }
+                notifyDataSetChanged();
+//                mainActionListener.onRecyclerRecipeListChange();
+            });
+
+            holder.$.btnDelete.setOnClickListener(v -> {
+                int curPos = holder.getAdapterPosition();
+                recipes.remove(curPos);
+                notifyItemRemoved(curPos);
+                mainActionListener.onRecyclerRecipeListChange();
+                expandedPosition = -1;
+            });
+            holder.$.btnDown.setOnClickListener(v -> {
+                int curPos = holder.getAdapterPosition();
+
+                if (curPos < recipes.size() - 1) {
+                    Recipe temp = recipes.get(curPos);
+                    recipes.set(curPos, recipes.get(curPos + 1));
+                    recipes.set(curPos + 1, temp);
+                    notifyItemMoved(curPos, curPos + 1);
+                    mainActionListener.onRecyclerRecipeListChange();
+                }
+            });
+            holder.$.btnUp.setOnClickListener(v -> {
+                int curPos = holder.getAdapterPosition();
+                if (curPos > 0) {
+                    Recipe temp = recipes.get(curPos);
+                    recipes.set(curPos, recipes.get(curPos - 1));
+                    recipes.set(curPos - 1, temp);
+                    notifyItemMoved(curPos, curPos - 1);
+                    mainActionListener.onRecyclerRecipeListChange();
+                }
+
+            });
+            holder.$.btnDuplicate.setOnClickListener(v -> {
+                int curPos = holder.getAdapterPosition();
+                Recipe duplicateRecipe = new Recipe(
+                        recipes.get(curPos).getId(),
+                        recipes.get(curPos).getTitle(),
+                        recipes.get(curPos).getImage()
+                );
+
+                recipes.add(curPos + 1, duplicateRecipe);
+                notifyItemInserted(curPos + 1);
+                mainActionListener.onRecyclerRecipeListChange();
+            });
             return;
         }
 
-        holder.$.btnAdd.setOnClickListener(v -> {
+        holder.$.btnMainAction.setOnClickListener(v -> {
             System.out.println("Add button clicked");
             if (mealPlan != null && mealPlan.getRecipeIdsList().contains(recipe.getId())) {
-                holder.$.btnAdd.setImageResource(R.drawable.ic_check);
+                holder.$.btnMainAction.setImageResource(R.drawable.ic_check);
                 return;
             }
-            if (onClickItemBtnAddListener != null) {
-                onClickItemBtnAddListener.onClickItemBtnAdd(position);
+            if (mainActionListener != null) {
+                mainActionListener.onRecyclerMainAction(position);
             }
         });
+
+        if (mealPlan.getRecipeIdsList().contains(recipe.getId())) {
+            holder.$.btnMainAction.setImageResource(R.drawable.ic_check);
+        }
     }
 
     @Override

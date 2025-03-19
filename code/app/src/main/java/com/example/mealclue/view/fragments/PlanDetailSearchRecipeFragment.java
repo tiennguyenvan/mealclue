@@ -40,7 +40,7 @@ import com.example.mealclue.databinding.FragmentPlanDetailSearchRecipeBinding;
  * create an instance of this fragment.
  */
 public class PlanDetailSearchRecipeFragment extends Fragment
-    implements RecipeListAdapter.OnClickItemBtnAddListener
+    implements RecipeListAdapter.MainActionListener
 {
     private FragmentPlanDetailSearchRecipeBinding $;
     MealPlanDAO mealPlanDAO;
@@ -120,7 +120,7 @@ public class PlanDetailSearchRecipeFragment extends Fragment
     }
 
     @Override
-    public void onClickItemBtnAdd(int position) {
+    public void onRecyclerMainAction(int position) {
         System.out.println("Add button clicked on position: " + position);
         Recipe addedRecipe = foundRecipes.get(position);
         if (addedRecipe == null || mealPlan == null) {
@@ -140,6 +140,11 @@ public class PlanDetailSearchRecipeFragment extends Fragment
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onRecyclerRecipeListChange() {
+
     }
 
     public void initMealPlan() {

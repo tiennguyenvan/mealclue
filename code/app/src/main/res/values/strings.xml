@@ -51,6 +51,8 @@
     <string name="set_as_goal">Set as Goal</string>
     <string name="edit_plan_name">Edit Plan Name</string>
     <string name="update">Update</string>
+    <string name="duplicate">Duplicate</string>
+    <string name="unset_as_goal">Unset as goal</string>
 
 
 </resources>

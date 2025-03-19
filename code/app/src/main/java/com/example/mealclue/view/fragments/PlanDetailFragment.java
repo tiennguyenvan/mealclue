@@ -32,12 +32,14 @@ import java.util.List;
 import com.example.mealclue.databinding.FragmentPlanDetailBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class PlanDetailFragment extends Fragment implements RecipeListAdapter.OnClickItemBtnAddListener {
+public class PlanDetailFragment extends Fragment implements RecipeListAdapter.MainActionListener {
     private FragmentPlanDetailBinding $;
     MealPlanDAO mealPlanDAO;
     long mealPlanId = -1;
     MealPlan mealPlan;
     RecipeDAO recipeDAO;
+    List<Recipe> mealPlanRecipes;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -104,6 +106,7 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.On
         recipeDAO = new RecipeDAO(requireContext());
         mealPlanId = PlanDetailFragmentArgs.fromBundle(getArguments()).getArgMealPlanId();
         Log.d("PlanDetailFragment", "Meal Plan ID: " + mealPlanId);
+        mealPlanRecipes = new ArrayList<>();
         if (mealPlanId == -1) {
             mealPlan = new MealPlan("", 1, "[]", false);
         } else {
@@ -112,8 +115,14 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.On
                 Toast.makeText(requireContext(), "Meal Plan not found", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            List<Integer> recipeIds = mealPlan.getRecipeIdsList();
+            for (int id : recipeIds) {
+                Recipe recipe = recipeDAO.getRecipeById(id);
+                if (recipe != null) mealPlanRecipes.add(recipe);
+            }
         }
-        populateMealPlan(mealPlanId, mealPlan);
+        populateMealPlan();
 
         $.incPlanHeader.btnEditPlanName.setOnClickListener(v -> {
             showPlanNameInput(mealPlan.getName());
@@ -124,37 +133,53 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.On
                 return;
             }
             mealPlan.setName(planName);
-            mealPlanId = insertOrUpdateMealPlan(mealPlanId, mealPlan);
-            populateMealPlan(mealPlanId, mealPlan);
+            mealPlanId = insertOrUpdateMealPlanToDB();
+            populateMealPlan();
+        });
+        $.incBotButtons.btnBack.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigateUp();
         });
         $.incBotButtons.btnAddNewRecipe.setOnClickListener(v -> {
             PlanDetailFragmentDirections.ActionFrgPlanDetailToFrgPlanDetailSearchRecipe action = PlanDetailFragmentDirections.actionFrgPlanDetailToFrgPlanDetailSearchRecipe();
             action.setArgMealPlanId(mealPlanId);
             Navigation.findNavController(v).navigate(action);
         });
+
+        $.incPlanHeader.btnToggleSetGoal.setOnClickListener(this::setMealPlanAsAGoal);
+    }
+
+    private void setMealPlanAsAGoal(View view) {
+        if (mealPlan.isGoal()) {
+            mealPlan.setGoal(false);
+            $.incPlanHeader.txtGoalRibbon.setVisibility(View.GONE);
+            $.incPlanHeader.btnToggleSetGoal.setText(R.string.set_as_goal);
+            insertOrUpdateMealPlanToDB();
+        } else {
+            mealPlan.setGoal(true);
+            $.incPlanHeader.txtGoalRibbon.setVisibility(View.VISIBLE);
+            $.incPlanHeader.btnToggleSetGoal.setText(R.string.unset_as_goal);
+            // remove all other goals for this user and set this one to true
+            mealPlanDAO.clearAllGoals(mealPlan.getUserId());
+            insertOrUpdateMealPlanToDB();
+        }
     }
 
 
-    public void populateMealPlan(long mealPlanId, MealPlan mealPlan) {
+    public void populateMealPlan() {
         if (mealPlanId == -1) {
             showPlanNameInput("");
             return;
         }
-        List<Integer> recipeIds = mealPlan.getRecipeIdsList();
+
         showExistingPlanComponents(mealPlan.getName());
-        if (recipeIds.isEmpty()) {
+        if (mealPlanRecipes.isEmpty()) {
             $.incPlanHeader.linearGoalSetter.setVisibility(View.GONE);
         } else {
             $.incPlanHeader.linearGoalSetter.setVisibility(View.VISIBLE);
         }
 
-        List<Recipe> recipes = new ArrayList<>();
-        for (int id : recipeIds) {
-            Recipe recipe = recipeDAO.getRecipeById(id);
-            if (recipe != null) recipes.add(recipe);
-        }
         $.recyclerAddedRecipes.setLayoutManager(new LinearLayoutManager(requireContext()));
-        RecipeListAdapter adapter = new RecipeListAdapter(recipes, mealPlan, requireContext(), this);
+        RecipeListAdapter adapter = new RecipeListAdapter(mealPlanRecipes, null, requireContext(), this);
         $.recyclerAddedRecipes.setAdapter(adapter);
     }
 
@@ -169,7 +194,6 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.On
     }
 
     /**
-     *
      * @param planName
      */
     public void showExistingPlanComponents(String planName) {
@@ -182,7 +206,7 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.On
         $.incBotButtons.spacer.setVisibility(View.VISIBLE);
     }
 
-    public long insertOrUpdateMealPlan(long mealPlanId, MealPlan mealPlan) {
+    public long insertOrUpdateMealPlanToDB() {
         long newId = -1;
         if (mealPlanId == -1) {
             newId = mealPlanDAO.insert(mealPlan);
@@ -200,7 +224,21 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.On
     }
 
     @Override
-    public void onClickItemBtnAdd(int position) {
+    public void onRecyclerMainAction(int position) {
 
+    }
+
+    @Override
+    public void onRecyclerRecipeListChange() {
+        List<Integer> recipeIds = new ArrayList<>();
+        for (Recipe recipe : mealPlanRecipes) {
+            recipeIds.add(recipe.getId());
+        }
+        try {
+            mealPlan.setRecipeIdsList(recipeIds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        insertOrUpdateMealPlanToDB();
     }
 }

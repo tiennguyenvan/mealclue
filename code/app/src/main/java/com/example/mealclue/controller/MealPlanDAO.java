@@ -38,6 +38,14 @@ public class MealPlanDAO {
         return db.insert(TABLE_NAME, null, values);
     }
 
+    public void clearAllGoals(int userId) {
+        ContentValues values = new ContentValues();
+        values.put("goal", 0);
+
+        db.update(TABLE_NAME, values, "user_id = ? AND goal = 1", new String[]{String.valueOf(userId)});
+    }
+
+
     // Get MealPlan by ID
     public MealPlan getById(int id) {
         Cursor cursor = db.query(TABLE_NAME, null, "id = ?", new String[]{String.valueOf(id)},
