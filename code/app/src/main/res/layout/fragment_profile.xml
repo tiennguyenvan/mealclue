@@ -72,6 +72,7 @@
                     <TextView
                         android:id="@+id/txtMealType"
                         style="@style/TextLight"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:letterSpacing="0.4"
@@ -100,7 +101,9 @@
                     android:alpha="0.8"
                     android:contentDescription="@string/previous_recipe"
                     android:padding="@dimen/text_large"
-                    android:src="@drawable/ic_caret_left" />
+                    android:src="@drawable/ic_caret_left"
+                    android:visibility="gone"
+                    />
 
                 <ImageButton
                     android:id="@+id/btnNextRecipe"
@@ -111,7 +114,9 @@
                     android:alpha="0.8"
                     android:contentDescription="@string/next_recipe"
                     android:padding="@dimen/text_large"
-                    android:src="@drawable/ic_caret_right" />
+                    android:src="@drawable/ic_caret_right"
+                    android:visibility="gone"
+                    />
             </FrameLayout>
         </LinearLayout>
 

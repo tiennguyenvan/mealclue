@@ -67,7 +67,10 @@ public class RecipeDAO {
             Recipe recipe = new Recipe(
                     cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                     cursor.getString(cursor.getColumnIndexOrThrow("title")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("image"))
+                    cursor.getString(cursor.getColumnIndexOrThrow("image")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("ingredients")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("instructions")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("keywords"))
             );
             cursor.close();
             return recipe;
@@ -84,8 +87,10 @@ public class RecipeDAO {
                 Recipe recipe = new Recipe(
                         cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                         cursor.getString(cursor.getColumnIndexOrThrow("title")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("image"))
-                );
+                        cursor.getString(cursor.getColumnIndexOrThrow("image")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("ingredients")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("instructions")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("keywords")));
                 recipeList.add(recipe);
             } while (cursor.moveToNext());
         }
@@ -118,7 +123,10 @@ public class RecipeDAO {
                 Recipe recipe = new Recipe(
                         cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                         cursor.getString(cursor.getColumnIndexOrThrow("title")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("image"))
+                        cursor.getString(cursor.getColumnIndexOrThrow("image")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("ingredients")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("instructions")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("keywords"))
                 );
                 recipe.setKeywords(cursor.getString(cursor.getColumnIndexOrThrow("keywords")));
                 recipeList.add(recipe);

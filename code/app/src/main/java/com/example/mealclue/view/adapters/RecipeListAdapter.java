@@ -13,7 +13,6 @@ import com.example.mealclue.R;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.Recipe;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.example.mealclue.databinding.RecyclerItemRecipeEditorBinding;
@@ -123,9 +122,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                 Recipe duplicateRecipe = new Recipe(
                         recipes.get(curPos).getId(),
                         recipes.get(curPos).getTitle(),
-                        recipes.get(curPos).getImage()
+                        recipes.get(curPos).getImage(),
+                        recipes.get(curPos).getIngredients(),
+                        recipes.get(curPos).getInstructions(),
+                        recipes.get(curPos).getKeywords()
                 );
-
                 recipes.add(curPos + 1, duplicateRecipe);
                 notifyItemInserted(curPos + 1);
                 mainActionListener.onRecyclerRecipeListChange();

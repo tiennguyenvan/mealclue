@@ -80,7 +80,7 @@ public class SocialFragment extends Fragment {
         plans.add(new MealPlan("Plan Name", 0, "", true));
         plans.add(new MealPlan("Plan Name", 0, "", true));
         $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        PlanListAdapter planAdapter = new PlanListAdapter(plans);
+        PlanListAdapter planAdapter = new PlanListAdapter(requireContext(), plans);
         $.recyclerPlanList.setAdapter(planAdapter);
 
         List<String> categories = Arrays.asList("Distance", "Heart", "Saved", "Test");

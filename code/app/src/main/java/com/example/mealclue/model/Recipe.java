@@ -4,9 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Recipe {
     private int id;
@@ -16,12 +15,12 @@ public class Recipe {
     private String instructions; // JSON array of steps [str,str]
     private String keywords;
 
-    public Recipe(int id, String title, String image) {
+    public Recipe(int id, String title, String image, String ingredients, String instructions, String keywords) {
         this.id = id;
         this.title = title;
         this.image = image;
-        this.ingredients = null; // Placeholder for future data
-        this.instructions = null; // Placeholder for future data
+        this.ingredients = ingredients;
+        this.instructions = instructions;
     }
 
     public String getKeywords() {
@@ -32,18 +31,20 @@ public class Recipe {
         this.keywords = keywords;
     }
 
-    public Map<String, String> getIngredientsMap() throws JSONException {
-        Map<String, String> ingredientsMap = new HashMap<>();
-        JSONObject jsonObject = new JSONObject(ingredients);
-
-        Iterator<String> keys = jsonObject.keys();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            ingredientsMap.put(key, jsonObject.getString(key));
+    public List<Ingredient> getIngredientList() throws JSONException {
+        List<Ingredient> list = new ArrayList<>();
+        JSONArray arr = new JSONArray(ingredients);
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject o = arr.getJSONObject(i);
+            list.add(new Ingredient(
+                    o.getString("name"),
+                    o.getString("amount"),
+                    o.getString("unit")
+            ));
         }
-
-        return ingredientsMap;
+        return list;
     }
+
 
     public String[] getInstructionsArray() throws JSONException {
         JSONArray jsonArray = new JSONArray(instructions);

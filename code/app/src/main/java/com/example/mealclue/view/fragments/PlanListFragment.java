@@ -21,6 +21,7 @@ import com.example.mealclue.R;
  * create an instance of this fragment.
  */
 import com.example.mealclue.controller.MealPlanDAO;
+import com.example.mealclue.controller.RecipeDAO;
 import com.example.mealclue.databinding.FragmentPlanListBinding;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.view.adapters.PlanListAdapter;
@@ -31,6 +32,8 @@ import java.util.List;
 public class PlanListFragment extends Fragment {
     private FragmentPlanListBinding $;
     private MealPlanDAO mealPlanDAO;
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -82,10 +85,11 @@ public class PlanListFragment extends Fragment {
         $.incBotButtons.btnAddNewPlan.setVisibility(View.VISIBLE);
 
         mealPlanDAO = new MealPlanDAO(requireContext());
+
         List<MealPlan> mealPlanList = mealPlanDAO.getByUser(1);
 
         $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        PlanListAdapter planAdapter = new PlanListAdapter(mealPlanList);
+        PlanListAdapter planAdapter = new PlanListAdapter(requireContext(), mealPlanList);
         $.recyclerPlanList.setAdapter(planAdapter);
 
         $.incBotButtons.btnAddNewPlan.setOnClickListener(v -> {

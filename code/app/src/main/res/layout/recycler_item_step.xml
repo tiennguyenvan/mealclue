@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemStep"
+    android:layout_weight="1"
+    android:background="@android:color/transparent"
+    android:layout_marginStart="@dimen/space_xx_large"
+    android:paddingStart="@dimen/space_small"
+    android:paddingEnd="@dimen/space_small"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        style="@style/TextBold"
+        android:backgroundTint="@color/colorPrimary"
+        android:id="@+id/txtStepName"
+        android:textSize="@dimen/text_large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+</LinearLayout>

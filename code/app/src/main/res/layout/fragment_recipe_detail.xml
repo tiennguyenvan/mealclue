@@ -7,6 +7,7 @@
     tools:context=".view.fragments.RecipeDetailFragment">
 
     <ImageView
+        android:id="@+id/imgRecipeThumb"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:contentDescription="@string/recipe_image"
@@ -21,18 +22,19 @@
         android:padding="@dimen/wrapper_padding">
 
         <TextView
+            android:id="@+id/txtRecipeName"
             style="@style/TextBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recipe_name"
             android:textSize="@dimen/text_xx_large" />
-
         <Space
             android:layout_width="@dimen/space_medium"
             android:layout_height="@dimen/space_medium"/>
 
         <!-- Step Buttons -->
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerRecipePrepareSteps"
             style="@style/ButtonField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
