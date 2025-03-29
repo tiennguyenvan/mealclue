@@ -53,6 +53,13 @@
     <string name="update">Update</string>
     <string name="duplicate">Duplicate</string>
     <string name="unset_as_goal">Unset as goal</string>
+    <string name="login_register">Login / Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="enter_username">Enter username</string>
+    <string name="enter_password">Enter password</string>
+    <string name="k_meal_clue_prefs">K_MEAL_CLUE_PREFS</string>
+    <string name="k_logged_in_user_id">K_LOGGED_IN_USER_ID</string>
 
 
 </resources>

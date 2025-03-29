@@ -6,14 +6,16 @@ public class User {
     private String fullName;
     private int hearts;
     private String postalCode;
-    private String email;
+    private String username;
+    private String passwordHash;
 
-    public User(String avatar, String fullName, int hearts, String postalCode, String email) {
+    public User(String avatar, String fullName, int hearts, String postalCode, String username, String passwordHash) {
         this.avatar = avatar;
         this.fullName = fullName;
         this.hearts = hearts;
         this.postalCode = postalCode;
-        this.email = email;
+        this.username = username;
+        this.passwordHash = passwordHash;
     }
 
     public int getId() {
@@ -56,11 +58,19 @@ public class User {
         this.postalCode = postalCode;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 }

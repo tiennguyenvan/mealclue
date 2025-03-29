@@ -59,25 +59,42 @@
 
         <Space style="@style/SpaceXXXLarge" />
 
-        <Button
-            style="@style/ButtonField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_caret_right"
-            android:paddingStart="48dp"
-            android:paddingEnd="20dp"
-            android:text="@string/email" />
+        <include
+            android:id="@+id/incInpUser"
+            layout="@layout/inc_labeled_input_text" />
+
+        <Space style="@style/SpaceXLarge" />
+
+        <include
+            android:id="@+id/incInpPassword"
+            layout="@layout/inc_labeled_input_text" />
 
         <Space style="@style/SpaceXLarge" />
 
         <Button
-            style="@style/ButtonContrast"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_google_logo"
-            android:paddingStart="48dp"
-            android:paddingEnd="20dp"
-            android:text="@string/google" />
+            android:id="@+id/btnLoginRegister"
+            style="@style/ButtonPrimary"
+            android:text="@string/login_register" />
+
+        <!--        <Button-->
+        <!--            style="@style/ButtonField"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:drawableEnd="@drawable/ic_caret_right"-->
+        <!--            android:paddingStart="48dp"-->
+        <!--            android:paddingEnd="20dp"-->
+        <!--            android:text="@string/email" />-->
+
+        <!--        <Space style="@style/SpaceXLarge" />-->
+
+        <!--        <Button-->
+        <!--            style="@style/ButtonContrast"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:drawableEnd="@drawable/ic_google_logo"-->
+        <!--            android:paddingStart="48dp"-->
+        <!--            android:paddingEnd="20dp"-->
+        <!--            android:text="@string/google" />-->
 
     </LinearLayout>
 

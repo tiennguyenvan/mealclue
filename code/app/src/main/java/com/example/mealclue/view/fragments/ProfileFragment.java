@@ -1,5 +1,9 @@
 package com.example.mealclue.view.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +15,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mealclue.R;
@@ -35,6 +40,7 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding $;
     private RecipeDAO recipeDAO;
     MealPlanDAO mealPlanDAO;
+    private Context context;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,6 +80,7 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        context = requireContext();
     }
 
     @Override
@@ -91,12 +98,24 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        UserDAO userDAO = new UserDAO(requireContext());
+
+        SharedPreferences prefs = context.getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
+        int savedUserId = prefs.getInt(getString(R.string.k_logged_in_user_id), -1);
+        if (savedUserId == -1) {
+            Toast.makeText(context, "User should log in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        UserDAO userDAO = new UserDAO(context);
         if (userDAO.count() == 0) {
-            userDAO.insertMockUser();
+            Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
+            return;
         }
         // for demo, I use first user at this time
-        User user = userDAO.getAll().get(0);
+        User user = userDAO.getUserById(savedUserId);
+        if (user == null) {
+            Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         $.incUser.txtFullName.setText(user.getFullName());
         $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));

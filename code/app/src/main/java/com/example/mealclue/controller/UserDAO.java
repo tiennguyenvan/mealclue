@@ -19,7 +19,8 @@ public class UserDAO {
             + "full_name TEXT NOT NULL, "
             + "hearts INTEGER DEFAULT 0, "
             + "postal_code TEXT, "
-            + "email TEXT UNIQUE NOT NULL);";
+            + "username TEXT UNIQUE NOT NULL, "
+            + "password_hash TEXT NOT NULL);";
 
     private SQLiteDatabase db;
 
@@ -34,7 +35,8 @@ public class UserDAO {
         values.put("full_name", user.getFullName());
         values.put("hearts", user.getHearts());
         values.put("postal_code", user.getPostalCode());
-        values.put("email", user.getEmail());
+        values.put("username", user.getUsername());
+        values.put("password_hash", user.getPasswordHash());
 
         return db.insert(TABLE_NAME, null, values);
     }
@@ -49,7 +51,8 @@ public class UserDAO {
                     cursor.getString(cursor.getColumnIndexOrThrow("full_name")),
                     cursor.getInt(cursor.getColumnIndexOrThrow("hearts")),
                     cursor.getString(cursor.getColumnIndexOrThrow("postal_code")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("email"))
+                    cursor.getString(cursor.getColumnIndexOrThrow("username")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("password_hash"))
             );
             user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             cursor.close();
@@ -69,7 +72,8 @@ public class UserDAO {
                         cursor.getString(cursor.getColumnIndexOrThrow("full_name")),
                         cursor.getInt(cursor.getColumnIndexOrThrow("hearts")),
                         cursor.getString(cursor.getColumnIndexOrThrow("postal_code")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("email"))
+                        cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("password_hash"))
                 );
                 user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 userList.add(user);
@@ -85,7 +89,8 @@ public class UserDAO {
         values.put("full_name", user.getFullName());
         values.put("hearts", user.getHearts());
         values.put("postal_code", user.getPostalCode());
-        values.put("email", user.getEmail());
+        values.put("username", user.getUsername());
+        values.put("password_hash", user.getPasswordHash());
 
         return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(user.getId())});
     }
@@ -95,15 +100,20 @@ public class UserDAO {
     }
 
     public void insertMockUser() {
+        String password = "123456";
+        String hash = String.valueOf(password.hashCode());
+
         User mockUser = new User(
                 "default_avatar.png", // Avatar
-                "Tim Nguyen",       // Full Name
-                5,                     // Hearts count
-                "V6B 1A9",             // Postal Code
-                "alice.johnson@example.com" // Email
+                "Tim Nguyen",         // Full Name
+                5,                    // Hearts count
+                "V6B 1A9",            // Postal Code
+                "timnguyen",          // Username
+                hash                  // Password hash
         );
         insert(mockUser);
     }
+
 
     public int count() {
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME, null);
@@ -114,4 +124,44 @@ public class UserDAO {
         cursor.close();
         return count;
     }
+
+    public User getUserByUsername(String username) {
+        Cursor cursor = db.query(TABLE_NAME, null, "username = ?", new String[]{username}, null, null, null);
+        if (cursor.moveToFirst()) {
+            User user = new User(
+                    cursor.getString(cursor.getColumnIndexOrThrow("avatar")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("full_name")),
+                    cursor.getInt(cursor.getColumnIndexOrThrow("hearts")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("postal_code")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("username")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("password_hash"))
+            );
+            user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+            cursor.close();
+            return user;
+        }
+        return null;
+    }
+
+    public User getUserById(int id) {
+        Cursor cursor = db.query(TABLE_NAME, null, "id = ?", new String[]{String.valueOf(id)},
+                null, null, null);
+
+        if (cursor.moveToFirst()) {
+            User user = new User(
+                    cursor.getString(cursor.getColumnIndexOrThrow("avatar")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("full_name")),
+                    cursor.getInt(cursor.getColumnIndexOrThrow("hearts")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("postal_code")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("username")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("password_hash"))
+            );
+            user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+            cursor.close();
+            return user;
+        }
+        cursor.close();
+        return null;
+    }
+
 }

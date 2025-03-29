@@ -9,7 +9,7 @@
     <TextView
         android:paddingStart="@dimen/space_large"
         android:paddingEnd="0dp"
-        android:id="@+id/tvLabel"
+        android:id="@+id/txtLabel"
         android:layout_width="120dp"
         style="@style/TextLight"
         android:text="@string/label"
@@ -19,7 +19,7 @@
     <EditText
         android:autofillHints=""
         android:padding="@dimen/space_large"
-        android:id="@+id/etInput"
+        android:id="@+id/inpField"
         style="@style/TextRegular"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

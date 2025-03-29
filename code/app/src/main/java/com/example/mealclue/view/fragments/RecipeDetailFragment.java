@@ -117,7 +117,7 @@ public class RecipeDetailFragment extends Fragment {
 
         if (currentRecipe.getInstructions() == null && currentRecipe.getIngredients() == null) {
             System.out.println(currentRecipe);
-//            fetchRecipeDetailsFromAPI(recipeId);
+            fetchRecipeDetailsFromAPI(recipeId);
         } else {
             showRecipe();
         }
@@ -178,10 +178,13 @@ public class RecipeDetailFragment extends Fragment {
         api.getRecipeInformation(id, RetrofitClient.getApiKey()).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                System.out.println("Called API Response: " + response);
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject body = response.body();
 
-                    int recipeId = body.get("id").getAsInt();
+
+
+//                    int recipeId = body.get("id").getAsInt();
 //                    String title = body.get("title").getAsString();
 //                    String image = body.get("image").getAsString();
 
@@ -200,8 +203,9 @@ public class RecipeDetailFragment extends Fragment {
                         ingredientJsonArray.put(ingObj);
                     }
 
-                    // 🍲 Parse steps from <li> HTML
+                    // Parse steps from <li> HTML
                     String instructionHtml = body.get("instructions").getAsString();
+                    System.out.println("instructionHtml:\n" + instructionHtml);
                     List<String> steps = new ArrayList<>();
                     Matcher matcher = Pattern.compile("(?i)<li>(.*?)</li>").matcher(instructionHtml);
                     while (matcher.find()) {
