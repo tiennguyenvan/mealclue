@@ -19,6 +19,7 @@ public class MealPlanDAO {
             + "user_id INTEGER NOT NULL, "
             + "recipes TEXT NOT NULL, "
             + "goal INTEGER NOT NULL CHECK(goal IN (0,1)), "
+            + "cooked_recipes TEXT, "
             + "FOREIGN KEY(user_id) REFERENCES User(id));";
 
     private SQLiteDatabase db;
@@ -33,6 +34,7 @@ public class MealPlanDAO {
         values.put("name", mealPlan.getName());
         values.put("user_id", mealPlan.getUserId());
         values.put("recipes", mealPlan.getRecipes());
+        values.put("cooked_recipes", mealPlan.getCookedRecipes());
         values.put("goal", mealPlan.isGoal() ? 1 : 0);
 
         return db.insert(TABLE_NAME, null, values);
@@ -59,6 +61,8 @@ public class MealPlanDAO {
                     cursor.getInt(cursor.getColumnIndexOrThrow("goal")) == 1
             );
             mealPlan.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+            mealPlan.setCookedRecipes(cursor.getString(cursor.getColumnIndexOrThrow("cooked_recipes")));
+
             cursor.close();
             return mealPlan;
         }
@@ -79,6 +83,8 @@ public class MealPlanDAO {
                         cursor.getInt(cursor.getColumnIndexOrThrow("goal")) == 1
                 );
                 mealPlan.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                mealPlan.setCookedRecipes(cursor.getString(cursor.getColumnIndexOrThrow("cooked_recipes")));
+
                 mealPlanList.add(mealPlan);
             } while (cursor.moveToNext());
         }
@@ -100,6 +106,8 @@ public class MealPlanDAO {
                         cursor.getInt(cursor.getColumnIndexOrThrow("goal")) == 1
                 );
                 mealPlan.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                mealPlan.setCookedRecipes(cursor.getString(cursor.getColumnIndexOrThrow("cooked_recipes")));
+
                 mealPlanList.add(mealPlan);
             } while (cursor.moveToNext());
         }
@@ -112,6 +120,7 @@ public class MealPlanDAO {
         values.put("name", mealPlan.getName());
         values.put("user_id", mealPlan.getUserId());
         values.put("recipes", mealPlan.getRecipes());
+        values.put("cooked_recipes", mealPlan.getCookedRecipes());
         values.put("goal", mealPlan.isGoal() ? 1 : 0);
 
         return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(mealPlan.getId())});
@@ -120,6 +129,7 @@ public class MealPlanDAO {
     public void update(int id) {
         db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
     }
+
     public int count() {
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME, null);
         int count = 0;

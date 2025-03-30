@@ -29,5 +29,11 @@
         android:layout_weight="1"
         android:text="@string/new_plan"
         android:visibility="gone" />
+    <Button
+        android:id="@+id/btnFinishCooking"
+        style="@style/ButtonPrimary"
+        android:layout_weight="1"
+        android:text="@string/finish"
+        android:visibility="gone" />
 
 </LinearLayout>

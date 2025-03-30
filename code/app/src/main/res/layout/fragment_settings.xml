@@ -8,14 +8,33 @@
     android:padding="@dimen/wrapper_padding"
     tools:context=".view.fragments.SettingsFragment">
 
-    <include layout="@layout/inc_profile_header" />
-    <Space style="@style/SpaceXXLarge"/>
-    <include layout="@layout/inc_labeled_input_text"  />
-    <Space style="@style/SpaceXLarge"/>
-    <include layout="@layout/inc_labeled_input_text"  />
-    <Space style="@style/SpaceXLarge"/>
-    <include layout="@layout/inc_labeled_input_text"  />
-    <Space style="@style/SpaceXLarge"/>
-    <include layout="@layout/inc_labeled_input_text"  />
+    <include
+        android:id="@+id/incUser"
+        layout="@layout/inc_profile_header" />
 
+    <Space style="@style/SpaceXXLarge" />
+
+    <include
+        android:id="@+id/incInpFullName"
+        layout="@layout/inc_labeled_input_text" />
+
+    <Space style="@style/SpaceXLarge" />
+
+    <include
+        android:id="@+id/incInpPostalCode"
+        layout="@layout/inc_labeled_input_text" />
+
+    <Space style="@style/SpaceXLarge" />
+
+    <include
+        android:id="@+id/incInpThemeModes"
+        layout="@layout/inc_labeled_input_text" />
+
+    <Space style="@style/SpaceXLarge" />
+
+    <Button
+        style="@style/ButtonPrimary"
+        android:text="@string/save_settings"
+        android:id="@+id/btnSaveSettings"
+        />
 </LinearLayout>

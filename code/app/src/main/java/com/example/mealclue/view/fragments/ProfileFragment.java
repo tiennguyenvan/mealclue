@@ -41,6 +41,8 @@ public class ProfileFragment extends Fragment {
     private RecipeDAO recipeDAO;
     MealPlanDAO mealPlanDAO;
     private Context context;
+    private Recipe recipe;
+    Integer uncookedRecipeId;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -91,34 +93,19 @@ public class ProfileFragment extends Fragment {
 
     /**
      * I place code here because on onCreate, the binding  for Header Include is not ready
-     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     *
+     * @param view               The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
      * @param savedInstanceState If non-null, this fragment is being re-constructed
-     * from a previous saved state as given here.
+     *                           from a previous saved state as given here.
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences prefs = context.getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
-        int savedUserId = prefs.getInt(getString(R.string.k_logged_in_user_id), -1);
-        if (savedUserId == -1) {
-            Toast.makeText(context, "User should log in", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        UserDAO userDAO = new UserDAO(context);
-        if (userDAO.count() == 0) {
-            Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        // for demo, I use first user at this time
-        User user = userDAO.getUserById(savedUserId);
+        User user = loadUser();
         if (user == null) {
-            Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        $.incUser.txtFullName.setText(user.getFullName());
-        $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));
 
         mealPlanDAO = new MealPlanDAO(requireContext());
         recipeDAO = new RecipeDAO(requireContext());
@@ -130,24 +117,6 @@ public class ProfileFragment extends Fragment {
             $.linearPlanGoal.setVisibility(View.VISIBLE);
             $.linearNoGoal.setVisibility(View.GONE);
             MealPlan goalPlan = goalPlans.get(0);
-            List<Integer> recipeIds = goalPlan.getRecipeIdsList();
-            $.txtPlanName.setText(goalPlan.getName());
-            if (!recipeIds.isEmpty()) {
-                Recipe firstRecipe = recipeDAO.getRecipeById(recipeIds.get(0));
-                if (firstRecipe != null && firstRecipe.getImage() != null) {
-                    Glide.with(requireContext())
-                            .load(firstRecipe.getImage())
-                            .into($.imgRecipeThumb);
-
-                }
-                $.txtRecipeName.setText(firstRecipe.getTitle());
-                $.linearCurRecipe.setOnClickListener(v -> {
-                    moveToRecipeDetail(v, firstRecipe);
-                });
-                $.btnCook.setOnClickListener(v -> {
-                    moveToRecipeDetail(v, firstRecipe);
-                });
-            }
 
             $.txtPlanName.setOnClickListener(v -> {
                 ProfileFragmentDirections.ActionFrgProfileToFrgPlanDetail action = ProfileFragmentDirections.actionFrgProfileToFrgPlanDetail();
@@ -156,6 +125,44 @@ public class ProfileFragment extends Fragment {
                 navController.navigate(action);
             });
 
+
+            $.txtPlanName.setText(goalPlan.getName());
+            uncookedRecipeId = goalPlan.getFirstUncookedRecipeId();
+
+            if (uncookedRecipeId == null) {
+                $.txtRecipeName.setText(R.string.finished_all_recipes);
+                $.btnCook.setText(R.string.reset_plan);
+            } else {
+                recipe = recipeDAO.getRecipeById(uncookedRecipeId);
+                if (recipe != null && recipe.getImage() != null) {
+                    Glide.with(requireContext())
+                            .load(recipe.getImage())
+                            .into($.imgRecipeThumb);
+
+                }
+                $.txtRecipeName.setText(recipe.getTitle());
+                $.linearCurRecipe.setOnClickListener(v -> {
+                    moveToRecipeDetail(v, recipe);
+                });
+            }
+
+            $.btnCook.setOnClickListener(v -> {
+                if (uncookedRecipeId != null) {
+                    moveToRecipeDetail(v, recipe);
+                    return;
+                }
+                goalPlan.setCookedRecipes(null);
+                mealPlanDAO.update(goalPlan);
+                uncookedRecipeId = goalPlan.getFirstUncookedRecipeId();
+                recipe = recipeDAO.getRecipeById(uncookedRecipeId);
+                if (recipe != null && recipe.getImage() != null) {
+                    Glide.with(requireContext())
+                            .load(recipe.getImage())
+                            .into($.imgRecipeThumb);
+                }
+                $.txtRecipeName.setText(recipe.getTitle());
+                $.btnCook.setText(R.string.cook);
+            });
         }
 
         $.btnSetGoalPlan.setOnClickListener(this::moveToPlanListToSetGoal);
@@ -183,5 +190,32 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         $ = FragmentProfileBinding.inflate(inflater, container, false);
         return $.getRoot();
+    }
+
+    public User loadUser() {
+        SharedPreferences prefs = context.getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
+        int savedUserId = prefs.getInt(getString(R.string.k_logged_in_user_id), -1);
+        if (savedUserId == -1) {
+            Toast.makeText(context, "User should log in", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        UserDAO userDAO = new UserDAO(context);
+        if (userDAO.count() == 0) {
+            Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        // for demo, I use first user at this time
+        User user = userDAO.getUserById(savedUserId);
+        if (user == null) {
+            Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        $.incUser.txtFullName.setText(user.getFullName());
+        $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));
+        if (user.getAvatar() != null) {
+            Glide.with(this).load(user.getAvatar()).into($.incUser.imgAvatar);
+        }
+        return user;
     }
 }

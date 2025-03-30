@@ -60,6 +60,19 @@
     <string name="enter_password">Enter password</string>
     <string name="k_meal_clue_prefs">K_MEAL_CLUE_PREFS</string>
     <string name="k_logged_in_user_id">K_LOGGED_IN_USER_ID</string>
+    <string name="save_settings">Save Settings</string>
+    <string name="name">Name</string>
+    <string name="postal">Postal</string>
+    <string name="theme">Theme</string>
+    <string name="k_selected_theme_mode">SELECTED_THEME_MODE</string>
+    <string name="finish">Finish</string>
+    <string name="finished_all_recipes">Finished all recipes</string>
+    <string name="reset_plan">Reset Plan</string>
+    <string-array name="arr_theme_modes">
+        <item>Dark</item>
+        <item>Light</item>
+        <item>System</item>
+    </string-array>
 
 
 </resources>

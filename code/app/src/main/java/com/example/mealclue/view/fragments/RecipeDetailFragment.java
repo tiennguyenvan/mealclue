@@ -1,10 +1,15 @@
 package com.example.mealclue.view.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.TextUtils;
@@ -14,10 +19,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.mealclue.R;
+import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.RecipeDAO;
 import com.example.mealclue.controller.RetrofitClient;
 import com.example.mealclue.controller.SpoonacularApiService;
+import com.example.mealclue.controller.UserDAO;
 import com.example.mealclue.model.Ingredient;
+import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.Recipe;
 
 /**
@@ -26,6 +35,7 @@ import com.example.mealclue.model.Recipe;
  * create an instance of this fragment.
  */
 import com.example.mealclue.databinding.FragmentRecipeDetailBinding;
+import com.example.mealclue.model.User;
 import com.example.mealclue.view.adapters.IngredientAdapter;
 import com.example.mealclue.view.adapters.StepSelectorAdapter;
 import com.google.gson.JsonArray;
@@ -50,6 +60,8 @@ public class RecipeDetailFragment extends Fragment {
     private RecipeDAO recipeDAO;
     private int recipeId;
     private Recipe currentRecipe;
+    MealPlanDAO mealPlanDAO;
+    private Context context;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,13 +101,12 @@ public class RecipeDetailFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        context = requireContext();
         // Inflate the layout for this fragment
         $ = FragmentRecipeDetailBinding.inflate(inflater, container, false);
         return $.getRoot();
@@ -106,7 +117,7 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         recipeId = RecipeDetailFragmentArgs.fromBundle(getArguments()).getArgRecipeId();
-        System.out.println("recipeId: " +recipeId);
+        System.out.println("recipeId: " + recipeId);
         recipeDAO = new RecipeDAO(requireContext());
         currentRecipe = recipeDAO.getRecipeById(recipeId);
 
@@ -121,6 +132,45 @@ public class RecipeDetailFragment extends Fragment {
         } else {
             showRecipe();
         }
+
+        mealPlanDAO = new MealPlanDAO(context);
+        recipeDAO = new RecipeDAO(context);
+        User user = loadUser();
+        if (user == null) {
+            Navigation.findNavController($.getRoot()).navigateUp();
+            return;
+        }
+        List<MealPlan> goalPlans = mealPlanDAO.getGoaledByUser(user.getId());
+        if (goalPlans.isEmpty()) {
+            Toast.makeText(context, "No goal plan", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController($.getRoot()).navigateUp();
+            return;
+        }
+
+        // button layouts
+        $.incBotButtons.btnFinishCooking.setVisibility(View.VISIBLE);
+        $.incBotButtons.spacer.setVisibility(View.VISIBLE);
+        $.incBotButtons.btnBack.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigateUp();
+        });
+
+        $.incBotButtons.btnFinishCooking.setOnClickListener(v -> {
+            MealPlan mealPlan = goalPlans.get(0);
+            Integer nextRecipe = mealPlan.getFirstUncookedRecipeId();
+            if (nextRecipe == null) {
+                Toast.makeText(context, "Finished all recipes", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            List<Integer> cooked = mealPlan.getCookedRecipeIdsList();
+            cooked.add(nextRecipe);
+            try {
+                mealPlan.setCookedRecipeIdsList(cooked);
+                mealPlanDAO.update(mealPlan);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Navigation.findNavController(v).navigateUp();
+        });
     }
 
     private void showRecipe() {
@@ -170,9 +220,6 @@ public class RecipeDetailFragment extends Fragment {
     }
 
 
-
-
-
     private void fetchRecipeDetailsFromAPI(int id) {
         SpoonacularApiService api = RetrofitClient.getClient().create(SpoonacularApiService.class);
         api.getRecipeInformation(id, RetrofitClient.getApiKey()).enqueue(new Callback<JsonObject>() {
@@ -181,7 +228,6 @@ public class RecipeDetailFragment extends Fragment {
                 System.out.println("Called API Response: " + response);
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject body = response.body();
-
 
 
 //                    int recipeId = body.get("id").getAsInt();
@@ -233,6 +279,27 @@ public class RecipeDetailFragment extends Fragment {
         });
     }
 
+    public User loadUser() {
+        SharedPreferences prefs = context.getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
+        int savedUserId = prefs.getInt(getString(R.string.k_logged_in_user_id), -1);
+        if (savedUserId == -1) {
+            Toast.makeText(context, "User should log in", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        UserDAO userDAO = new UserDAO(context);
+        if (userDAO.count() == 0) {
+            Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        User user = userDAO.getUserById(savedUserId);
+        if (user == null) {
+            Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        return user;
+    }
 
 
 }

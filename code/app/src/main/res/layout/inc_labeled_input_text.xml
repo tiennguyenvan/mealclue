@@ -29,4 +29,18 @@
         android:inputType="text"
         android:textColor="@color/colorContrast"
         android:textSize="@dimen/text_medium" />
+    <Spinner
+        android:padding="@dimen/space_large"
+        android:id="@+id/inpSelect"
+        style="@style/TextRegular"
+        android:backgroundTint="@android:color/transparent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:visibility="gone"
+        android:spinnerMode="dialog"
+        android:entries="@array/arr_theme_modes"
+        android:textColor="@color/colorContrast"
+        android:textSize="@dimen/text_medium"/>
 </LinearLayout>

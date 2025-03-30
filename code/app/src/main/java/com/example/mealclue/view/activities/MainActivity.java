@@ -1,6 +1,8 @@
 package com.example.mealclue.view.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import com.example.mealclue.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding $;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,23 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+        // get theme modes from prefs then set the mode accordingly
+        prefs = getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
+        String[] themeModes = getResources().getStringArray(R.array.arr_theme_modes);
+        int selectedThemeModeId = prefs.getInt(getString(R.string.k_selected_theme_mode), 0);
+        if (selectedThemeModeId >= themeModes.length) {
+            selectedThemeModeId = 0;
+        }
+
+        if (selectedThemeModeId == 0) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else if (selectedThemeModeId == 1) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
 
 //        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.frgMain);
 //        if (navHostFragment != null) {

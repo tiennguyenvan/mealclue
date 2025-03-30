@@ -91,6 +91,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
             holder.$.btnDelete.setOnClickListener(v -> {
                 int curPos = holder.getAdapterPosition();
                 recipes.remove(curPos);
+                this.mealPlan.setCookedRecipes(null);
                 notifyItemRemoved(curPos);
                 mainActionListener.onRecyclerRecipeListChange();
                 expandedPosition = -1;
@@ -102,6 +103,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                     Recipe temp = recipes.get(curPos);
                     recipes.set(curPos, recipes.get(curPos + 1));
                     recipes.set(curPos + 1, temp);
+                    this.mealPlan.setCookedRecipes(null);
                     notifyItemMoved(curPos, curPos + 1);
                     mainActionListener.onRecyclerRecipeListChange();
                 }
@@ -112,6 +114,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                     Recipe temp = recipes.get(curPos);
                     recipes.set(curPos, recipes.get(curPos - 1));
                     recipes.set(curPos - 1, temp);
+                    this.mealPlan.setCookedRecipes(null);
                     notifyItemMoved(curPos, curPos - 1);
                     mainActionListener.onRecyclerRecipeListChange();
                 }
@@ -128,6 +131,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                         recipes.get(curPos).getKeywords()
                 );
                 recipes.add(curPos + 1, duplicateRecipe);
+                this.mealPlan.setCookedRecipes(null);
                 notifyItemInserted(curPos + 1);
                 mainActionListener.onRecyclerRecipeListChange();
             });
