@@ -37,4 +37,12 @@
         android:text="@string/save_settings"
         android:id="@+id/btnSaveSettings"
         />
+    <Space
+        style="@style/SpaceMedium"
+        />
+    <Button
+        android:id="@+id/btnLogout"
+        style="@style/ButtonField"
+        android:text="@string/log_out"
+        />
 </LinearLayout>

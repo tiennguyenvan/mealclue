@@ -3,6 +3,7 @@ package com.example.mealclue.view.fragments;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -21,9 +22,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.mealclue.R;
 import com.example.mealclue.controller.UserDAO;
-import com.example.mealclue.databinding.FragmentProfileBinding;
 import com.example.mealclue.databinding.FragmentSettingsBinding;
 import com.example.mealclue.model.User;
+import com.example.mealclue.view.activities.LoginActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,12 +88,14 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        prefs = context.getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
         user = loadUser();
         if (user == null) {
             return;
         }
         initFields();
         $.btnSaveSettings.setOnClickListener(this::saveSettings);
+        $.btnLogout.setOnClickListener(this::logout);
     }
 
     private void saveSettings(View v) {
@@ -135,6 +138,17 @@ public class SettingsFragment extends Fragment {
         Navigation.findNavController(v).navigateUp();
     }
 
+    private void logout(View v) {
+
+        prefs.edit().remove(getString(R.string.k_logged_in_user_id)).apply();
+
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+        requireActivity().finish();
+    }
+
+
     private void initFields() {
         System.out.println("initFields for " + user.getFullName());
         $.incInpFullName.txtLabel.setText(R.string.name);
@@ -163,20 +177,8 @@ public class SettingsFragment extends Fragment {
     }
 
     public User loadUser() {
-        prefs = context.getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
-        int savedUserId = prefs.getInt(getString(R.string.k_logged_in_user_id), -1);
-        if (savedUserId == -1) {
-            Toast.makeText(context, "User should log in", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        UserDAO userDAO = new UserDAO(context);
-        if (userDAO.count() == 0) {
-            Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        user = userDAO.getUserById(savedUserId);
+        User user = User.getLoggedInUser(context);
         if (user == null) {
-            Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show();
             return null;
         }
 

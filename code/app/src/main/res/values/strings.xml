@@ -68,6 +68,9 @@
     <string name="finish">Finish</string>
     <string name="finished_all_recipes">Finished all recipes</string>
     <string name="reset_plan">Reset Plan</string>
+    <string name="log_out">Log Out</string>
+    <string name="set_a_goal_plan">Set A Goal Plan</string>
+    <string name="reset_goal_plan">Reset Goal Plan</string>
     <string-array name="arr_theme_modes">
         <item>Dark</item>
         <item>Light</item>

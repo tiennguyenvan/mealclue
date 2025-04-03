@@ -1,5 +1,6 @@
 package com.example.mealclue.view.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.RecipeDAO;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.Recipe;
+import com.example.mealclue.model.User;
 import com.example.mealclue.view.adapters.RecipeListAdapter;
 
 import java.util.ArrayList;
@@ -34,12 +36,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class PlanDetailFragment extends Fragment implements RecipeListAdapter.MainActionListener {
     private FragmentPlanDetailBinding $;
-    MealPlanDAO mealPlanDAO;
-    long mealPlanId = -1;
-    MealPlan mealPlan;
-    RecipeDAO recipeDAO;
-    List<Recipe> mealPlanRecipes;
-
+    private MealPlanDAO mealPlanDAO;
+    private long mealPlanId = -1;
+    private MealPlan mealPlan;
+    private RecipeDAO recipeDAO;
+    private List<Recipe> mealPlanRecipes;
+    private Context context;
+    private User loggedInUser;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,6 +87,7 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        context = requireContext();
         $ = FragmentPlanDetailBinding.inflate(inflater, container, false);
         return $.getRoot();
     }
@@ -102,13 +106,14 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         clearBottomNavSelection();
+        loggedInUser = User.getLoggedInUser(context);
         mealPlanDAO = new MealPlanDAO(requireContext());
         recipeDAO = new RecipeDAO(requireContext());
         mealPlanId = PlanDetailFragmentArgs.fromBundle(getArguments()).getArgMealPlanId();
         Log.d("PlanDetailFragment", "Meal Plan ID: " + mealPlanId);
         mealPlanRecipes = new ArrayList<>();
         if (mealPlanId == -1) {
-            mealPlan = new MealPlan("", 1, "[]", false);
+            mealPlan = new MealPlan("", loggedInUser.getId(), "[]", false);
         } else {
             mealPlan = mealPlanDAO.getById((int) mealPlanId);
             if (mealPlan == null) {
@@ -241,4 +246,5 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         }
         insertOrUpdateMealPlanToDB();
     }
+
 }

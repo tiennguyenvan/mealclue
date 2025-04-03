@@ -1,9 +1,6 @@
 package com.example.mealclue.view.fragments;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,19 +9,16 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.mealclue.R;
 import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.RecipeDAO;
 import com.example.mealclue.controller.RetrofitClient;
 import com.example.mealclue.controller.SpoonacularApiService;
-import com.example.mealclue.controller.UserDAO;
 import com.example.mealclue.model.Ingredient;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.Recipe;
@@ -135,7 +129,7 @@ public class RecipeDetailFragment extends Fragment {
 
         mealPlanDAO = new MealPlanDAO(context);
         recipeDAO = new RecipeDAO(context);
-        User user = loadUser();
+        User user = User.getLoggedInUser(context);
         if (user == null) {
             Navigation.findNavController($.getRoot()).navigateUp();
             return;
@@ -278,28 +272,4 @@ public class RecipeDetailFragment extends Fragment {
             }
         });
     }
-
-    public User loadUser() {
-        SharedPreferences prefs = context.getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
-        int savedUserId = prefs.getInt(getString(R.string.k_logged_in_user_id), -1);
-        if (savedUserId == -1) {
-            Toast.makeText(context, "User should log in", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        UserDAO userDAO = new UserDAO(context);
-        if (userDAO.count() == 0) {
-            Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-
-        User user = userDAO.getUserById(savedUserId);
-        if (user == null) {
-            Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-
-        return user;
-    }
-
-
 }

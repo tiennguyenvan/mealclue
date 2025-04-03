@@ -1,5 +1,6 @@
 package com.example.mealclue.view.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,26 +14,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.mealclue.R;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link PlanListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 import com.example.mealclue.controller.MealPlanDAO;
-import com.example.mealclue.controller.RecipeDAO;
 import com.example.mealclue.databinding.FragmentPlanListBinding;
 import com.example.mealclue.model.MealPlan;
+import com.example.mealclue.model.User;
 import com.example.mealclue.view.adapters.PlanListAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlanListFragment extends Fragment {
     private FragmentPlanListBinding $;
     private MealPlanDAO mealPlanDAO;
-
+    private Context context;
+    private User loggedInUser;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,11 +72,16 @@ public class PlanListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        context = requireContext();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        loggedInUser = User.getLoggedInUser(context);
+        if (loggedInUser == null) {
+            return;
+        }
         $.incBotButtons.btnBack.setOnClickListener(v -> {
             Navigation.findNavController(view).navigateUp();
         });
@@ -86,7 +90,7 @@ public class PlanListFragment extends Fragment {
 
         mealPlanDAO = new MealPlanDAO(requireContext());
 
-        List<MealPlan> mealPlanList = mealPlanDAO.getByUser(1);
+        List<MealPlan> mealPlanList = mealPlanDAO.getByUser(loggedInUser.getId());
 
         $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
         PlanListAdapter planAdapter = new PlanListAdapter(requireContext(), mealPlanList);

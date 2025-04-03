@@ -50,14 +50,24 @@ public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.ViewHo
                         .into(holder.$.imgThumb);
             }
         }
+        int recipeCount = recipeIds.size();
+        int recipeDoneCount = plan.getCookedRecipeIdsList().size();
+        int recipeDonePercent = (recipeDoneCount * 100) / recipeCount;
+        int recipeLeftCount = recipeCount - recipeDoneCount;
 
         if (plan.isGoal()) {
             holder.$.txtGoalRibbon.setVisibility(View.VISIBLE);
-            holder.$.txtName.setText(plan.getName() + " - 80%");
-            holder.$.txtMeta.setText("30 recipes - 3 left");
+            holder.$.txtName.setText(
+                    String.format("%s - %s%%", plan.getName(), recipeDonePercent)
+            );
+            holder.$.txtMeta.setText(
+                    String.format("%s recipes - %s", recipeCount, recipeLeftCount > 0 ? recipeLeftCount + " left": "Finished")
+            );
         } else {
             holder.$.txtGoalRibbon.setVisibility(View.GONE);
-            holder.$.txtMeta.setText(String.format("%s recipes", plan.getRecipeIdsList().size()));
+            holder.$.txtMeta.setText(
+                    String.format("%s recipes", plan.getRecipeIdsList().size())
+            );
         }
         holder.$.item.setOnClickListener(v -> {
             PlanListFragmentDirections.ActionFrgPlanListToFrgPlanDetail action = PlanListFragmentDirections.actionFrgPlanListToFrgPlanDetail();

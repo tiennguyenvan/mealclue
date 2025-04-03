@@ -12,7 +12,9 @@
     <include
         android:id="@+id/incUser"
         layout="@layout/inc_profile_header" />
+
     <Space style="@style/SpaceXXLarge" />
+
     <LinearLayout
         android:id="@+id/linearPlanGoal"
         android:layout_width="match_parent"
@@ -72,13 +74,13 @@
                     <TextView
                         android:id="@+id/txtMealType"
                         style="@style/TextLight"
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:letterSpacing="0.4"
                         android:text="@string/lunch"
                         android:textAllCaps="true"
-                        android:textSize="@dimen/text_medium" />
+                        android:textSize="@dimen/text_medium"
+                        android:visibility="gone" />
 
                     <Space style="@style/SpaceMedium" />
 
@@ -86,9 +88,10 @@
                         android:id="@+id/txtRecipeName"
                         style="@style/TextMedium"
 
- android:textAlignment="center"                       android:layout_width="wrap_content"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/recipe_name"
+                        android:textAlignment="center"
                         android:textSize="@dimen/text_x_large"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -103,8 +106,7 @@
                     android:contentDescription="@string/previous_recipe"
                     android:padding="@dimen/text_large"
                     android:src="@drawable/ic_caret_left"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
 
                 <ImageButton
                     android:id="@+id/btnNextRecipe"
@@ -116,8 +118,7 @@
                     android:contentDescription="@string/next_recipe"
                     android:padding="@dimen/text_large"
                     android:src="@drawable/ic_caret_right"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
             </FrameLayout>
         </LinearLayout>
 
@@ -130,25 +131,26 @@
             android:drawableTop="@drawable/ic_pot"
             android:text="@string/cook" />
 
-<!--        <Space style="@style/SpaceMedium" />-->
 
-<!--        <Button-->
-<!--            android:id="@+id/btnDelay"-->
-<!--            style="@style/ButtonBase"-->
-<!--            android:text="@string/delay" />-->
+        <!--        <Space style="@style/SpaceMedium" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/btnDelay"-->
+        <!--            style="@style/ButtonBase"-->
+        <!--            android:text="@string/delay" />-->
     </LinearLayout>
 
-    <LinearLayout
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/linearNoGoal">
-        <Button
-            android:id="@+id/btnSetGoalPlan"
-            style="@style/ButtonBase"
-            android:text="Set A Goal Plan" />
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnResetGoalPlan"
+        style="@style/ButtonSecondary"
+        android:layout_marginBottom="@dimen/space_medium"
+        android:text="@string/reset_goal_plan"
+        android:visibility="gone" />
 
+    <Button
+        android:id="@+id/btnSetGoalPlan"
+        style="@style/ButtonBase"
+        android:text="@string/set_a_goal_plan"
+        android:visibility="gone" />
 </LinearLayout>

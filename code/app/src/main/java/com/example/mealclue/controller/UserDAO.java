@@ -41,26 +41,6 @@ public class UserDAO {
         return db.insert(TABLE_NAME, null, values);
     }
 
-    public User getByEmail(String email) {
-        Cursor cursor = db.query(TABLE_NAME, null, "email = ?", new String[]{email},
-                null, null, null);
-
-        if (cursor.moveToFirst()) {
-            User user = new User(
-                    cursor.getString(cursor.getColumnIndexOrThrow("avatar")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("full_name")),
-                    cursor.getInt(cursor.getColumnIndexOrThrow("hearts")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("postal_code")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("username")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("password_hash"))
-            );
-            user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-            cursor.close();
-            return user;
-        }
-        return null;
-    }
-
     public List<User> getAll() {
         List<User> userList = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
@@ -72,7 +52,7 @@ public class UserDAO {
                         cursor.getString(cursor.getColumnIndexOrThrow("full_name")),
                         cursor.getInt(cursor.getColumnIndexOrThrow("hearts")),
                         cursor.getString(cursor.getColumnIndexOrThrow("postal_code")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("username")),
                         cursor.getString(cursor.getColumnIndexOrThrow("password_hash"))
                 );
                 user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));

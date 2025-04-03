@@ -1,5 +1,6 @@
 package com.example.mealclue.view.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,26 +11,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.mealclue.R;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SocialFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+import com.example.mealclue.controller.MealPlanDAO;
+import com.example.mealclue.controller.UserDAO;
 import com.example.mealclue.databinding.FragmentSocialBinding;
 import com.example.mealclue.model.MealPlan;
+import com.example.mealclue.model.User;
 import com.example.mealclue.view.adapters.CategoryAdapter;
 import com.example.mealclue.view.adapters.PlanListAdapter;
 import com.example.mealclue.view.adapters.SubCategoryAdapter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class SocialFragment extends Fragment {
     private FragmentSocialBinding $;
+    private MealPlanDAO mealPlanDAO;
+    private List<MealPlan> userMealPlans;
+    private Context context;
+    private UserDAO userDAO;
+    private List<User> users;
+    private User loggedInUser;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,19 +76,28 @@ public class SocialFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        context = requireContext();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // mock plan data
-        List<MealPlan> plans = new ArrayList<>();
-        plans.add(new MealPlan("Plan Name", 0, "", true));
-        plans.add(new MealPlan("Plan Name", 0, "", true));
-        plans.add(new MealPlan("Plan Name", 0, "", true));
-        plans.add(new MealPlan("Plan Name", 0, "", true));
+        loggedInUser = User.getLoggedInUser(context);
+        if (loggedInUser == null) {
+            return;
+        }
+        userDAO = new UserDAO(context);
+        users = userDAO.getAll();
+        if (users.isEmpty()) {
+            Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mealPlanDAO = new MealPlanDAO(requireContext());
+        List<MealPlan> first10MealPlans = mealPlanDAO.getFirstMealPlans(10);
+
         $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        PlanListAdapter planAdapter = new PlanListAdapter(requireContext(), plans);
+        PlanListAdapter planAdapter = new PlanListAdapter(requireContext(), first10MealPlans);
         $.recyclerPlanList.setAdapter(planAdapter);
 
         List<String> categories = Arrays.asList("Distance", "Heart", "Saved", "Test");

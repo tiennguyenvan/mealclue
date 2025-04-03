@@ -1,9 +1,6 @@
 package com.example.mealclue.view.fragments;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,13 +12,11 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mealclue.R;
 import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.RecipeDAO;
-import com.example.mealclue.controller.UserDAO;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.Recipe;
 import com.example.mealclue.model.User;
@@ -112,10 +107,11 @@ public class ProfileFragment extends Fragment {
         List<MealPlan> goalPlans = mealPlanDAO.getGoaledByUser(user.getId());
         if (goalPlans.isEmpty()) {
             $.linearPlanGoal.setVisibility(View.GONE);
-            $.linearNoGoal.setVisibility(View.VISIBLE);
+            $.btnSetGoalPlan.setVisibility(View.VISIBLE);
+            $.btnSetGoalPlan.setOnClickListener(this::moveToPlanListToSetGoal);
         } else {
             $.linearPlanGoal.setVisibility(View.VISIBLE);
-            $.linearNoGoal.setVisibility(View.GONE);
+            $.btnSetGoalPlan.setVisibility(View.GONE);
             MealPlan goalPlan = goalPlans.get(0);
 
             $.txtPlanName.setOnClickListener(v -> {
@@ -125,13 +121,15 @@ public class ProfileFragment extends Fragment {
                 navController.navigate(action);
             });
 
+            setPlanName(goalPlan);
 
-            $.txtPlanName.setText(goalPlan.getName());
             uncookedRecipeId = goalPlan.getFirstUncookedRecipeId();
 
             if (uncookedRecipeId == null) {
                 $.txtRecipeName.setText(R.string.finished_all_recipes);
-                $.btnCook.setText(R.string.reset_plan);
+//                $.btnCook.setText(R.string.reset_plan);
+                $.btnCook.setVisibility(View.GONE);
+                $.btnResetGoalPlan.setVisibility(View.VISIBLE);
             } else {
                 recipe = recipeDAO.getRecipeById(uncookedRecipeId);
                 if (recipe != null && recipe.getImage() != null) {
@@ -146,11 +144,7 @@ public class ProfileFragment extends Fragment {
                 });
             }
 
-            $.btnCook.setOnClickListener(v -> {
-                if (uncookedRecipeId != null) {
-                    moveToRecipeDetail(v, recipe);
-                    return;
-                }
+            $.btnResetGoalPlan.setOnClickListener(v -> {
                 goalPlan.setCookedRecipes(null);
                 mealPlanDAO.update(goalPlan);
                 uncookedRecipeId = goalPlan.getFirstUncookedRecipeId();
@@ -162,10 +156,27 @@ public class ProfileFragment extends Fragment {
                 }
                 $.txtRecipeName.setText(recipe.getTitle());
                 $.btnCook.setText(R.string.cook);
+                $.btnCook.setVisibility(View.VISIBLE);
+                $.btnResetGoalPlan.setVisibility(View.GONE);
+                setPlanName(goalPlan);
+            });
+
+            $.btnCook.setOnClickListener(v -> {
+                moveToRecipeDetail(v, recipe);
             });
         }
 
-        $.btnSetGoalPlan.setOnClickListener(this::moveToPlanListToSetGoal);
+
+    }
+
+    private void setPlanName(MealPlan goalPlan) {
+        int recipeCount = goalPlan.getRecipeIdsList().size();
+        int recipeDoneCount = goalPlan.getCookedRecipeIdsList().size();
+        int recipeDonePercent = (recipeDoneCount * 100) / recipeCount;
+        int recipeLeftCount = recipeCount - recipeDoneCount;
+        $.txtPlanName.setText(
+                String.format("%s, %s%%, %s left", goalPlan.getName(), recipeDonePercent, recipeLeftCount)
+        );
     }
 
     private void moveToRecipeDetail(View view, Recipe recipe) {
@@ -193,24 +204,10 @@ public class ProfileFragment extends Fragment {
     }
 
     public User loadUser() {
-        SharedPreferences prefs = context.getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
-        int savedUserId = prefs.getInt(getString(R.string.k_logged_in_user_id), -1);
-        if (savedUserId == -1) {
-            Toast.makeText(context, "User should log in", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        UserDAO userDAO = new UserDAO(context);
-        if (userDAO.count() == 0) {
-            Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        // for demo, I use first user at this time
-        User user = userDAO.getUserById(savedUserId);
+        User user = User.getLoggedInUser(context);
         if (user == null) {
-            Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show();
             return null;
         }
-
         $.incUser.txtFullName.setText(user.getFullName());
         $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));
         if (user.getAvatar() != null) {

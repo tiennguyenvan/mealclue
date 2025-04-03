@@ -1,5 +1,14 @@
 package com.example.mealclue.model;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.widget.Toast;
+
+import com.example.mealclue.R;
+import com.example.mealclue.controller.UserDAO;
+
 public class User {
     private int id;
     private String avatar; // File path or Base64 string
@@ -72,5 +81,28 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+
+    public static User getLoggedInUser(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
+        int savedUserId = prefs.getInt(context.getString(R.string.k_logged_in_user_id), -1);
+        if (savedUserId == -1) {
+            Toast.makeText(context, "User should log in", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        UserDAO userDAO = new UserDAO(context);
+        if (userDAO.count() == 0) {
+            Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        // for demo, I use first user at this time
+        User user = userDAO.getUserById(savedUserId);
+        if (user == null) {
+            Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        return user;
     }
 }

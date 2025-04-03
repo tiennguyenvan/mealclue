@@ -139,4 +139,27 @@ public class MealPlanDAO {
         cursor.close();
         return count;
     }
+
+    public List<MealPlan> getFirstMealPlans(int numberOfMealPlans) {
+        List<MealPlan> mealPlanList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " LIMIT ?", new String[]{String.valueOf(numberOfMealPlans)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                MealPlan mealPlan = new MealPlan(
+                        cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("user_id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("recipes")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("goal")) == 1
+                );
+                mealPlan.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                mealPlan.setCookedRecipes(cursor.getString(cursor.getColumnIndexOrThrow("cooked_recipes")));
+                mealPlanList.add(mealPlan);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return mealPlanList;
+    }
+
 }
