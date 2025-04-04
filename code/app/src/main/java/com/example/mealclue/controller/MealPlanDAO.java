@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.mealclue.model.MealPlan;
+import com.example.mealclue.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,6 +165,4 @@ public class MealPlanDAO {
         cursor.close();
         return mealPlanList;
     }
-
-
 }

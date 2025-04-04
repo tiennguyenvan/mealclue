@@ -16,8 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.mealclue.R;
+import com.example.mealclue.controller.HeartedMealPlanDAO;
 import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.RecipeDAO;
+import com.example.mealclue.controller.UserDAO;
+import com.example.mealclue.model.HeartedMealPlan;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.Recipe;
 import com.example.mealclue.model.User;
@@ -44,6 +47,7 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
     private Context context;
     private User loggedInUser;
     private Boolean isFromSocial = false;
+    private UserDAO userDAO;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -110,6 +114,7 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         loggedInUser = User.getLoggedInUser(context);
         mealPlanDAO = new MealPlanDAO(requireContext());
         recipeDAO = new RecipeDAO(requireContext());
+        userDAO = new UserDAO(requireContext());
         mealPlanId = PlanDetailFragmentArgs.fromBundle(getArguments()).getArgMealPlanId();
         isFromSocial = PlanDetailFragmentArgs.fromBundle(getArguments()).getArgFromSocial();
         Log.d("PlanDetailFragment", "Meal Plan ID: " + mealPlanId);
@@ -137,11 +142,32 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         $.incBotButtons.btnAddNewRecipe.setOnClickListener(this::onClickAddNewRecipe);
         $.incPlanHeader.btnToggleSetGoal.setOnClickListener(this::setMealPlanAsAGoal);
         $.incBotButtons.btnFork.setOnClickListener(this::onClickForkPlan);
+        $.incBotButtons.btnHeart.setOnClickListener(this::onClickHeart);
 
 
         $.incBotButtons.btnBack.setOnClickListener(v -> {
             Navigation.findNavController(view).navigateUp();
         });
+    }
+
+    private void onClickHeart(View view) {
+        HeartedMealPlan hearted = new HeartedMealPlan(loggedInUser.getId(), (int) mealPlanId);
+        HeartedMealPlanDAO heartedDAO = new HeartedMealPlanDAO(requireContext());
+        User planOwner = userDAO.getUserById(mealPlan.getUserId());
+        int heartCount = planOwner.getHearts();
+        if (heartedDAO.isHearted(hearted.getUserId(), hearted.getMealPlanId())) {
+            heartedDAO.delete(hearted.getUserId(), hearted.getMealPlanId());
+            Toast.makeText(requireContext(), "Meal Plan unhearted", Toast.LENGTH_SHORT).show();
+            heartCount--;
+            if (heartCount < 0) heartCount = 0;
+        } else {
+            heartedDAO.insert(hearted);
+            Toast.makeText(requireContext(), "Meal Plan hearted", Toast.LENGTH_SHORT).show();
+            heartCount++;
+        }
+        planOwner.setHearts(heartCount);
+        userDAO.update(planOwner);
+        Navigation.findNavController(view).navigateUp();
     }
 
     private void onClickForkPlan(View view) {
