@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="@dimen/space_x_large"
+    app:cardCornerRadius="@dimen/space_x_large"
+    android:id="@+id/item"
+
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    >
+
+    <ImageView
+        android:id="@+id/imgThumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:alpha="0.7"
+        android:contentDescription="@string/login_background"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_background" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/gradient_bottom_overlay" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@android:color/transparent"
+        android:gravity="start"
+        android:orientation="vertical"
+        android:padding="@dimen/space_x_large">
+
+        <TextView
+            android:id="@+id/txtHeartCount"
+            style="@style/ButtonTertiary"
+            android:layout_width="wrap_content"
+            android:paddingStart="@dimen/space_small"
+            android:paddingTop="@dimen/space_xxx_small"
+            android:paddingEnd="@dimen/space_small"
+            android:paddingBottom="@dimen/space_xxx_small"
+            android:text="@string/hearts"
+            android:textAllCaps="true" />
+
+        <Space style="@style/SpaceXXXSmall" />
+
+        <TextView
+            android:id="@+id/txtName"
+            style="@style/TextBold"
+            android:text="@string/recipe_name"
+            android:textSize="@dimen/text_xx_large" />
+
+        <Space style="@style/SpaceXXSmall" />
+
+        <TextView
+            android:id="@+id/txtRecipeCount"
+            style="@style/TextLight"
+            android:text="@string/recipe_number"
+            android:textSize="@dimen/text_medium" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

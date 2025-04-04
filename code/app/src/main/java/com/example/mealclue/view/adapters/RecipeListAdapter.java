@@ -23,6 +23,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     Context context;
     MealPlan mealPlan;
     int expandedPosition = -1;
+    private MainActionListener mainActionListener;
 
     /**
      * @param recipes
@@ -54,7 +55,6 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         void onRecyclerRecipeListChange();
     }
 
-    private MainActionListener mainActionListener;
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -68,6 +68,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
             // Fallback for URL images
             Glide.with(holder.itemView.getContext()).load(recipe.getImage()).into(holder.$.imgThumb);
         }
+
+        if (mainActionListener == null) {
+            holder.$.btnMainAction.setVisibility(View.GONE);
+            return;
+        }
+
         if (mealPlan == null) {
             holder.$.btnMainAction.setImageResource(R.drawable.ic_pen);
             if (expandedPosition == position) {

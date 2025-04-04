@@ -74,6 +74,9 @@
     <string name="user_should_set_postal_code">User should set postal code</string>
     <string name="empty_user_base">Empty User Base</string>
     <string name="not_meal_plan_found">Not meal plan found</string>
+    <string name="hearts">Hearts</string>
+    <string name="fork">Fork</string>
+    <string name="heart_unicode">❤</string>
     <string-array name="arr_theme_modes">
         <item>Dark</item>
         <item>Light</item>

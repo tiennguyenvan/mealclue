@@ -43,6 +43,7 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
     private List<Recipe> mealPlanRecipes;
     private Context context;
     private User loggedInUser;
+    private Boolean isFromSocial = false;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -110,8 +111,10 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         mealPlanDAO = new MealPlanDAO(requireContext());
         recipeDAO = new RecipeDAO(requireContext());
         mealPlanId = PlanDetailFragmentArgs.fromBundle(getArguments()).getArgMealPlanId();
+        isFromSocial = PlanDetailFragmentArgs.fromBundle(getArguments()).getArgFromSocial();
         Log.d("PlanDetailFragment", "Meal Plan ID: " + mealPlanId);
         mealPlanRecipes = new ArrayList<>();
+
         if (mealPlanId == -1) {
             mealPlan = new MealPlan("", loggedInUser.getId(), "[]", false);
         } else {
@@ -129,9 +132,22 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         }
         populateMealPlan();
 
-        $.incPlanHeader.btnEditPlanName.setOnClickListener(v -> {
-            showPlanNameInput(mealPlan.getName());
-        });
+        if (isFromSocial) {
+            $.incPlanHeader.btnEditPlanName.setVisibility(View.GONE);
+            $.incPlanHeader.btnToggleSetGoal.setVisibility(View.GONE);
+            $.incPlanHeader.txtGoalRibbon.setVisibility(View.GONE);
+
+            $.incBotButtons.btnAddNewRecipe.setVisibility(View.GONE);
+            $.incBotButtons.spacer.setVisibility(View.GONE);
+            $.incBotButtons.btnFork.setVisibility(View.VISIBLE);
+            $.incBotButtons.btnHeart.setVisibility(View.VISIBLE);
+
+        } else {
+            $.incPlanHeader.btnEditPlanName.setOnClickListener(v -> {
+                showPlanNameInput(mealPlan.getName());
+            });
+        }
+
         $.incPlanHeader.btnUpdatePlanName.setOnClickListener(v -> {
             String planName = $.incPlanHeader.inpPlanName.getText().toString().trim();
             if (planName.isEmpty()) {
@@ -141,6 +157,7 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
             mealPlanId = insertOrUpdateMealPlanToDB();
             populateMealPlan();
         });
+
         $.incBotButtons.btnBack.setOnClickListener(v -> {
             Navigation.findNavController(view).navigateUp();
         });
@@ -184,7 +201,12 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         }
 
         $.recyclerAddedRecipes.setLayoutManager(new LinearLayoutManager(requireContext()));
-        RecipeListAdapter adapter = new RecipeListAdapter(mealPlanRecipes, null, requireContext(), this);
+        RecipeListAdapter adapter;
+        if (isFromSocial) {
+            adapter = new RecipeListAdapter(mealPlanRecipes, null, requireContext(), null);
+        } else {
+            adapter = new RecipeListAdapter(mealPlanRecipes, null, requireContext(), this);
+        }
         $.recyclerAddedRecipes.setAdapter(adapter);
     }
 

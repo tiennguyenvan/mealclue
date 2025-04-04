@@ -27,6 +27,7 @@ import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.User;
 import com.example.mealclue.view.adapters.CategoryAdapter;
 import com.example.mealclue.view.adapters.PlanListAdapter;
+import com.example.mealclue.view.adapters.SocialPlanListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,8 +122,10 @@ public class SocialFragment extends Fragment {
         }
 
         $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        PlanListAdapter planAdapter = new PlanListAdapter(requireContext(), first10MealPlans);
+        SocialPlanListAdapter planAdapter = new SocialPlanListAdapter(requireContext(), first10MealPlans);
         $.recyclerPlanList.setAdapter(planAdapter);
+
+
 
         $.recyclerSubCategories.setVisibility(View.GONE);
 

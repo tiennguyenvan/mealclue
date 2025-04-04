@@ -36,4 +36,24 @@
         android:text="@string/finish"
         android:visibility="gone" />
 
+    <Button
+        android:id="@+id/btnFork"
+        android:layout_marginStart="@dimen/space_small"
+        style="@style/ButtonPrimary"
+        android:layout_weight="1"
+        android:text="@string/fork"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btnHeart"
+        android:layout_marginStart="@dimen/space_small"
+        android:paddingStart="@dimen/space_medium"
+        android:paddingEnd="@dimen/space_medium"
+        style="@style/ButtonPrimary"
+        android:layout_width="wrap_content"
+        android:layout_weight="0"
+        android:text="@string/heart_unicode"
+        android:visibility="gone" />
+
+
 </LinearLayout>
