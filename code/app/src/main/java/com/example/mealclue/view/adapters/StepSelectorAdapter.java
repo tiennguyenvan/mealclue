@@ -1,10 +1,8 @@
 package com.example.mealclue.view.adapters;
 
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -17,15 +15,15 @@ import java.util.List;
 import com.example.mealclue.databinding.RecyclerItemStepBinding;
 public class StepSelectorAdapter extends RecyclerView.Adapter<StepSelectorAdapter.ViewHolder> {
 
-    public interface OnStepClickListener {
-        void onClick(int stepIndex);
+    public interface Listener {
+        void onClickStep(int stepIndex);
     }
 
     private final List<Integer> steps;
-    private final OnStepClickListener listener;
+    private final Listener listener;
     private int selectedStep = 0;
 
-    public StepSelectorAdapter(List<Integer> steps, OnStepClickListener listener) {
+    public StepSelectorAdapter(List<Integer> steps, Listener listener) {
         this.steps = steps;
         this.listener = listener;
         this.selectedStep = steps.get(0);
@@ -44,7 +42,7 @@ public class StepSelectorAdapter extends RecyclerView.Adapter<StepSelectorAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.$.txtStepName.setText(String.valueOf(steps.get(position)));
         holder.$.itemStep.setOnClickListener(v -> {
-            listener.onClick(steps.get(position));
+            listener.onClickStep(steps.get(position));
             selectedStep = steps.get(position);
             notifyDataSetChanged();
         });

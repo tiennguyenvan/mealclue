@@ -11,9 +11,15 @@ import java.util.List;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private List<String> categories;
     private int selectedPosition = 0; // Default selected item
+    private Listener listener;
 
-    public CategoryAdapter(List<String> categories) {
+    public CategoryAdapter(List<String> categories, Listener listener) {
         this.categories = categories;
+        this.listener = listener;
+    }
+
+    public interface Listener {
+        void onClickCategory(int position);
     }
 
     @NonNull
@@ -38,10 +44,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             holder.$.txtName.setTextColor(holder.$.txtName.getContext().getResources().getColor(android.R.color.white));
             holder.$.txtName.setTypeface(null, android.graphics.Typeface.NORMAL);
         }
-
-        holder.itemView.setOnClickListener(v -> {
+        holder.$.item.setOnClickListener(v -> {
             selectedPosition = holder.getAdapterPosition();
             notifyDataSetChanged();
+            if (listener != null) {
+                listener.onClickCategory(position);
+            }
         });
     }
 

@@ -71,6 +71,9 @@
     <string name="log_out">Log Out</string>
     <string name="set_a_goal_plan">Set A Goal Plan</string>
     <string name="reset_goal_plan">Reset Goal Plan</string>
+    <string name="user_should_set_postal_code">User should set postal code</string>
+    <string name="empty_user_base">Empty User Base</string>
+    <string name="not_meal_plan_found">Not meal plan found</string>
     <string-array name="arr_theme_modes">
         <item>Dark</item>
         <item>Light</item>

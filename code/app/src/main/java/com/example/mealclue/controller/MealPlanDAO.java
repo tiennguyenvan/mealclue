@@ -140,9 +140,12 @@ public class MealPlanDAO {
         return count;
     }
 
-    public List<MealPlan> getFirstMealPlans(int numberOfMealPlans) {
+    public List<MealPlan> getFirstMealPlans(int numberOfMealPlans, int curUserId) {
         List<MealPlan> mealPlanList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " LIMIT ?", new String[]{String.valueOf(numberOfMealPlans)});
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_NAME + " WHERE user_id != ? LIMIT ?",
+                new String[]{String.valueOf(curUserId), String.valueOf(numberOfMealPlans)}
+        );
 
         if (cursor.moveToFirst()) {
             do {
@@ -161,5 +164,6 @@ public class MealPlanDAO {
         cursor.close();
         return mealPlanList;
     }
+
 
 }

@@ -7,23 +7,39 @@
     android:padding="@dimen/space_x_large"
     tools:context=".view.fragments.SocialFragment">
 
-    <include layout="@layout/inc_search_bar" />
+    <TextView
+        android:id="@+id/txtMessage"
+        style="@style/TextBold"
+        android:textColor="@color/colorTertiary"
+        android:visibility="gone" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCategories"
-        style="@style/ButtonField"
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/linearMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerSubCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <include
+            android:id="@+id/incSearchBar"
+            layout="@layout/inc_search_bar" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerPlanList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCategories"
+            style="@style/ButtonField"
+            android:layout_marginBottom="@dimen/space_x_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerSubCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPlanList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnBack"
