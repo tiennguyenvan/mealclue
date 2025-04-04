@@ -115,6 +115,54 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         Log.d("PlanDetailFragment", "Meal Plan ID: " + mealPlanId);
         mealPlanRecipes = new ArrayList<>();
 
+        loadMealPlanRecipes();
+        populateMealPlan();
+
+        if (isFromSocial) {
+            $.incPlanHeader.btnEditPlanName.setVisibility(View.GONE);
+            $.incPlanHeader.btnToggleSetGoal.setVisibility(View.GONE);
+            $.incPlanHeader.txtGoalRibbon.setVisibility(View.GONE);
+
+            $.incBotButtons.btnAddNewRecipe.setVisibility(View.GONE);
+            $.incBotButtons.spacer.setVisibility(View.GONE);
+            $.incBotButtons.btnFork.setVisibility(View.VISIBLE);
+            $.incBotButtons.btnHeart.setVisibility(View.VISIBLE);
+        } else {
+            $.incPlanHeader.btnEditPlanName.setOnClickListener(v -> {
+                showPlanNameInput(mealPlan.getName());
+            });
+        }
+
+        $.incPlanHeader.btnUpdatePlanName.setOnClickListener(this::onClickUpdatePlanName);
+        $.incBotButtons.btnAddNewRecipe.setOnClickListener(this::onClickAddNewRecipe);
+        $.incPlanHeader.btnToggleSetGoal.setOnClickListener(this::setMealPlanAsAGoal);
+        $.incBotButtons.btnFork.setOnClickListener(this::onClickForkPlan);
+
+
+        $.incBotButtons.btnBack.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigateUp();
+        });
+    }
+
+    private void onClickForkPlan(View view) {
+        MealPlan clonedMealPlan = new MealPlan(
+                mealPlan.getName(),
+                loggedInUser.getId(),
+                mealPlan.getRecipes(),
+                false
+        );
+        long newId = mealPlanDAO.insert(clonedMealPlan);
+        if (newId == -1) {
+            Toast.makeText(requireContext(), "Error forking meal plan", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Navigation.findNavController(view).navigate(
+                PlanDetailFragmentDirections.actionFrgPlanDetailToFrgPlanList()
+        );
+    }
+
+    private void loadMealPlanRecipes() {
         if (mealPlanId == -1) {
             mealPlan = new MealPlan("", loggedInUser.getId(), "[]", false);
         } else {
@@ -130,45 +178,24 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
                 if (recipe != null) mealPlanRecipes.add(recipe);
             }
         }
-        populateMealPlan();
-
-        if (isFromSocial) {
-            $.incPlanHeader.btnEditPlanName.setVisibility(View.GONE);
-            $.incPlanHeader.btnToggleSetGoal.setVisibility(View.GONE);
-            $.incPlanHeader.txtGoalRibbon.setVisibility(View.GONE);
-
-            $.incBotButtons.btnAddNewRecipe.setVisibility(View.GONE);
-            $.incBotButtons.spacer.setVisibility(View.GONE);
-            $.incBotButtons.btnFork.setVisibility(View.VISIBLE);
-            $.incBotButtons.btnHeart.setVisibility(View.VISIBLE);
-
-        } else {
-            $.incPlanHeader.btnEditPlanName.setOnClickListener(v -> {
-                showPlanNameInput(mealPlan.getName());
-            });
-        }
-
-        $.incPlanHeader.btnUpdatePlanName.setOnClickListener(v -> {
-            String planName = $.incPlanHeader.inpPlanName.getText().toString().trim();
-            if (planName.isEmpty()) {
-                return;
-            }
-            mealPlan.setName(planName);
-            mealPlanId = insertOrUpdateMealPlanToDB();
-            populateMealPlan();
-        });
-
-        $.incBotButtons.btnBack.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigateUp();
-        });
-        $.incBotButtons.btnAddNewRecipe.setOnClickListener(v -> {
-            PlanDetailFragmentDirections.ActionFrgPlanDetailToFrgPlanDetailSearchRecipe action = PlanDetailFragmentDirections.actionFrgPlanDetailToFrgPlanDetailSearchRecipe();
-            action.setArgMealPlanId(mealPlanId);
-            Navigation.findNavController(v).navigate(action);
-        });
-
-        $.incPlanHeader.btnToggleSetGoal.setOnClickListener(this::setMealPlanAsAGoal);
     }
+
+    private void onClickUpdatePlanName(View view) {
+        String planName = $.incPlanHeader.inpPlanName.getText().toString().trim();
+        if (planName.isEmpty()) {
+            return;
+        }
+        mealPlan.setName(planName);
+        mealPlanId = insertOrUpdateMealPlanToDB();
+        populateMealPlan();
+    }
+
+    private void onClickAddNewRecipe(View view) {
+        PlanDetailFragmentDirections.ActionFrgPlanDetailToFrgPlanDetailSearchRecipe action = PlanDetailFragmentDirections.actionFrgPlanDetailToFrgPlanDetailSearchRecipe();
+        action.setArgMealPlanId(mealPlanId);
+        Navigation.findNavController(view).navigate(action);
+    }
+
 
     private void setMealPlanAsAGoal(View view) {
         if (mealPlan.isGoal()) {
@@ -191,6 +218,13 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         if (mealPlanId == -1) {
             showPlanNameInput("");
             return;
+        }
+        if (mealPlan == null) {
+            return;
+        }
+        if (mealPlan.isGoal()) {
+            $.incPlanHeader.txtGoalRibbon.setVisibility(View.VISIBLE);
+            $.incPlanHeader.btnToggleSetGoal.setText(R.string.unset_as_goal);
         }
 
         showExistingPlanComponents(mealPlan.getName());

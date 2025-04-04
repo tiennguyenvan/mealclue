@@ -64,6 +64,9 @@
             android:name="argFromSocial"
             app:argType="boolean"
             android:defaultValue="false" />
+        <action
+            android:id="@+id/action_frgPlanDetail_to_frgPlanList"
+            app:destination="@id/frgPlanList" />
     </fragment>
 
     <fragment
