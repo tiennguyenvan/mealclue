@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -37,6 +39,8 @@ public class SettingsFragment extends Fragment {
     private Context context;
     private User user;
     private SharedPreferences prefs;
+    private ActivityResultLauncher<String> imagePickerLauncher;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -93,11 +97,23 @@ public class SettingsFragment extends Fragment {
         if (user == null) {
             return;
         }
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+            if (uri != null) {
+                String avatarPath = uri.toString();
+                user.setAvatar(avatarPath);
+                Glide.with(this).load(avatarPath).into($.incUser.imgAvatar);
+                new UserDAO(context).update(user);
+            }
+        });
         initFields();
         $.btnSaveSettings.setOnClickListener(this::saveSettings);
         $.btnLogout.setOnClickListener(this::logout);
+        $.incUser.imgAvatar.setOnClickListener(this::onClickUserAvatar);
     }
 
+    private void onClickUserAvatar(View v) {
+        imagePickerLauncher.launch("image/*");
+    }
     private void saveSettings(View v) {
         String fullName = $.incInpFullName.inpField.getText().toString();
         String postalCode = $.incInpPostalCode.inpField.getText().toString();

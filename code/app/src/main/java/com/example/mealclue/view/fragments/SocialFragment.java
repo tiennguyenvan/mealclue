@@ -35,12 +35,13 @@ import java.util.List;
 public class SocialFragment extends Fragment {
     private FragmentSocialBinding $;
     private MealPlanDAO mealPlanDAO;
-    private List<MealPlan> userMealPlans;
+    private List<MealPlan> showingPlanList;
     private Context context;
     private UserDAO userDAO;
     private List<User> users;
     private User loggedInUser;
     private Utils.RegionType selectedRegion = Utils.RegionType.COUNTRY;
+    SocialPlanListAdapter planAdapter;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -82,7 +83,6 @@ public class SocialFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = requireContext();
-
     }
 
     @Override
@@ -113,20 +113,19 @@ public class SocialFragment extends Fragment {
 
 
         mealPlanDAO = new MealPlanDAO(requireContext());
-        List<MealPlan> first10MealPlans = mealPlanDAO.getFirstMealPlans(10, loggedInUser.getId());
+        showingPlanList = mealPlanDAO.getFirstMealPlans(10, loggedInUser.getId());
 
-        if (first10MealPlans.isEmpty()) {
+        if (showingPlanList.isEmpty()) {
             $.txtMessage.setText(R.string.not_meal_plan_found);
             $.txtMessage.setVisibility(View.VISIBLE);
             return;
         }
 
         $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        SocialPlanListAdapter planAdapter = new SocialPlanListAdapter(requireContext(), first10MealPlans);
+        planAdapter = new SocialPlanListAdapter(requireContext(), showingPlanList);
         $.recyclerPlanList.setAdapter(planAdapter);
 
-
-
+        // region name adapter
         $.recyclerSubCategories.setVisibility(View.GONE);
 
         List<String> regionNames = new ArrayList<>();
@@ -152,8 +151,7 @@ public class SocialFragment extends Fragment {
     // filter meal plans by keywords (search their title) and region selected
     private void performSearch() {
         String keyword = $.incSearchBar.inpKeywords.getText().toString().trim().toLowerCase();
-        List<MealPlan> filtered = new ArrayList<>();
-
+        showingPlanList.clear();
         for (User user : users) {
             if (user.getId() == loggedInUser.getId()) continue;
             if (user.getPostalCode() == null || user.getPostalCode().isEmpty()) continue;
@@ -178,12 +176,13 @@ public class SocialFragment extends Fragment {
             List<MealPlan> plans = mealPlanDAO.getByUser(user.getId());
             for (MealPlan plan : plans) {
                 if (keyword.isEmpty() || plan.getName().toLowerCase().contains(keyword)) {
-                    filtered.add(plan);
+                    showingPlanList.add(plan);
                 }
             }
         }
 
-        $.recyclerPlanList.setAdapter(new PlanListAdapter(requireContext(), filtered));
+//        $.recyclerPlanList.setAdapter(new PlanListAdapter(requireContext(), filtered));
+        planAdapter.notifyDataSetChanged();
     }
 
 

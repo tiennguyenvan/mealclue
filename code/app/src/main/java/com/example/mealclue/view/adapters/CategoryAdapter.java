@@ -46,10 +46,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         }
         holder.$.item.setOnClickListener(v -> {
             selectedPosition = holder.getAdapterPosition();
-            notifyDataSetChanged();
             if (listener != null) {
                 listener.onClickCategory(position);
             }
+            notifyDataSetChanged();
         });
     }
 

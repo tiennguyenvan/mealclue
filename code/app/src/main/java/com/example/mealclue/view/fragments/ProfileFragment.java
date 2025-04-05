@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+
 import com.example.mealclue.R;
 import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.RecipeDAO;
@@ -38,6 +39,9 @@ public class ProfileFragment extends Fragment {
     private Context context;
     private Recipe recipe;
     Integer uncookedRecipeId;
+
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,6 +82,7 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         context = requireContext();
+
     }
 
     @Override
@@ -211,8 +216,12 @@ public class ProfileFragment extends Fragment {
         $.incUser.txtFullName.setText(user.getFullName());
         $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));
         if (user.getAvatar() != null) {
-            Glide.with(this).load(user.getAvatar()).into($.incUser.imgAvatar);
+
+            Glide.with(this)
+                    .load(user.getAvatar())
+                    .into($.incUser.imgAvatar);
         }
+
         return user;
     }
 }
