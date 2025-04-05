@@ -35,7 +35,7 @@
         android:padding="@dimen/space_x_large">
 
         <TextView
-            android:id="@+id/txtGoalRibbon"
+            android:id="@+id/txt_ribbon"
             style="@style/ButtonTertiary"
             android:layout_width="wrap_content"
             android:paddingStart="@dimen/space_small"

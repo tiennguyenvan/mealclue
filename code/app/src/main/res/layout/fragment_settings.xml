@@ -30,6 +30,11 @@
         android:id="@+id/incInpThemeModes"
         layout="@layout/inc_labeled_input_text" />
 
+<!--    <Space style="@style/SpaceXLarge" />-->
+<!--    <include-->
+<!--        android:id="@+id/incInpFonts"-->
+<!--        layout="@layout/inc_labeled_input_text" />-->
+
     <Space style="@style/SpaceXLarge" />
 
     <Button

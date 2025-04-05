@@ -48,11 +48,11 @@
     <string name="sub_category_name">Sub Category Name</string>
     <string name="add_recipe">Add Recipe</string>
     <string name="input_plan_name">Input Plan Name</string>
-    <string name="set_as_goal">Set as Goal</string>
+    <string name="set_as_goal">Set Goal</string>
     <string name="edit_plan_name">Edit Plan Name</string>
     <string name="update">Update</string>
     <string name="duplicate">Duplicate</string>
-    <string name="unset_as_goal">Unset as goal</string>
+    <string name="unset_as_goal">Ungoal</string>
     <string name="login_register">Login / Register</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -77,10 +77,18 @@
     <string name="hearts">Hearts</string>
     <string name="fork">Fork</string>
     <string name="heart_unicode">❤</string>
+    <string name="fonts">Fonts</string>
+    <string name="color">Color</string>
+    <string name="set_as_private">Set Private</string>
+    <string name="set_as_public">Set Public</string>
     <string-array name="arr_theme_modes">
         <item>Dark</item>
         <item>Light</item>
         <item>System</item>
+    </string-array>
+    <string-array name="arr_fonts">
+        <item>Lexend</item>
+        <item>Roboto</item>
     </string-array>
 
 

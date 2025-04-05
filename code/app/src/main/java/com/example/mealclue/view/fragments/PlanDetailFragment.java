@@ -126,7 +126,8 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         if (isFromSocial) {
             $.incPlanHeader.btnEditPlanName.setVisibility(View.GONE);
             $.incPlanHeader.btnToggleSetGoal.setVisibility(View.GONE);
-            $.incPlanHeader.txtGoalRibbon.setVisibility(View.GONE);
+            $.incPlanHeader.btnTogglePrivate.setVisibility(View.GONE);
+//            $.incPlanHeader.txtGoalRibbon.setVisibility(View.GONE);
 
             $.incBotButtons.btnAddNewRecipe.setVisibility(View.GONE);
             $.incBotButtons.spacer.setVisibility(View.GONE);
@@ -141,6 +142,7 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         $.incPlanHeader.btnUpdatePlanName.setOnClickListener(this::onClickUpdatePlanName);
         $.incBotButtons.btnAddNewRecipe.setOnClickListener(this::onClickAddNewRecipe);
         $.incPlanHeader.btnToggleSetGoal.setOnClickListener(this::setMealPlanAsAGoal);
+        $.incPlanHeader.btnTogglePrivate.setOnClickListener(this::setMealPlanAsPrivate);
         $.incBotButtons.btnFork.setOnClickListener(this::onClickForkPlan);
         $.incBotButtons.btnHeart.setOnClickListener(this::onClickHeart);
 
@@ -222,21 +224,50 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         Navigation.findNavController(view).navigate(action);
     }
 
+    private void decoratePrivateButton(boolean isPrivate) {
+        if (isPrivate) {
+            $.incPlanHeader.btnTogglePrivate.setText(R.string.set_as_public);
+            $.incPlanHeader.btnTogglePrivate.setBackground(
+                    getResources().getDrawable(R.drawable.button_primary, null)
+            );
+            return;
+        }
+        $.incPlanHeader.btnTogglePrivate.setText(R.string.set_as_private);
+        $.incPlanHeader.btnTogglePrivate.setBackground(
+                getResources().getDrawable(R.drawable.button_tertiary, null)
+        );
+    }
+
+    private void setMealPlanAsPrivate(View view) {
+        boolean newIsPrivate = !mealPlan.isPrivate();
+        decoratePrivateButton(newIsPrivate);
+        mealPlan.setPrivate(newIsPrivate);
+        insertOrUpdateMealPlanToDB();
+    }
+
+    private void decorateGoalButton(boolean isGoal) {
+        if (isGoal) {
+            $.incPlanHeader.btnToggleSetGoal.setText(R.string.unset_as_goal);
+            $.incPlanHeader.btnToggleSetGoal.setBackground(
+                    getResources().getDrawable(R.drawable.button_tertiary, null)
+            );
+            return;
+        }
+        $.incPlanHeader.btnToggleSetGoal.setText(R.string.set_as_goal);
+        $.incPlanHeader.btnToggleSetGoal.setBackground(
+                getResources().getDrawable(R.drawable.button_primary, null)
+        );
+    }
 
     private void setMealPlanAsAGoal(View view) {
-        if (mealPlan.isGoal()) {
-            mealPlan.setGoal(false);
-            $.incPlanHeader.txtGoalRibbon.setVisibility(View.GONE);
-            $.incPlanHeader.btnToggleSetGoal.setText(R.string.set_as_goal);
-            insertOrUpdateMealPlanToDB();
-        } else {
-            mealPlan.setGoal(true);
-            $.incPlanHeader.txtGoalRibbon.setVisibility(View.VISIBLE);
-            $.incPlanHeader.btnToggleSetGoal.setText(R.string.unset_as_goal);
-            // remove all other goals for this user and set this one to true
+        boolean newIsGoal = !mealPlan.isGoal();
+        decorateGoalButton(newIsGoal);
+        // each user should have only goal
+        if (newIsGoal) {
             mealPlanDAO.clearAllGoals(mealPlan.getUserId());
-            insertOrUpdateMealPlanToDB();
         }
+        mealPlan.setGoal(newIsGoal);
+        insertOrUpdateMealPlanToDB();
     }
 
 
@@ -248,10 +279,10 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         if (mealPlan == null) {
             return;
         }
-        if (mealPlan.isGoal()) {
-            $.incPlanHeader.txtGoalRibbon.setVisibility(View.VISIBLE);
-            $.incPlanHeader.btnToggleSetGoal.setText(R.string.unset_as_goal);
-        }
+
+        decorateGoalButton(mealPlan.isGoal());
+//        System.out.println("XXXXX mealPlan.isPrivate() = " +mealPlan.isPrivate());
+        decoratePrivateButton(mealPlan.isPrivate());
 
         showExistingPlanComponents(mealPlan.getName());
         if (mealPlanRecipes.isEmpty()) {

@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.mealclue.model.MealPlan;
-import com.example.mealclue.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ public class MealPlanDAO {
             + "recipes TEXT NOT NULL, "
             + "goal INTEGER NOT NULL CHECK(goal IN (0,1)), "
             + "cooked_recipes TEXT, "
+            + "is_private INTEGER NOT NULL DEFAULT 0, "
             + "FOREIGN KEY(user_id) REFERENCES User(id));";
 
     private SQLiteDatabase db;
@@ -37,6 +37,7 @@ public class MealPlanDAO {
         values.put("recipes", mealPlan.getRecipes());
         values.put("cooked_recipes", mealPlan.getCookedRecipes());
         values.put("goal", mealPlan.isGoal() ? 1 : 0);
+        values.put("is_private", mealPlan.isPrivate() ? 1 : 0);
 
         return db.insert(TABLE_NAME, null, values);
     }
@@ -47,7 +48,6 @@ public class MealPlanDAO {
 
         db.update(TABLE_NAME, values, "user_id = ? AND goal = 1", new String[]{String.valueOf(userId)});
     }
-
 
     // Get MealPlan by ID
     public MealPlan getById(int id) {
@@ -63,7 +63,7 @@ public class MealPlanDAO {
             );
             mealPlan.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             mealPlan.setCookedRecipes(cursor.getString(cursor.getColumnIndexOrThrow("cooked_recipes")));
-
+            mealPlan.setPrivate(cursor.getInt(cursor.getColumnIndexOrThrow("is_private")) == 1);
             cursor.close();
             return mealPlan;
         }
@@ -85,6 +85,30 @@ public class MealPlanDAO {
                 );
                 mealPlan.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 mealPlan.setCookedRecipes(cursor.getString(cursor.getColumnIndexOrThrow("cooked_recipes")));
+                mealPlan.setPrivate(cursor.getInt(cursor.getColumnIndexOrThrow("is_private")) == 1);
+
+                mealPlanList.add(mealPlan);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return mealPlanList;
+    }
+
+    public List<MealPlan> getPublicByUser(int userId) {
+        List<MealPlan> mealPlanList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE user_id = ? AND is_private = 0", new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                MealPlan mealPlan = new MealPlan(
+                        cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("user_id")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("recipes")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("goal")) == 1
+                );
+                mealPlan.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                mealPlan.setCookedRecipes(cursor.getString(cursor.getColumnIndexOrThrow("cooked_recipes")));
+                mealPlan.setPrivate(cursor.getInt(cursor.getColumnIndexOrThrow("is_private")) == 1);
 
                 mealPlanList.add(mealPlan);
             } while (cursor.moveToNext());
@@ -108,6 +132,7 @@ public class MealPlanDAO {
                 );
                 mealPlan.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 mealPlan.setCookedRecipes(cursor.getString(cursor.getColumnIndexOrThrow("cooked_recipes")));
+                mealPlan.setPrivate(cursor.getInt(cursor.getColumnIndexOrThrow("is_private")) == 1);
 
                 mealPlanList.add(mealPlan);
             } while (cursor.moveToNext());
@@ -123,11 +148,12 @@ public class MealPlanDAO {
         values.put("recipes", mealPlan.getRecipes());
         values.put("cooked_recipes", mealPlan.getCookedRecipes());
         values.put("goal", mealPlan.isGoal() ? 1 : 0);
+        values.put("is_private", mealPlan.isPrivate() ? 1 : 0);
 
         return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(mealPlan.getId())});
     }
 
-    public void update(int id) {
+    public void delete(int id) {
         db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
     }
 
@@ -141,10 +167,10 @@ public class MealPlanDAO {
         return count;
     }
 
-    public List<MealPlan> getFirstMealPlans(int numberOfMealPlans, int curUserId) {
+    public List<MealPlan> getFirstPublicPlansFromOtherUsers(int numberOfMealPlans, int curUserId) {
         List<MealPlan> mealPlanList = new ArrayList<>();
         Cursor cursor = db.rawQuery(
-                "SELECT * FROM " + TABLE_NAME + " WHERE user_id != ? LIMIT ?",
+                "SELECT * FROM " + TABLE_NAME + " WHERE user_id != ? AND is_private = 0 LIMIT ?",
                 new String[]{String.valueOf(curUserId), String.valueOf(numberOfMealPlans)}
         );
 
@@ -158,6 +184,8 @@ public class MealPlanDAO {
                 );
                 mealPlan.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 mealPlan.setCookedRecipes(cursor.getString(cursor.getColumnIndexOrThrow("cooked_recipes")));
+                mealPlan.setPrivate(cursor.getInt(cursor.getColumnIndexOrThrow("is_private")) == 1);
+
                 mealPlanList.add(mealPlan);
             } while (cursor.moveToNext());
         }

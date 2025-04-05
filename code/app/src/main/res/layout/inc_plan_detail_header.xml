@@ -11,13 +11,13 @@
         android:orientation="horizontal"
         android:visibility="gone">
 
-        <TextView
-            android:id="@+id/txtGoalRibbon"
-            style="@style/TextLight"
-            android:visibility="gone"
-            android:layout_marginEnd="@dimen/space_medium"
-            android:text="@string/goal"
-            android:textColor="@color/colorTertiary" />
+<!--        <TextView-->
+<!--            android:id="@+id/txtGoalRibbon"-->
+<!--            style="@style/TextLight"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_marginEnd="@dimen/space_medium"-->
+<!--            android:text="@string/goal"-->
+<!--            android:textColor="@color/colorTertiary" />-->
 
         <Button
             android:id="@+id/btnToggleSetGoal"
@@ -25,6 +25,14 @@
             android:layout_width="wrap_content"
             android:padding="@dimen/space_x_small"
             android:text="@string/set_as_goal" />
+
+        <Button
+            android:id="@+id/btnTogglePrivate"
+            style="@style/ButtonPrimary"
+            android:layout_width="wrap_content"
+            android:padding="@dimen/space_x_small"
+            android:layout_marginStart="@dimen/space_medium"
+            android:text="@string/set_as_private" />
     </LinearLayout>
 
 

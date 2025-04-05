@@ -40,7 +40,7 @@ public class SettingsFragment extends Fragment {
     private User user;
     private SharedPreferences prefs;
     private ActivityResultLauncher<String> imagePickerLauncher;
-
+    String[] fonts;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -105,6 +105,7 @@ public class SettingsFragment extends Fragment {
                 new UserDAO(context).update(user);
             }
         });
+        fonts = getResources().getStringArray(R.array.arr_fonts);
         initFields();
         $.btnSaveSettings.setOnClickListener(this::saveSettings);
         $.btnLogout.setOnClickListener(this::logout);
@@ -174,9 +175,17 @@ public class SettingsFragment extends Fragment {
         $.incInpPostalCode.inpField.setText(user.getPostalCode());
         $.incInpPostalCode.inpField.setHint("XXX XXX");
 
-        $.incInpThemeModes.txtLabel.setText(R.string.theme);
+        $.incInpThemeModes.txtLabel.setText(R.string.color);
         $.incInpThemeModes.inpField.setVisibility(View.GONE);
         $.incInpThemeModes.inpSelect.setVisibility(View.VISIBLE);
+
+
+//        $.incInpFonts.txtLabel.setText(R.string.fonts);
+//        $.incInpFonts.inpField.setVisibility(View.GONE);
+//        $.incInpFonts.inpSelect.setVisibility(View.VISIBLE);
+//        $.incInpFonts.inpSelect.setAdapter(new ArrayAdapter<>(
+//                context, android.R.layout.simple_spinner_item, fonts
+//        ));
 
         // get theme modes from prefs then set the inputSelect value to the selected value
         String[] themeModes = getResources().getStringArray(R.array.arr_theme_modes);

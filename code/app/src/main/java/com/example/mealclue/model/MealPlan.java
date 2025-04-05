@@ -11,6 +11,7 @@ public class MealPlan {
     private int userId; // FK to User
     private String recipes; // JSON array of Recipe IDs
     private String cookedRecipes; // JSON array of cooked Recipe IDs, allowing duplicates
+    private boolean isPrivate;
 
     private boolean goal; // True if it's a goal plan
 
@@ -20,6 +21,15 @@ public class MealPlan {
         this.recipes = recipes;
         this.goal = goal;
         this.cookedRecipes = null;
+        this.isPrivate = false;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
     }
 
     // Convert recipes JSON string to a List<Integer>

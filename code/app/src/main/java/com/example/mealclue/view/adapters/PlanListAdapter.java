@@ -54,9 +54,25 @@ public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.ViewHo
         int recipeDoneCount = plan.getCookedRecipeIdsList().size();
         int recipeDonePercent = (recipeDoneCount * 100) / recipeCount;
         int recipeLeftCount = recipeCount - recipeDoneCount;
-
+        String ribbonText = "";
         if (plan.isGoal()) {
-            holder.$.txtGoalRibbon.setVisibility(View.VISIBLE);
+            ribbonText += "Goal";
+        }
+        if (plan.isPrivate()) {
+            if (!ribbonText.isEmpty()) {
+                ribbonText += " - ";
+            }
+            ribbonText += "Private";
+        }
+        if (ribbonText.isEmpty()) {
+            holder.$.txtRibbon.setVisibility(View.GONE);
+        } else {
+            holder.$.txtRibbon.setVisibility(View.VISIBLE);
+            holder.$.txtRibbon.setText(ribbonText);
+        }
+
+        // at this time we force to show all the details
+        if (true || plan.isGoal()) {
             holder.$.txtName.setText(
                     String.format("%s - %s%%", plan.getName(), recipeDonePercent)
             );
@@ -64,11 +80,11 @@ public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.ViewHo
                     String.format("%s recipes - %s", recipeCount, recipeLeftCount > 0 ? recipeLeftCount + " left": "Finished")
             );
         } else {
-            holder.$.txtGoalRibbon.setVisibility(View.GONE);
             holder.$.txtMeta.setText(
                     String.format("%s recipes", plan.getRecipeIdsList().size())
             );
         }
+
         holder.$.item.setOnClickListener(v -> {
             PlanListFragmentDirections.ActionFrgPlanListToFrgPlanDetail action = PlanListFragmentDirections.actionFrgPlanListToFrgPlanDetail();
             action.setArgMealPlanId(plan.getId());

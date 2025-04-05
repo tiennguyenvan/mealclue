@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "mealclue.db";
-    private static final int DB_VERSION = 11;
+    private static final int DB_VERSION = 12;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -23,17 +23,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(MealPlanDAO.CREATE_TABLE); // Added MealPlan table
     }
 
-//    @Override
-//    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-//        db.execSQL("DROP TABLE IF EXISTS " + UserDAO.TABLE_NAME);
-//        db.execSQL("DROP TABLE IF EXISTS " + RecipeDAO.TABLE_NAME);
-//        db.execSQL("DROP TABLE IF EXISTS " + MealPlanDAO.TABLE_NAME);
-//        db.execSQL("ALTER TABLE " + MealPlanDAO.TABLE_NAME + " ADD COLUMN cookedRecipes TEXT;");
-//        onCreate(db);
-//    }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 12) {
+            db.execSQL("ALTER TABLE " + MealPlanDAO.TABLE_NAME + " ADD COLUMN is_private INTEGER NOT NULL DEFAULT 0;");
+        }
+
 //        if (oldVersion < newVersion) {
 //            db.execSQL(HeartedMealPlanDAO.CREATE_TABLE);
 //        }

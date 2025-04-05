@@ -19,6 +19,7 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 import com.example.mealclue.R;
+import com.example.mealclue.controller.HeartedMealPlanDAO;
 import com.example.mealclue.controller.MealPlanDAO;
 import com.example.mealclue.controller.UserDAO;
 import com.example.mealclue.controller.Utils;
@@ -26,7 +27,6 @@ import com.example.mealclue.databinding.FragmentSocialBinding;
 import com.example.mealclue.model.MealPlan;
 import com.example.mealclue.model.User;
 import com.example.mealclue.view.adapters.CategoryAdapter;
-import com.example.mealclue.view.adapters.PlanListAdapter;
 import com.example.mealclue.view.adapters.SocialPlanListAdapter;
 
 import java.util.ArrayList;
@@ -40,8 +40,9 @@ public class SocialFragment extends Fragment {
     private UserDAO userDAO;
     private List<User> users;
     private User loggedInUser;
-    private Utils.RegionType selectedRegion = Utils.RegionType.COUNTRY;
+    private Utils.RegionType selectedCategory = Utils.RegionType.COUNTRY;
     SocialPlanListAdapter planAdapter;
+    private HeartedMealPlanDAO heartedMealPlanDAO;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -113,7 +114,7 @@ public class SocialFragment extends Fragment {
 
 
         mealPlanDAO = new MealPlanDAO(requireContext());
-        showingPlanList = mealPlanDAO.getFirstMealPlans(10, loggedInUser.getId());
+        showingPlanList = mealPlanDAO.getFirstPublicPlansFromOtherUsers(10, loggedInUser.getId());
 
         if (showingPlanList.isEmpty()) {
             $.txtMessage.setText(R.string.not_meal_plan_found);
@@ -121,21 +122,36 @@ public class SocialFragment extends Fragment {
             return;
         }
 
-        $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        planAdapter = new SocialPlanListAdapter(requireContext(), showingPlanList);
-        $.recyclerPlanList.setAdapter(planAdapter);
+        heartedMealPlanDAO = new HeartedMealPlanDAO(requireContext());
 
-        // region name adapter
+        fillPlanList();
+        fillCategories();
+
+        $.incSearchBar.btnSearch.setOnClickListener(v -> {
+            performSearch();
+        });
+    }
+
+    private void fillCategories() {
+        // at this time, I use one filter to serve all the categories including ❤
         $.recyclerSubCategories.setVisibility(View.GONE);
 
-        List<String> regionNames = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
         for (Utils.RegionType type : Utils.RegionType.values()) {
-            regionNames.add(type.name());
+            categories.add(type.name());
         }
+        categories.add("♡");
+        int heartPosition = categories.size() - 1;
         $.recyclerCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        CategoryAdapter regionNameAdapter = new CategoryAdapter(regionNames, position -> {
-            selectedRegion = Utils.RegionType.valueOf(regionNames.get(position));
+        CategoryAdapter regionNameAdapter = new CategoryAdapter(categories, position -> {
+            if (position == heartPosition) {
+                selectedCategory = null;
+                categories.set(heartPosition, "♥");
+            } else {
+                selectedCategory = Utils.RegionType.valueOf(categories.get(position));
+                categories.set(heartPosition, "♡");
+            }
             performSearch();
         });
 
@@ -143,15 +159,32 @@ public class SocialFragment extends Fragment {
         $.recyclerCategories.setLayoutManager(layoutManager);
         $.recyclerCategories.setAdapter(regionNameAdapter);
 
-        $.incSearchBar.btnSearch.setOnClickListener(v -> {
-            performSearch();
-        });
+    }
+
+    private void fillPlanList() {
+        $.recyclerPlanList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        planAdapter = new SocialPlanListAdapter(requireContext(), showingPlanList);
+        $.recyclerPlanList.setAdapter(planAdapter);
     }
 
     // filter meal plans by keywords (search their title) and region selected
     private void performSearch() {
         String keyword = $.incSearchBar.inpKeywords.getText().toString().trim().toLowerCase();
         showingPlanList.clear();
+
+        // selected heart
+        if (selectedCategory == null) {
+            List<Integer> heartedPlanIds = heartedMealPlanDAO.getHeartedPlanIdsByUser(loggedInUser.getId());
+            for (int planId : heartedPlanIds) {
+                MealPlan plan = mealPlanDAO.getById(planId);
+                if (plan != null && (keyword.isEmpty() || plan.getName().toLowerCase().contains(keyword))) {
+                    showingPlanList.add(plan);
+                }
+            }
+            planAdapter.notifyDataSetChanged();
+            return;
+        }
+
         for (User user : users) {
             if (user.getId() == loggedInUser.getId()) continue;
             if (user.getPostalCode() == null || user.getPostalCode().isEmpty()) continue;
@@ -159,7 +192,7 @@ public class SocialFragment extends Fragment {
             Utils.RegionType commonRegion = Utils.getCommonRegion(loggedInUser.getPostalCode(), user.getPostalCode());
 
             boolean matchedSelectedRegion = false;
-            switch (selectedRegion) {
+            switch (selectedCategory) {
                 case DISTRICT:
                     matchedSelectedRegion = (commonRegion == Utils.RegionType.DISTRICT);
                     break;
@@ -169,11 +202,12 @@ public class SocialFragment extends Fragment {
                 case COUNTRY:
                     matchedSelectedRegion = true;
                     break;
+
             }
 
             if (!matchedSelectedRegion) continue;
 
-            List<MealPlan> plans = mealPlanDAO.getByUser(user.getId());
+            List<MealPlan> plans = mealPlanDAO.getPublicByUser(user.getId());
             for (MealPlan plan : plans) {
                 if (keyword.isEmpty() || plan.getName().toLowerCase().contains(keyword)) {
                     showingPlanList.add(plan);

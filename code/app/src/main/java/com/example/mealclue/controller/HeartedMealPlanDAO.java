@@ -68,17 +68,4 @@ public class HeartedMealPlanDAO {
         return count;
     }
 
-    public int countHeartsUserGot(int userId) {
-        Cursor cursor = db.rawQuery(
-                "SELECT COUNT(*) FROM " + TABLE_NAME + " h JOIN MealPlan m ON h.meal_plan_id = m.id WHERE m.user_id = ?",
-                new String[]{String.valueOf(userId)}
-        );
-        int count = 0;
-        if (cursor.moveToFirst()) {
-            count = cursor.getInt(0);
-        }
-        cursor.close();
-        return count;
-    }
-
 }
