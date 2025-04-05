@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -126,6 +128,15 @@ public class SocialFragment extends Fragment {
 
         fillPlanList();
         fillCategories();
+
+        $.incSearchBar.inpKeywords.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                    (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                performSearch();
+                return true;
+            }
+            return false;
+        });
 
         $.incSearchBar.btnSearch.setOnClickListener(v -> {
             performSearch();

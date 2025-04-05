@@ -9,10 +9,14 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import com.example.mealclue.controller.MealPlanDAO;
@@ -49,7 +53,7 @@ public class PlanDetailSearchRecipeFragment extends Fragment
     MealPlan mealPlan;
     RecipeDAO recipeDAO;
     List<Recipe> foundRecipes;
-    RecyclerView.Adapter recyclerSearchFoundRecipesAdapter;
+    RecipeListAdapter recyclerSearchFoundRecipesAdapter;
     String keyword = "";
 
     // TODO: Rename parameter arguments, choose names that match
@@ -103,11 +107,29 @@ public class PlanDetailSearchRecipeFragment extends Fragment
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        System.out.println("IN THE PLAN DETAIL SEARCH RECIPE FRAGMENT");
         initMealPlan();
-        recyclerSearchFoundRecipesAdapter = new RecipeListAdapter(foundRecipes, mealPlan, requireContext(), this);
+        recyclerSearchFoundRecipesAdapter = new RecipeListAdapter(foundRecipes, mealPlan, requireContext(), this, true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         $.recyclerSearchFoundRecipes.setAdapter(recyclerSearchFoundRecipesAdapter);
         $.recyclerSearchFoundRecipes.setLayoutManager(layoutManager);
+
+        $.incSearchBar.inpKeywords.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE ||
+                    (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+
+                keyword = $.incSearchBar.inpKeywords.getText().toString().trim();
+                System.out.println("Hit Search Button: " + keyword);
+                if (keyword.isEmpty()) {
+                    System.out.println("Keyword empty: " + keyword);
+                    return false;
+                }
+                searchRecipes();
+
+                return true;
+            }
+            return false;
+        });
 
         $.incSearchBar.btnSearch.setOnClickListener(v -> {
             keyword = $.incSearchBar.inpKeywords.getText().toString().trim();

@@ -24,6 +24,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     MealPlan mealPlan;
     int expandedPosition = -1;
     private MainActionListener mainActionListener;
+    private boolean isAdding = false;
 
     /**
      * @param recipes
@@ -31,11 +32,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
      * @param context
      * @param listener
      */
-    public RecipeListAdapter(List<Recipe> recipes, MealPlan mealPlan, Context context, MainActionListener listener) {
+    public RecipeListAdapter(List<Recipe> recipes, MealPlan mealPlan, Context context, MainActionListener listener, boolean isAdding) {
         this.recipes = recipes;
         this.context = context;
         this.mealPlan = mealPlan;
         this.mainActionListener = listener; // Assign listener here
+        this.isAdding = isAdding;
+        System.out.println("IS ADDING: " + isAdding);
     }
 
     @NonNull
@@ -51,10 +54,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
 
     public interface MainActionListener {
         void onRecyclerMainAction(int position);
-
         void onRecyclerRecipeListChange();
     }
-
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -75,6 +76,10 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         }
 
         if (mealPlan == null) {
+            return;
+        }
+        System.out.println("IS ADDING BINDING: " + isAdding);
+        if (!isAdding) {
             holder.$.btnMainAction.setImageResource(R.drawable.ic_pen);
             if (expandedPosition == position) {
                 holder.$.linearEditingActions.setVisibility(View.VISIBLE);
@@ -120,9 +125,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                     Recipe temp = recipes.get(curPos);
                     recipes.set(curPos, recipes.get(curPos - 1));
                     recipes.set(curPos - 1, temp);
+                    System.out.println("Meal Plan is null? " + (this.mealPlan == null));
                     this.mealPlan.setCookedRecipes(null);
+                    System.out.println("1");
                     notifyItemMoved(curPos, curPos - 1);
+                    System.out.println("2");
                     mainActionListener.onRecyclerRecipeListChange();
+                    System.out.println("So what is no is available?");
                 }
 
             });
@@ -157,6 +166,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
 
         if (mealPlan.getRecipeIdsList().contains(recipe.getId())) {
             holder.$.btnMainAction.setImageResource(R.drawable.ic_check);
+        } else {
+            holder.$.btnMainAction.setImageResource(R.drawable.ic_plus);
         }
     }
 

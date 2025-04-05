@@ -294,9 +294,9 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         $.recyclerAddedRecipes.setLayoutManager(new LinearLayoutManager(requireContext()));
         RecipeListAdapter adapter;
         if (isFromSocial) {
-            adapter = new RecipeListAdapter(mealPlanRecipes, null, requireContext(), null);
+            adapter = new RecipeListAdapter(mealPlanRecipes, null, requireContext(), null, false);
         } else {
-            adapter = new RecipeListAdapter(mealPlanRecipes, null, requireContext(), this);
+            adapter = new RecipeListAdapter(mealPlanRecipes, mealPlan, requireContext(), this, false);
         }
         $.recyclerAddedRecipes.setAdapter(adapter);
     }
