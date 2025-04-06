@@ -209,8 +209,12 @@ public class SettingsFragment extends Fragment {
 
         $.incUser.txtFullName.setText(user.getFullName());
         $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));
-        if (user.getAvatar() != null) {
-            Glide.with(this).load(user.getAvatar()).into($.incUser.imgAvatar);
+        if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+            Glide.with(this)
+                    .load(user.getAvatar())
+                    .into($.incUser.imgAvatar);
+        } else {
+            $.incUser.imgAvatar.setImageResource(R.drawable.ic_profile);
         }
         return user;
     }

@@ -86,13 +86,18 @@ public class User {
 
     public static User getLoggedInUser(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
+        SharedPreferences.Editor editor = context.getSharedPreferences(context.getString(R.string.k_meal_clue_prefs), MODE_PRIVATE).edit();
+
         int savedUserId = prefs.getInt(context.getString(R.string.k_logged_in_user_id), -1);
         if (savedUserId == -1) {
+            editor.remove(context.getString(R.string.k_logged_in_user_id));
+            editor.apply();
             Toast.makeText(context, "User should log in", Toast.LENGTH_SHORT).show();
             return null;
         }
         UserDAO userDAO = new UserDAO(context);
         if (userDAO.count() == 0) {
+            editor.remove(context.getString(R.string.k_logged_in_user_id));
             Toast.makeText(context, "Empty User Base", Toast.LENGTH_SHORT).show();
             return null;
         }
@@ -100,6 +105,7 @@ public class User {
         // for demo, I use first user at this time
         User user = userDAO.getUserById(savedUserId);
         if (user == null) {
+            editor.remove(context.getString(R.string.k_logged_in_user_id));
             Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show();
             return null;
         }

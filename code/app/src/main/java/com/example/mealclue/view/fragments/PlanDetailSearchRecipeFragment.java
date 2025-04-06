@@ -141,7 +141,8 @@ public class PlanDetailSearchRecipeFragment extends Fragment
             searchRecipes();
         });
         $.incBotButtons.btnBack.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigateUp();
+//            Navigation.findNavController(view).navigateUp();
+
         });
     }
 

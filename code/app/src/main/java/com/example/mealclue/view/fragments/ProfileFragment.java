@@ -1,6 +1,7 @@
 package com.example.mealclue.view.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ import com.example.mealclue.model.User;
  * create an instance of this fragment.
  */
 import com.example.mealclue.databinding.FragmentProfileBinding;
+import com.example.mealclue.view.activities.LoginActivity;
 
 import java.util.List;
 
@@ -39,8 +41,6 @@ public class ProfileFragment extends Fragment {
     private Context context;
     private Recipe recipe;
     Integer uncookedRecipeId;
-
-
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -104,6 +104,8 @@ public class ProfileFragment extends Fragment {
 
         User user = loadUser();
         if (user == null) {
+            Intent intent = new Intent(context, LoginActivity.class);
+            startActivity(intent);
             return;
         }
 
@@ -215,13 +217,13 @@ public class ProfileFragment extends Fragment {
         }
         $.incUser.txtFullName.setText(user.getFullName());
         $.incUser.txtHeartCount.setText(String.format("%s hearts", user.getHearts()));
-        if (user.getAvatar() != null) {
-
+        if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
             Glide.with(this)
                     .load(user.getAvatar())
                     .into($.incUser.imgAvatar);
+        } else {
+            $.incUser.imgAvatar.setImageResource(R.drawable.ic_profile);
         }
-
         return user;
     }
 }

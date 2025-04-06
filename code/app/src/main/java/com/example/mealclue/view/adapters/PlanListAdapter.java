@@ -52,7 +52,7 @@ public class PlanListAdapter extends RecyclerView.Adapter<PlanListAdapter.ViewHo
         }
         int recipeCount = recipeIds.size();
         int recipeDoneCount = plan.getCookedRecipeIdsList().size();
-        int recipeDonePercent = (recipeDoneCount * 100) / recipeCount;
+        int recipeDonePercent = recipeCount == 0 ? 0 : (recipeDoneCount * 100) / recipeCount;
         int recipeLeftCount = recipeCount - recipeDoneCount;
         String ribbonText = "";
         if (plan.isGoal()) {

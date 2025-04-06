@@ -34,12 +34,22 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        SharedPreferences prefs = getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
-        int savedUserId = prefs.getInt(getString(R.string.k_logged_in_user_id), -1);
-        if (savedUserId != -1) {
-            goToMain(savedUserId);
+//        SharedPreferences prefs = getSharedPreferences(getString(R.string.k_meal_clue_prefs), MODE_PRIVATE);
+//        int savedUserId = prefs.getInt(getString(R.string.k_logged_in_user_id), -1);
+//        if (savedUserId != -1) {
+//            goToMain(savedUserId);
+//            return;
+//        }
+        User loggedInUser = User.getLoggedInUser(this);
+        if (loggedInUser != null) {
+            goToMain(loggedInUser.getId());
             return;
         }
+
+//        UserDAO userDAO = new UserDAO(this);
+//        if (userDAO.count() == 0) {
+//            // create demo users and database
+//        }
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
