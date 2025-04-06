@@ -21,6 +21,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(UserDAO.CREATE_TABLE);
         db.execSQL(RecipeDAO.CREATE_TABLE);
         db.execSQL(MealPlanDAO.CREATE_TABLE); // Added MealPlan table
+        db.execSQL(HeartedMealPlanDAO.CREATE_TABLE); // Added HeartedMealPlan table
+        Utils.demoDataCreation(db);
     }
 
     @Override

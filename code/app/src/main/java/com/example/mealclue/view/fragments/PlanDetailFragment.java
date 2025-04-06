@@ -140,6 +140,7 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
         }
 
         $.incPlanHeader.btnUpdatePlanName.setOnClickListener(this::onClickUpdatePlanName);
+        $.incPlanHeader.btnDeletePlan.setOnClickListener(this::onClickDeletePlan);
         $.incBotButtons.btnAddNewRecipe.setOnClickListener(this::onClickAddNewRecipe);
         $.incPlanHeader.btnToggleSetGoal.setOnClickListener(this::setMealPlanAsAGoal);
         $.incPlanHeader.btnTogglePrivate.setOnClickListener(this::setMealPlanAsPrivate);
@@ -151,6 +152,19 @@ public class PlanDetailFragment extends Fragment implements RecipeListAdapter.Ma
             Navigation.findNavController(view).navigateUp();
         });
     }
+
+    private void onClickDeletePlan(View v) {
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Delete Meal Plan")
+                .setMessage("Are you sure you want to delete this meal plan?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    mealPlanDAO.delete((int) mealPlanId);
+                    Navigation.findNavController(requireView()).navigateUp();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
 
     private void onClickHeart(View view) {
         HeartedMealPlan hearted = new HeartedMealPlan(loggedInUser.getId(), (int) mealPlanId);

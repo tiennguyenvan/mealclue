@@ -1,15 +1,11 @@
+
 package com.example.mealclue.controller;
 
 import android.database.sqlite.SQLiteDatabase;
 
-public class Utils {
-    public enum RegionType {
-        COUNTRY,
-        DISTRICT,
-        PROVINCE
-    }
-
-    public static void demoDataCreation(SQLiteDatabase db) {
+public class DemoDataSeeder {
+    public static void seed(SQLiteDatabase db) {
+        // Demo data insertions
         db.execSQL("INSERT INTO android_metadata VALUES('en_US');");
         db.execSQL("INSERT INTO User VALUES(5,'','timvan',0,'V6B 1A1','timvan','2987074');");
         db.execSQL("INSERT INTO User VALUES(6,NULL,'snowvan',0,'V6B 3H7','snowvan','2987074');");
@@ -46,7 +42,7 @@ public class Utils {
         db.execSQL("INSERT INTO Recipe VALUES(651715,'Mexican Three Cheese Dip','https://img.spoonacular.com/recipes/651715-312x231.jpg',NULL,NULL,NULL,'miso');");
         db.execSQL("INSERT INTO Recipe VALUES(652335,'Mongolian Beef','https://img.spoonacular.com/recipes/652335-312x231.jpg',NULL,NULL,NULL,'miso');");
         db.execSQL("INSERT INTO Recipe VALUES(652421,'Moroccan Chicken Tagine','https://img.spoonacular.com/recipes/652421-312x231.jpg',NULL,NULL,NULL,'chicken');");
-        db.execSQL("INSERT INTO Recipe VALUES(654515,'Pandan Smoothie','https://img.spoonacular.com/recipes/654515-312x231.jpg',NULL,'[{\"name\":\"pandan leaves click here cut to 2\\\\\\\" length\",\"amount\":\"5.0\",\"unit\":\"\"},{\"name\":\"soda\",\"amount\":\"200.0\",\"unit\":\"ml\"},{\"name\":\"cucumber\",\"amount\":\"100.0\",\"unit\":\"grams\"},{\"name\":\"honey or\",\"amount\":\"6.0\",\"unit\":\"tablespoons\"},{\"name\":\"oranges\",\"amount\":\"3.0\",\"unit\":\"\"},{\"name\":\"water\",\"amount\":\"1.0\",\"unit\":\"tablespoon\"}]','[\"Blend pandan leaves and water together, strain.\",\"Blend oranges, cucumber, honey and soda, then add in the pandan water again and mix well.\",\"Pour \\\"Smoothie\\\" into a jug and leave to chill in the fridge before serving.\"]',NULL);");
+        db.execSQL("INSERT INTO Recipe VALUES(654515,'Pandan Smoothie','https://img.spoonacular.com/recipes/654515-312x231.jpg',NULL,'[{\"name\":\"pandan leaves click here cut to 2\\" length\",\"amount\":\"5.0\",\"unit\":\"\"},{\"name\":\"soda\",\"amount\":\"200.0\",\"unit\":\"ml\"},{\"name\":\"cucumber\",\"amount\":\"100.0\",\"unit\":\"grams\"},{\"name\":\"honey or\",\"amount\":\"6.0\",\"unit\":\"tablespoons\"},{\"name\":\"oranges\",\"amount\":\"3.0\",\"unit\":\"\"},{\"name\":\"water\",\"amount\":\"1.0\",\"unit\":\"tablespoon\"}]','[\"Blend pandan leaves and water together, strain.\",\"Blend oranges, cucumber, honey and soda, then add in the pandan water again and mix well.\",\"Pour \\"Smoothie\\" into a jug and leave to chill in the fridge before serving.\"]',NULL);");
         db.execSQL("INSERT INTO Recipe VALUES(654679,'Parmesan Mashed Potatoes','https://img.spoonacular.com/recipes/654679-312x231.jpg',NULL,NULL,NULL,'potato');");
         db.execSQL("INSERT INTO Recipe VALUES(655524,'Pecan Rice Pilaf','https://img.spoonacular.com/recipes/655524-312x231.jpg',NULL,NULL,NULL,'rice');");
         db.execSQL("INSERT INTO Recipe VALUES(657178,'Protein Packed Carrot Muffins','https://img.spoonacular.com/recipes/657178-312x231.jpg',NULL,NULL,NULL,'tofu');");
@@ -75,28 +71,5 @@ public class Utils {
         db.execSQL("INSERT INTO MealPlan VALUES(16,'Toronto Power',8,'[635675,641836,648883]',0,NULL,0);");
         db.execSQL("INSERT INTO sqlite_sequence VALUES('User',8);");
         db.execSQL("INSERT INTO sqlite_sequence VALUES('MealPlan',16);");
-    }
-
-    /**
-     * Get the Forward Sortation Area (first 3 characters) in the Postal Code
-     */
-    private static String getFSA(String postalCode) {
-        if (postalCode == null || postalCode.length() < 3) return "";
-        return postalCode.replaceAll("\\s+", "").substring(0, 3).toUpperCase();
-    }
-
-    public static RegionType getCommonRegion(String postal1, String postal2) {
-        String fsa1 = getFSA(postal1);
-        String fsa2 = getFSA(postal2);
-
-        if (fsa1.equals(fsa2)) {
-            return RegionType.DISTRICT;
-        }
-
-        if (!fsa1.isEmpty() && !fsa2.isEmpty() && fsa1.charAt(0) == fsa2.charAt(0)) {
-            return RegionType.PROVINCE;
-        }
-
-        return RegionType.COUNTRY;
     }
 }

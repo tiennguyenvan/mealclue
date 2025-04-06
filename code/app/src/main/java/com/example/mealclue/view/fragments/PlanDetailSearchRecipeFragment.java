@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -142,7 +143,10 @@ public class PlanDetailSearchRecipeFragment extends Fragment
         });
         $.incBotButtons.btnBack.setOnClickListener(v -> {
 //            Navigation.findNavController(view).navigateUp();
-
+                PlanDetailSearchRecipeFragmentDirections.ActionFrgPlanDetailSearchRecipeToFrgPlanDetail action = PlanDetailSearchRecipeFragmentDirections.actionFrgPlanDetailSearchRecipeToFrgPlanDetail();
+                action.setArgMealPlanId(mealPlanId);
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(action);
         });
     }
 
@@ -244,6 +248,7 @@ public class PlanDetailSearchRecipeFragment extends Fragment
 
                     if (recipes == null || recipes.isEmpty()) {
                         Log.e("API_ERROR", "No recipes found from API");
+                        Toast.makeText(requireContext(), "No recipes found", Toast.LENGTH_SHORT).show();
                         return;
                     }
 

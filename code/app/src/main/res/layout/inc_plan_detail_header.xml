@@ -71,30 +71,36 @@
 
     <LinearLayout
         android:id="@+id/linearPlanNameInput"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="@dimen/space_medium"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/inpPlanName"
             style="@style/TextBold"
-            android:layout_width="0dp"
-            android:layout_weight="1"
             android:autofillHints="@string/input_plan_name"
             android:hint="@string/input_plan_name"
             android:inputType="text"
             android:textColorHint="#78909C"
             android:textSize="@dimen/text_xx_large"
+            android:layout_width="match_parent"
             />
 
         <Button
-            android:padding="@dimen/space_medium"
             android:id="@+id/btnUpdatePlanName"
+            android:layout_marginTop="@dimen/space_medium"
+            android:padding="@dimen/space_medium"
             style="@style/ButtonPrimary"
-            android:layout_width="wrap_content"
-            android:layout_marginStart="@dimen/space_medium"
+            android:layout_width="match_parent"
             android:text="@string/update" />
-
+        <Button
+            android:id="@+id/btnDeletePlan"
+            android:layout_marginTop="@dimen/space_medium"
+            android:padding="@dimen/space_medium"
+            style="@style/ButtonTertiary"
+            android:layout_width="match_parent"
+            android:text="@string/delete" />
     </LinearLayout>
 
 
